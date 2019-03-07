@@ -222,6 +222,36 @@ fromCharCode() //把ASCII码转换成字符串
     console.log(obj.name); // undefined
 ```
 
+## 4.JSON对象
+
+### json对象与数组
+
+```json
+{"name":"Runoob", "url":"www.runoob.com"}
+"sites":[
+    {"name":"Runoob", "url":"www.runoob.com"},
+    {"name":"Google", "url":"www.google.com"},
+    {"name":"Taobao", "url":"www.taobao.com"}
+]
+```
+
+### JSON字符串与JavaScript对象互转
+
+```js
+var text = '{ "sites" : [' +
+    '{ "name":"Runoob" , "url":"www.runoob.com" },' +
+    '{ "name":"Google" , "url":"www.google.com" },' +
+    '{ "name":"Taobao" , "url":"www.taobao.com" } ]}';
+obj = JSON.parse(text);
+document.getElementById("demo").innerHTML = obj.sites[1].name + " " + obj.sites[1].url;
+JSON.stringify(value[, replacer[, space]])
+// value:必需， 要转换的 JavaScript 值（通常为对象或数组）。
+//replacer:可选。用于转换结果的函数或数组。
+//如果 replacer 为函数，则 JSON.stringify 将调用该函数，并传入每个成员的键和值。使用返回值而不是原始值。如果此函数返回 undefined，则排除成员。根对象的键是一个空字符串：""。
+//如果 replacer 是一个数组，则仅转换该数组中具有键值的成员。成员的转换顺序与键在数组中的顺序一样。
+//space:可选，文本添加缩进、空格和换行符，如果 space 是一个数字，则返回值文本在每个级别缩进指定数目的空格，如果 space 大于 10，则文本缩进 10 个空格。space 也可以使用非数字，如：\t。
+```
+
 # 5.Date对象
 
 [date对象](http://www.runoob.com/jsref/jsref-obj-date.html)
@@ -1574,4 +1604,151 @@ d.showName();
 d.showColor();
 // d.showInfo();
 Dog.showInfo();
+```
+
+# 15.AJAX
+
+## 1.创建对象
+
+```js
+var xmlHttp
+if (window.XMLHttpRequest) {
+    xmlHttp = new XMLHttpRequest(); # 支持IE7.0以上及其他浏览器
+} else {
+    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP") # 支持IE5 IE6
+}
+```
+
+## 2.请求
+
+- xmlHttp.open(method,url,async);
+  规定请求的类型、URL 以及是否异步处理请求。
+  method：请求的类型；GET 或 POST
+  url：文件在服务器上的位置
+  async：true（异步）或 false（同步）
+
+- xmlHttp.send(string);
+  将请求发送到服务器。
+  string：仅用于 POST 请求
+
+- xmlHttp.setRequestHeader(header,value)
+  向请求添加 HTTP 头。
+  header: 规定头的名称
+  value: 规定头的值
+
+```js
+xmlHttp.onreadystatechange=function() {
+    if (xmlHttp.readyState==4 && xmlHttp.status==200){
+        document.getElementById("myDiv").innerHTML=xmlHttp.responseText;
+    }
+}
+xmlHttp.open("GET","/try/ajax/ajax_info.txt",true);
+xmlHttp.send();
+```
+
+## 3.响应
+
+responseText 属性
+  获得字符串形式的响应数据。
+responseXML 属性
+  获得 XML 形式的响应数据。
+
+## 4.对ajax的封装
+
+```js
+function ajax(url,type,param,dataType,callback){
+    var xhr = null;
+    if(window.XMLHttpRequest){
+        xhr = new XMLHttpRequest();
+    }else{
+        xhr = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    if(type == 'get'){
+        url += "?" + param;
+    }
+    xhr.open(type,url,true);
+
+    var data = null;
+    if(type == 'post'){
+        data = param;
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    }
+    xhr.send(data);
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4){
+            if(xhr.status == 200){
+                var data = xhr.responseText;
+                if(dataType == 'json'){
+                    data = JSON.parse(data);
+                }
+                callback(data);
+            }
+        }
+    }
+}
+```
+
+## 5.对ajax的另一种封装
+
+```js
+function ajax(obj){
+    var defaults = {
+        type : 'get',
+        data : {},
+        url : '#',
+        dataType : 'text',
+        async : true,
+        success : function(data){console.log(data)}
+    }
+    for(var key in obj){
+        defaults[key] = obj[key];
+    }
+    var xhr = null;
+    if(window.XMLHttpRequest){
+        xhr = new XMLHttpRequest();
+    }else{
+        xhr = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    // 把对象形式的参数转化为字符串形式的参数
+    var param = '';
+    for(var attr in obj.data){
+        param += attr + '=' + obj.data[attr] + '&';
+    }
+    if(param){
+        param = param.substring(0,param.length - 1);
+    }
+    // 处理get请求参数并且处理中文乱码问题
+    if(defaults.type == 'get'){
+        defaults.url += '?' + encodeURI(param);
+    }
+    xhr.open(defaults.type,defaults.url,defaults.async); // 准备发送（设置发送的参数）
+    // 处理post请求参数并且设置请求头信息（必须设置）
+    var data = null;
+    if(defaults.type == 'post'){
+        data = param;
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    }
+    xhr.send(data); // 执行发送动作
+    // 处理同步请求，不会调用回调函数
+    if(!defaults.async){
+        if(defaults.dataType == 'json'){
+            return JSON.parse(xhr.responseText);
+        }else{
+            return xhr.responseText;
+        }
+    }
+    // 指定回调函数（处理服务器响应数据）
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4){
+            if(xhr.status == 200){
+                var data = xhr.responseText;
+                if(defaults.dataType == 'json'){
+                    // data = eval("("+ data +")");
+                    data = JSON.parse(data);
+                }
+                defaults.success(data);
+            }
+        }
+    }
+}
 ```

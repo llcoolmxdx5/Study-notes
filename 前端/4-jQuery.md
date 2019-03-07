@@ -69,14 +69,33 @@ $(document).ready(function(){});
 $().ready(function(){});
 $(function(){});
 
-## 2.jQuery的事件绑定
+## 2.jQuery的事件绑定/解绑
 
-$obj.bind("事件名称",事件处理函数);事件名称不用加on
-$obj.事件名称(function(){});
+```js
+$obj.on(events[,selector][,data],handler);//事件名称不用加on
+// 第一个参数：events，绑定事件的名称可以是由空格分隔的多个事件（标准事件或者自定义事件）
+// 第二个参数：selector, 执行事件的后代元素（可选），如果没有后代元素，那么事件将有自己执行。
+// 第三个参数：data，传递给处理函数的数据，事件触发的时候通过event.data来使用（不常使用）
+// 第四个参数：handler，事件处理函数
+$(selector).on( "click","span", function() {});
+$obj.off() // 解绑元素所有事件
+$obj.off("click") // 解绑元素点击事件
+```
 
 ## 3.event 参数
 
 >在绑定事件的时候，允许传递 event 参数来表示事件对象
+
+## 4.事件冒泡
+
+>元素中有元素,这些元素都有相同的事件,一旦最里面的元素的事件触发了,外面的所有的元素的相同的事件都会被触发
+
+```js
+$("#dv3").click(function () {
+    alert("dv3被点了"+$(this).attr("id"));
+    return false;//取消事件冒泡 也可用于取消浏览器默认事件
+});
+```
 
 # 3.jQuery动画
 
@@ -152,6 +171,11 @@ $obj.before($new)将$new作为$obj的上一个兄弟元素插入进来
 3.$obj.empty()
   删除$obj的子元素
 
+## 6.each()方法
+
+$obj.each(function([index,[element]]))
+  element当前元素也可用this选择器
+
 # 5.jQueryAJAX
 
 >AJAX 是与服务器交换数据的技术，它在不重载全部页面的情况下，实现了对部分网页的更新。
@@ -163,7 +187,7 @@ $obj.before($new)将$new作为$obj的上一个兄弟元素插入进来
 $(selector).load(URL,data,callback); URL必选
 
 也可以把 jQuery 选择器添加到 URL 参数。
-`$("#div1").load("demo_test.txt #p1");`把 "demo_test.txt" 文件中 id="p1" 的元素的内容，加载到指定的 <div> 元素中：
+`$("#div1").load("demo_test.txt #p1");`把 "demo_test.txt" 文件中 id="p1" 的元素的内容，加载到指定的`<div>`元素中：
 
 可选的 callback 参数规定当 load() 方法完成后所要允许的回调函数
 回调函数可以设置不同的参数：
@@ -189,12 +213,36 @@ $("button").click(function(){
 $.get(URL,callback);
 $.post(URL,data,callback);
 
+## ajax
+
+```js
+function queryData(obj,callback){
+    $.ajax({
+        type:'get',
+        url:'http://localhost/summary/select.php',
+        data:obj,
+        dataType:'json/jsonp/html',
+        jsonp:'cb',//jsonp属性的作用就是自定义参数名字（callback=abc 这里的名字指的是等号前面的键，
+                  //后端根据这个键获取方法名，jquery的默认参数名称是callback）
+        jsonpCallback:'abc',//这个属性的作用就是自定义回调函数的名字
+                            //（callback=abc这里的名字指的是等号后面的值）
+                            //默认会是一个随机的函数名
+        success:function(data){
+            callback(data);
+        },
+        error:function(data){
+            consolo.log(data)
+        }
+    });
+}
+```
+
 # 6.其他
 
 ## noConflict() 方法
 
-var jq = $.noConflict();noConflict()
-可返回对 jQuery 的引用，您可以把它存入变量，以供稍后使用。
+var jq = $.noConflict();
+noConflict()可返回对 jQuery 的引用，您可以把它存入变量，以供稍后使用。
 
 ## JSONP
 
