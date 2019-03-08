@@ -261,12 +261,11 @@ noConflict()可返回对 jQuery 的引用，您可以把它存入变量，以供
 <script>
 $.getJSON("http://www.runoob.com/try/ajax/jsonp.php?jsoncallback=?", function(data) {
     var html = '<ul>';
-    for(var i = 0; i < data.length; i++)
-    {
+    for(var i = 0; i < data.length; i++){
         html += '<li>' + data[i] + '</li>';
     }
     html += '</ul>';
-    $('#divCustomers').html(html); 
+    $('#divCustomers').html(html);
 });
 </script>
 </body>

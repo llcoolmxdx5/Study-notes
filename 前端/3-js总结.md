@@ -85,24 +85,29 @@ slice(starti,endi+1) //从当前数组中截取一个新的数组，不影响原
 splice(starti,n,options //删除或替换当前数组的某些项目，参数start, deleteCount, options(要替换的项目)
 imgs=imgs.concat(imgs.splice(0,n))  // 移除开头的n个元素拼到结尾
 imgs=imgs.splice(-n).concat(imgs)  //移除结尾的n个元素拼到开头
-``
+```
 
 ### 5.位置方法
 
 ```js
-indexOf()、lastIndexOf()   //如果没找到返回-1
+indexOf()
+lastIndexOf()   //如果没找到返回-1
 ```
 
 ### 6.迭代方法 不会修改原数组(可选)
 
 ```js
-every()、filter()、forEach()、map()、some()
+every()
+filter()
+forEach()
+map()
+some()
 ```
 
-### 7.方法将数组的所有元素连接到一个字符串中。
+### 7.join方法
 
 ```js
-join("连接符")
+join("连接符")//将数组的所有元素连接到一个字符串中。
 ```
 
 # 3.String
@@ -259,17 +264,17 @@ JSON.stringify(value[, replacer[, space]])
 ## 1.创建
 
 ```js
-1.var d = new Date(); // 获取当前时间，UTC世界时间，距1970年1月1日（世界标准时间）起的毫秒数
-2.var d = new Date(1498099000356)  // 毫秒数 1498099000356
-3.var d = new Date('2015-5-1') // 日期格式字符串  '2015-5-1'
-4.var d = new Date(2015, 4, 1)  // 年、月、日……
+var d = new Date(); // 获取当前时间，UTC世界时间，距1970年1月1日（世界标准时间）起的毫秒数
+var d = new Date(1498099000356)  // 毫秒数 1498099000356
+var d = new Date('2015-5-1') // 日期格式字符串  '2015-5-1'
+var d = new Date(2015, 4, 1)  // 年、月、日……
 ```
 
 ## 2.获取日期的毫秒形式
 
 ```js
 var now = new Date();
-console.log(date.valueOf()) // valueOf用于获取对象的原始值
+console.log(now.valueOf()) // valueOf用于获取对象的原始值 获取毫秒值
 var now = Date.now(); // HTML5中提供的方法，有兼容性问题
 var now = + new Date(); // 不支持HTML5的浏览器，可以用这种方式.实际是调用 Date对象的valueOf()
 ```
@@ -280,23 +285,23 @@ var now = + new Date(); // 不支持HTML5的浏览器，可以用这种方式.�
 toString()  // 转换成字符串
 valueOf()  // 获取毫秒值
 // 下面格式化日期的方法，在不同浏览器可能表现不一致，一般不用
-toDateString()  把 Date 对象的日期部分转换为字符串
-toTimeString()  把 Date 对象的时间部分转换为字符串
-toLocaleDateString()  根据本地时间格式，把 Date 对象的日期部分转换为字符串。
-toLocaleTimeString()  根据本地时间格式，把 Date 对象的时间部分转换为字符串。
+toDateString()  // 把 Date 对象的日期部分转换为字符串
+toTimeString()  // 把 Date 对象的时间部分转换为字符串
+toLocaleDateString()  // 根据本地时间格式，把 Date 对象的日期部分转换为字符串。
+toLocaleTimeString()  // 根据本地时间格式，把 Date 对象的时间部分转换为字符串。
 ```
 
 ## 4.获取日期指定部分
 
 ```js
-getTime()  返回毫秒数和valueOf()结果一样，valueOf()内部调用的getTime()
-getMilliseconds()  返回 Date 对象的毫秒(0 ~ 999)
-getSeconds()  返回0-59
-getMinutes()  返回0-59
-getHours()    返回0-23
-getDay()      返回星期几 0周日   6周6
-getDate()     返回当前月的第几天
-getMonth()    返回月份，***从0开始***
+getTime()  // 返回毫秒数和valueOf()结果一样，valueOf()内部调用的getTime()
+getMilliseconds()  // 返回 Date 对象的毫秒(0 ~ 999)
+getSeconds()  // 返回0-59
+getMinutes()  // 返回0-59
+getHours()    // 返回0-23
+getDay()      // 返回星期几 0周日   6周6
+getDate()     // 返回当前月的第几天 1~
+getMonth()    // 返回月份，***从0开始***
 getFullYear() //返回4位的年份  如 2016
 ```
 
@@ -305,73 +310,73 @@ getFullYear() //返回4位的年份  如 2016
 [Math](http://www.runoob.com/jsref/jsref-obj-math.html)
 
 ```js
-  Math.PI // 圆周率
-  Math.random() // 生成随机数
-  Math.floor()/Math.ceil() // 向下取整/向上取整
-  Math.round() // 取整，四舍五入
-  Math.abs() // 绝对值
-  Math.max()/Math.min()// 求最大和最小值
-  Math.sin()/Math.cos() // 正弦/余弦
-  Math.power()/Math.sqrt() // 求指数次幂/求平方根
+Math.PI // 圆周率
+Math.random() // 生成随机数
+Math.floor()/Math.ceil() // 向下取整/向上取整
+Math.round() // 取整，四舍五入
+Math.abs() // 绝对值
+Math.max()/Math.min()// 求最大和最小值
+Math.sin()/Math.cos() // 正弦/余弦
+Math.power()/Math.sqrt() // 求指数次幂/求平方根
 ```
 
 # 7.DOM
 
 ## 1. 获取元素
 
-  ```js
-    document.getElementById()
-    document.getElementsByTagName()
-    document.getElementsByName()
-    document.getElementsByClassName()
-    document.querySelector()
-    document.querySelectorAll()
-  ```
+```js
+document.getElementById()
+document.getElementsByTagName()
+document.getElementsByName()
+document.getElementsByClassName()
+document.querySelector()
+document.querySelectorAll()
+```
 
 ## 2. 事件
 
 ### 1. 注册/移除事件的三种方式
 
 ```js
-  var box = document.getElementById('box');
-  box.onclick = function() {
+var box = document.getElementById('box');
+box.onclick = function() {
     console.log('代码会在box被点击后执行');  
-  };
-  box.onclick=null;
+};
+box.onclick=null;
 ```
 
 ```js
-  box.addEventListener('click', eventCode, false);
-  box.removeEventListener('click', eventCode, false);
-  ```
+box.addEventListener('click', eventCode, false);
+box.removeEventListener('click', eventCode, false);
+```
 
 ```js
-  box.attachEvent('onclick', eventCode);
-  box.detachEvent('onclick', eventCode);
+box.attachEvent('onclick', eventCode);
+box.detachEvent('onclick', eventCode);
 ```
 
 ### 2. 事件注册/移除的兼容代码
 
 ```js
-  function addEventListener(element, type, fn) {
+function addEventListener(element, type, fn) {
     if (element.addEventListener) {
-      element.addEventListener(type, fn, false);
+        element.addEventListener(type, fn, false);
     } else if (element.attachEvent){
-      element.attachEvent('on' + type,fn);
+        element.attachEvent('on' + type,fn);
     } else {
-      element['on'+type] = fn;
+        element['on'+type] = fn;
     }
-  }
+}
 
-  function removeEventListener(element, type, fn) {
+function removeEventListener(element, type, fn) {
     if (element.removeEventListener) {
-      element.removeEventListener(type, fn, false);
+        element.removeEventListener(type, fn, false);
     } else if (element.detachEvent) {
-      element.detachEvent('on' + type, fn);
+        element.detachEvent('on' + type, fn);
     } else {
-      element['on'+type] = null;
+        element['on'+type] = null;
     }
-  }
+}
 ```
 
 ### 3. 事件的三个阶段
@@ -422,7 +427,7 @@ console.log(pic.src);
 ```js
 innerText兼容处理
 function getInnerText(element) {
-  return (typeof element.textContent == "string") ? element.textContent : element.innerText;
+    return (typeof element.textContent == "string") ? element.textContent : element.innerText;
 }
 ```
 
@@ -461,11 +466,11 @@ element.className = "box"
 
 ```js
 document.write()
-innerHTML
+obj.innerHTML
 document.createElement()
 ```
 
-innerHTML方法由于会对字符串进行解析，需要避免在循环内多次使用。
+innerHTML属性由于会对字符串进行解析，需要避免在循环内多次使用。
 可以借助字符串或数组的方式进行替换，再设置给innerHTML
 优化后与document.createElement性能相近
 
@@ -475,7 +480,7 @@ innerHTML方法由于会对字符串进行解析，需要避免在循环内多�
 
 ```js
 element.appendChild()
-element.insertBefore(child1,child2) 将child1插入到child2之前
+element.insertBefore(child1,child2) // 将child1插入到child2之前
 element.removeChild()
 element.replaceChild()
 ```
@@ -493,7 +498,8 @@ element.firstChild/lastChild
 ### 3. 注意
 
 `childNodes`和`children`的区别，`childNodes`获取的是子节点，`children`获取的是子元素
-`nextSibling`和`previousSibling`获取的是节点，获取元素对应的属性是`nextElementSibling`和`previousElementSibling`获取的是元素
+`nextSibling`和`previousSibling`获取的是节点
+获取元素对应的属性是`nextElementSibling`和`previousElementSibling`
 `nextElementSibling`和`previousElementSibling`有兼容性问题，IE9以后才支持
 
 # 8.BOM
@@ -502,17 +508,17 @@ window是浏览器的顶级对象，当调用window下的属性和方法时，�
 
 ## 1. 对话框
 
-  alert()
-  prompt()
-  confirm()
+alert()
+prompt()
+confirm()
 
 ## 2. 页面加载事件
 
 ```js
-  window.onload = function () {
-    // 当页面加载完成执行
-    // 当页面完全加载所有内容（包括图像、脚本文件、CSS 文件等）执行
-  }
+window.onload = function () {
+  // 当页面加载完成执行
+  // 当页面完全加载所有内容（包括图像、脚本文件、CSS 文件等）执行
+}
 ```
 
 ## 3.定时器
@@ -523,7 +529,7 @@ window是浏览器的顶级对象，当调用window下的属性和方法时，�
 
 ```js
 var timerId = setTimeout(function () {
-  console.log('Hello World');
+    console.log('Hello World');
 }, 1000);
 clearTimeout(timerId);// 取消定时器的执行
 ```
@@ -535,8 +541,8 @@ clearTimeout(timerId);// 取消定时器的执行
 ```js
 // 创建一个定时器，每隔1秒调用一次
 var timerId = setInterval(function () {
-  var date = new Date();
-  console.log(date.toLocaleTimeString());
+    var date = new Date();
+    console.log(date.toLocaleTimeString());
 }, 1000);
 clearInterval(timerId);// 取消定时器的执行
 ```
@@ -564,11 +570,11 @@ platform  通过platform可以判断浏览器所在的系统平台类型.
 ## 1. 滚动偏移
 
 ```js
-  var box = document.getElementById('box');
-  console.log(box.scrollLeft) // box滚动出去的距离
-  console.log(box.scrollTop)
-  console.log(box.scrollWidth) // 内容的大小，包括padding 和未显示的内容，不包括滚动条
-  console.log(box.scrollHeight)
+var box = document.getElementById('box');
+console.log(box.scrollLeft) // box滚动出去的距离
+console.log(box.scrollTop)
+console.log(box.scrollWidth) // 内容的大小，包括padding 和未显示的内容，不包括滚动条
+console.log(box.scrollHeight)
 ```
 
 ## 2.偏移量即外边距
@@ -576,266 +582,267 @@ platform  通过platform可以判断浏览器所在的系统平台类型.
   offsetParent用于获取定位的父级元素
 
 ```js
-  var box = document.getElementById('box');
-  console.log(box.offsetParent); //获取距离当前元素最近的定位父元素
-  console.log(box.offsetLeft); //获取box的坐标
-  console.log(box.offsetTop);
-  console.log(box.offsetWidth); //获取box的大小
-  console.log(box.offsetHeight); //包括padding和边框
+var box = document.getElementById('box');
+console.log(box.offsetParent); //获取距离当前元素最近的定位父元素
+console.log(box.offsetLeft); //获取box的坐标
+console.log(box.offsetTop);
+console.log(box.offsetWidth); //获取box的大小
+console.log(box.offsetHeight); //包括padding和边框
 ```
 
 ## 3. 客户区大小 去掉边框的大小
 
 ```js
-  var box = document.getElementById('box');
-  console.log(box.clientLeft); //border-left的宽度
-  console.log(box.clientTop); //border-top的宽度
-  console.log(box.clientWidth); //包括padding  但是不包括边框
-  console.log(box.clientHeight);
+var box = document.getElementById('box');
+console.log(box.clientLeft); //border-left的宽度
+console.log(box.clientTop); //border-top的宽度
+console.log(box.clientWidth); //包括padding  但是不包括边框
+console.log(box.clientHeight);
 ```
 
 # 10.特效
 
 ## 1.拖拽
 
-   ```js
-    <div class="d-box" id="d_box">
-      <div class="hd" id="drop">注册信息 (可以拖拽)
-        <span id="box_close">【关闭】</span>
-      </div>
-      <div class="bd"></div>
-    </div>
-    var box = document.getElementById('d_box');
-    var drop = document.getElementById('drop');
-    drop.onmousedown = function (e) {
-      e = e || window.event;// 兼容性处理
-      // 当鼠标按下的时候，求鼠标在盒子中的位置
-      // 鼠标在盒子中的位置 = 鼠标在页面上的位置 - 盒子的位置
-      var x = getPage(e).pageX - box.offsetLeft;
-      var y = getPage(e).pageY - box.offsetTop;
-      // 鼠标在文档中移动
-      document.onmousemove = function (e) {
-        e = e || window.event;
-        // 当鼠标在页面上移动的时候。求盒子的坐标
-        // 盒子的坐标 = 鼠标当前在页面中的位置 - 鼠标在盒子中的位置
-        var boxX = getPage(e).pageX - x;
-        var boxY = getPage(e).pageY - y;
-        box.style.left = boxX + 'px';
-        box.style.top = boxY + 'px';
-      }
-    }
-    // 当鼠标弹起的时候，移除鼠标移动事件
-    document.onmouseup = function () {
-      document.onmousemove = null;
-    }
-    // 点击关闭按钮，隐藏盒子
-    var box_close = document.getElementById('box_close');
-    box_close.onclick = function () {
-      box.style.display = 'none';
-    }
-   ```
+```js
+<div class="d-box" id="d_box">
+  <div class="hd" id="drop">注册信息 (可以拖拽)
+    <span id="box_close">【关闭】</span>
+  </div>
+  <div class="bd"></div>
+</div>
+var box = document.getElementById('d_box');
+var drop = document.getElementById('drop');
+drop.onmousedown = function (e) {
+  e = e || window.event;// 兼容性处理
+  // 当鼠标按下的时候，求鼠标在盒子中的位置
+  // 鼠标在盒子中的位置 = 鼠标在页面上的位置 - 盒子的位置
+  var x = getPage(e).pageX - box.offsetLeft;
+  var y = getPage(e).pageY - box.offsetTop;
+  // 鼠标在文档中移动
+  document.onmousemove = function (e) {
+    e = e || window.event;
+    // 当鼠标在页面上移动的时候。求盒子的坐标
+    // 盒子的坐标 = 鼠标当前在页面中的位置 - 鼠标在盒子中的位置
+    var boxX = getPage(e).pageX - x;
+    var boxY = getPage(e).pageY - y;
+    box.style.left = boxX + 'px';
+    box.style.top = boxY + 'px';
+  }
+}
+// 当鼠标弹起的时候，移除鼠标移动事件
+document.onmouseup = function () {
+  document.onmousemove = null;
+}
+// 点击关闭按钮，隐藏盒子
+var box_close = document.getElementById('box_close');
+box_close.onclick = function () {
+  box.style.display = 'none';
+}
+```
 
 ## 2. 弹出层
 
-   ```js
-    <div class="login-header"><a id="link" href="javascript:void(0);">点击，弹出登录框</a></div>
-    <div id="login" class="login" >...</div>
-    <div id="bg" class="login-bg" ></div> //遮盖层
-    // 显示登录框和遮盖层
-    var login = document.getElementById('login');
-    var bg = document.getElementById('bg');
-    //1 点击按钮，弹出登录框和遮盖层
-    var link = document.getElementById('link');
-    link.onclick = function () {
-      login.style.display = 'block';
-      bg.style.display = 'block';
-      return false;
-    }
-    // 2 点击关闭按钮，隐藏 登录框和遮盖层
-    var closeBtn = document.getElementById('closeBtn');
-    closeBtn.onclick = function () {
-      // 隐藏 登录框和遮盖层
-      login.style.display = 'none';
-      bg.style.display = 'none';
-    }
-   ```
+```js
+<div class="login-header"><a id="link" href="javascript:void(0);">点击，弹出登录框</a></div>
+<div id="login" class="login" >...</div>
+<div id="bg" class="login-bg" ></div> //遮盖层
+// 显示登录框和遮盖层
+var login = document.getElementById('login');
+var bg = document.getElementById('bg');
+//1 点击按钮，弹出登录框和遮盖层
+var link = document.getElementById('link');
+link.onclick = function () {
+  login.style.display = 'block';
+  bg.style.display = 'block';
+  return false;
+}
+// 2 点击关闭按钮，隐藏 登录框和遮盖层
+var closeBtn = document.getElementById('closeBtn');
+closeBtn.onclick = function () {
+  // 隐藏 登录框和遮盖层
+  login.style.display = 'none';
+  bg.style.display = 'none';
+}
+```
 
 ## 3. 放大镜
 
-   ```js
-    <div class="box" id="box">
-      <div class="small">
-          <img src="images/small.jpg" width="350" alt=""/>
-          <div class="mask"></div>
-      </div>
-      <div class="big">
-          <img src="images/big.jpg" width="800" alt=""/>
-      </div>
-    </div>
-    <script>
-      var box = document.getElementById('box');
-      var smallBox = box.children[0];
-      var bigBox = box.children[1];
-      var smallImage = smallBox.children[0];
-      var mask = smallBox.children[1];
-      var bigImage = bigBox.children[0];
-      // 1 鼠标经过的时候 显示 mask和bigBox ， 当鼠标离开box的时候隐藏mask和bigBox
-      // mouseenter   mouseleave     不会触发事件冒泡
-      // mouseover   mouseout        会触发事件冒泡
-      box.onmouseenter = function () {
-        // 显示 mask和bigBox
-        mask.style.display = 'block';
-        bigBox.style.display = 'block'
-      }
-      box.onmouseleave = function () {
-        mask.style.display = 'none';
-        bigBox.style.display = 'none';
-      }
-      // 2 当鼠标在盒子中移动的时候，让mask和鼠标一起移动
-      box.onmousemove = function (e) {
-        e = e || window.event;
-        // 获取鼠标在盒子中的位置，就是mask的坐标
-        var maskX = getPage(e).pageX - box.offsetLeft;
-        var maskY = getPage(e).pageY - box.offsetTop;
-        // 让鼠标出现在mask的中心点
-        maskX = maskX - mask.offsetWidth / 2;
-        maskY = maskY - mask.offsetHeight / 2;
-        // 把mask限制到box中
-        maskX = maskX < 0 ? 0 : maskX;
-        maskY = maskY < 0 ? 0 : maskY;
-        maskX = maskX > box.offsetWidth - mask.offsetWidth ? box.offsetWidth - mask.offsetWidth : maskX;
-        maskY = maskY > box.offsetHeight - mask.offsetHeight ? box.offsetHeight - mask.offsetHeight : maskY;
-        mask.style.left = maskX + 'px';
-        mask.style.top = maskY + 'px';
-        // 3 当mask移动的时候，让大图片移动
-        // 求 大图片移动的距离
-        // mask移动的距离 / mask最大能够移动的距离  = 大图片移动的距离 / 大图片最大能够移动的距离
-        // mask最大能够移动的距离
-        var maskMax = box.offsetWidth - mask.offsetWidth;
-        // 大图片最大能够移动的距离
-        var bigImageMax = bigImage.offsetWidth - bigBox.offsetWidth;
-        var bigImageX = maskX * bigImageMax / maskMax;
-        var bigImageY = maskY * bigImageMax / maskMax;
-        bigImage.style.left = -bigImageX + 'px';
-        bigImage.style.top = -bigImageY + 'px';
-      }
-   ```
+```js
+<div class="box" id="box">
+  <div class="small">
+      <img src="images/small.jpg" width="350" alt=""/>
+      <div class="mask"></div>
+  </div>
+  <div class="big">
+      <img src="images/big.jpg" width="800" alt=""/>
+  </div>
+</div>
+<script>
+  var box = document.getElementById('box');
+  var smallBox = box.children[0];
+  var bigBox = box.children[1];
+  var smallImage = smallBox.children[0];
+  var mask = smallBox.children[1];
+  var bigImage = bigBox.children[0];
+  // 1 鼠标经过的时候 显示 mask和bigBox ， 当鼠标离开box的时候隐藏mask和bigBox
+  // mouseenter   mouseleave     不会触发事件冒泡
+  // mouseover   mouseout        会触发事件冒泡
+  box.onmouseenter = function () {
+    // 显示 mask和bigBox
+    mask.style.display = 'block';
+    bigBox.style.display = 'block'
+  }
+  box.onmouseleave = function () {
+    mask.style.display = 'none';
+    bigBox.style.display = 'none';
+  }
+  // 2 当鼠标在盒子中移动的时候，让mask和鼠标一起移动
+  box.onmousemove = function (e) {
+    e = e || window.event;
+    // 获取鼠标在盒子中的位置，就是mask的坐标
+    var maskX = getPage(e).pageX - box.offsetLeft;
+    var maskY = getPage(e).pageY - box.offsetTop;
+    // 让鼠标出现在mask的中心点
+    maskX = maskX - mask.offsetWidth / 2;
+    maskY = maskY - mask.offsetHeight / 2;
+    // 把mask限制到box中
+    maskX = maskX < 0 ? 0 : maskX;
+    maskY = maskY < 0 ? 0 : maskY;
+    maskX = maskX > box.offsetWidth - mask.offsetWidth ? box.offsetWidth - mask.offsetWidth : maskX;
+    maskY = maskY > box.offsetHeight - mask.offsetHeight ? box.offsetHeight - mask.offsetHeight : maskY;
+    mask.style.left = maskX + 'px';
+    mask.style.top = maskY + 'px';
+    // 3 当mask移动的时候，让大图片移动
+    // 求 大图片移动的距离
+    // mask移动的距离 / mask最大能够移动的距离  = 大图片移动的距离 / 大图片最大能够移动的距离
+    // mask最大能够移动的距离
+    var maskMax = box.offsetWidth - mask.offsetWidth;
+    // 大图片最大能够移动的距离
+    var bigImageMax = bigImage.offsetWidth - bigBox.offsetWidth;
+    var bigImageX = maskX * bigImageMax / maskMax;
+    var bigImageY = maskY * bigImageMax / maskMax;
+    bigImage.style.left = -bigImageX + 'px';
+    bigImage.style.top = -bigImageY + 'px';
+  }
+</script>
+```
 
 ## 4. 模拟滚动条
 
-   ```js
-    <div class="box" id="box">
-      <div class="content" id="content">
-        大量内容在此
-      </div>
-      <div class="scroll" id="scroll">
-          <div class="bar" id="bar"></div>
-      </div>
-    </div>
-    <script>
-      var box = document.getElementById('box')
-      var content = document.getElementById('content');
-      var scroll = document.getElementById('scroll');
-      var bar = document.getElementById('bar');
-      //1 根据内容的大小，计算滚动条的高度
-      //  滚动条的高度 / scroll的高度 = box的高度 / 内容的高度
-      // offsetHeight     元素的大小 + padding + border
-      // clientHeight     元素的大小 + padding
-      // scrollHeight     内容的大小 + padding
-      // 当内容的高度大于box的高度，再计算 滚动条的高度，否则的话滚动条的高度为0
-      var barHeight = 0;
-      if (content.scrollHeight > box.clientHeight) {
-        barHeight = box.clientHeight / content.scrollHeight * scroll.clientHeight;
-      }
-      bar.style.height = barHeight + 'px';
-      //2 让滚动条能够拖拽
-      // 2.1 当鼠标按下的时候，求鼠标在滚动条中的位置
-      bar.onmousedown = function (e) {
-        e = e || window.event;
-        // 鼠标在滚动条中的位置
-        var y = getPage(e).pageY - bar.offsetTop - box.offsetTop;
-        // 2.2 当鼠标在页面上移动的时候，求滚动条的位置
-        document.onmousemove = function (e) {
-            var barY = getPage(e).pageY - y - box.offsetTop;//求滚动条的位置
-            // 控制bar不能移除scroll
-            barY = barY < 0 ? 0 : barY;
-            barY = barY > scroll.clientHeight - bar.clientHeight ? scroll.clientHeight - bar.clientHeight : barY;
-            bar.style.top = barY + 'px';
-            //3 当拖拽滚动条的时候，改变内容的位置
-            // 内容滚动的距离 / 内容最大能够滚动的距离 = 滚动条滚动的距离 / 滚动条最大能够滚动的距离
-            var contentMax = content.scrollHeight - box.clientHeight;// 内容最大能够滚动的距离
-            var barMax = scroll.clientHeight - bar.clientHeight; // 滚动条最大能够滚动的距离
-            var contentY = barY / barMax * contentMax;
-            content.style.top = -contentY + 'px';
-        }
-      }
-      document.onmouseup = function () {
-        document.onmousemove = null;// 移除鼠标移动的事件
-      }
-    </script>
-   ```
-  
+```js
+<div class="box" id="box">
+  <div class="content" id="content">
+    大量内容在此
+  </div>
+  <div class="scroll" id="scroll">
+      <div class="bar" id="bar"></div>
+  </div>
+</div>
+<script>
+  var box = document.getElementById('box')
+  var content = document.getElementById('content');
+  var scroll = document.getElementById('scroll');
+  var bar = document.getElementById('bar');
+  //1 根据内容的大小，计算滚动条的高度
+  //  滚动条的高度 / scroll的高度 = box的高度 / 内容的高度
+  // offsetHeight     元素的大小 + padding + border
+  // clientHeight     元素的大小 + padding
+  // scrollHeight     内容的大小 + padding
+  // 当内容的高度大于box的高度，再计算 滚动条的高度，否则的话滚动条的高度为0
+  var barHeight = 0;
+  if (content.scrollHeight > box.clientHeight) {
+    barHeight = box.clientHeight / content.scrollHeight * scroll.clientHeight;
+  }
+  bar.style.height = barHeight + 'px';
+  //2 让滚动条能够拖拽
+  // 2.1 当鼠标按下的时候，求鼠标在滚动条中的位置
+  bar.onmousedown = function (e) {
+    e = e || window.event;
+    // 鼠标在滚动条中的位置
+    var y = getPage(e).pageY - bar.offsetTop - box.offsetTop;
+    // 2.2 当鼠标在页面上移动的时候，求滚动条的位置
+    document.onmousemove = function (e) {
+        var barY = getPage(e).pageY - y - box.offsetTop;//求滚动条的位置
+        // 控制bar不能移除scroll
+        barY = barY < 0 ? 0 : barY;
+        barY = barY > scroll.clientHeight - bar.clientHeight ? scroll.clientHeight - bar.clientHeight : barY;
+        bar.style.top = barY + 'px';
+        //3 当拖拽滚动条的时候，改变内容的位置
+        // 内容滚动的距离 / 内容最大能够滚动的距离 = 滚动条滚动的距离 / 滚动条最大能够滚动的距离
+        var contentMax = content.scrollHeight - box.clientHeight;// 内容最大能够滚动的距离
+        var barMax = scroll.clientHeight - bar.clientHeight; // 滚动条最大能够滚动的距离
+        var contentY = barY / barMax * contentMax;
+        content.style.top = -contentY + 'px';
+    }
+  }
+  document.onmouseup = function () {
+    document.onmousemove = null;// 移除鼠标移动的事件
+  }
+</script>
+```
+
 ## 5. 回到顶部
 
-   ```js
-    function my$(id) {
-      return document.getElementById(id);
+```js
+function my$(id) {
+  return document.getElementById(id);
+}
+// 获取页面滚动距离的浏览器兼容性问题
+// 获取页面滚动出去的距离
+function getScroll() {
+  var scrollLeft = document.body.scrollLeft || document.documentElement.scrollLeft;
+  var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+  return {
+    scrollLeft: scrollLeft,
+    scrollTop: scrollTop
+  };
+}
+var bodyTop = my$('top');// 获取元素
+var totop = my$('totop');// 回到顶部的按钮
+// 当拖动滚动条的时候执行
+window.onscroll = function () {
+  //1 当拖动滚动条的时候，当内容滚动出去 10px的时候，改变top的高度，并且显示回到顶部按钮
+  // 调用common.js getScroll函数，获取页面滚动出去的距离
+  var scrollTop = getScroll().scrollTop;
+  if (scrollTop > 10) {
+    bodyTop.className = 'header fixed';// 改变top
+    totop.style.display = 'block';// 显示回到顶部
+  } else {
+    bodyTop.className = 'header';// 不改变top
+    totop.style.display = 'none';// 不显示回到顶部
+  }
+  // 如何获取滚动距离
+  // document.body.scrollTop
+  // documentElement  网页中的根元素 html
+  // document.documentElement.scrollTop
+};
+var timerId = null;//2 当点击回到顶部按钮的时候，动画的方式，回到最上面，让滚动距离为0
+totop.onclick = function () {
+  if (timerId) {
+    clearInterval(timerId);
+    timerId = null;
+  }
+  timerId = setInterval(function () {
+    var step = 10;// 步进 每次移动的距离
+    var target = 0;// 目标位置
+    var current = getScroll().scrollTop;// 获取当前位置
+    if (current > target) {
+      step = -Math.abs(step);
     }
-    // 获取页面滚动距离的浏览器兼容性问题
-    // 获取页面滚动出去的距离
-    function getScroll() {
-      var scrollLeft = document.body.scrollLeft || document.documentElement.scrollLeft;
-      var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-      return {
-        scrollLeft: scrollLeft,
-        scrollTop: scrollTop
-      };
+    // 判断当前是否到达目标位置
+    if (Math.abs(current - target) <= Math.abs(step)) {
+      clearInterval(timerId);
+      document.body.scrollTop = target;
+      document.documentElement.scrollTop = target;
+      return;
     }
-    var bodyTop = my$('top');// 获取元素
-    var totop = my$('totop');// 回到顶部的按钮
-    // 当拖动滚动条的时候执行
-    window.onscroll = function () {
-      //1 当拖动滚动条的时候，当内容滚动出去 10px的时候，改变top的高度，并且显示回到顶部按钮
-      // 调用common.js getScroll函数，获取页面滚动出去的距离
-      var scrollTop = getScroll().scrollTop;
-      if (scrollTop > 10) {
-        bodyTop.className = 'header fixed';// 改变top
-        totop.style.display = 'block';// 显示回到顶部
-      } else {
-        bodyTop.className = 'header';// 不改变top
-        totop.style.display = 'none';// 不显示回到顶部
-      }
-      // 如何获取滚动距离
-      // document.body.scrollTop
-      // documentElement  网页中的根元素 html
-      // document.documentElement.scrollTop
-    };
-    var timerId = null;//2 当点击回到顶部按钮的时候，动画的方式，回到最上面，让滚动距离为0
-    totop.onclick = function () {
-      if (timerId) {
-        clearInterval(timerId);
-        timerId = null;
-      }
-      timerId = setInterval(function () {
-        var step = 10;// 步进 每次移动的距离
-        var target = 0;// 目标位置
-        var current = getScroll().scrollTop;// 获取当前位置
-        if (current > target) {
-          step = -Math.abs(step);
-        }
-        // 判断当前是否到达目标位置
-        if (Math.abs(current - target) <= Math.abs(step)) {
-          clearInterval(timerId);
-          document.body.scrollTop = target;
-          document.documentElement.scrollTop = target;
-          return;
-        }
-        current += step;
-        document.body.scrollTop = current;
-        document.documentElement.scrollTop = current;
-      }, 5);
-    };
-   ```
+    current += step;
+    document.body.scrollTop = current;
+    document.documentElement.scrollTop = current;
+  }, 5);
+};
+```
 
 # 11.面向对象
 
@@ -881,15 +888,15 @@ console.log(p1.sayName === p2.sayName) // => true
 
 ```js
 function Person (name, age) {
-this.name = name
-this.age = age
+    this.name = name
+    this.age = age
 }
 Person.prototype = {
-  constructor: Person, // => 手动将 constructor 指向正确的构造函数
-  type: 'human',
-  sayHello: function () {
-    console.log('我叫' + this.name + '，我今年' + this.age + '岁了')
-  }
+    constructor: Person, // => 手动将 constructor 指向正确的构造函数
+    type: 'human',
+    sayHello: function () {
+        console.log('我叫' + this.name + '，我今年' + this.age + '岁了')
+    }
 }
 ```
 
@@ -1037,10 +1044,10 @@ fun.bind(thisArg[, arg1[, arg2[, ...]]])
 参数：
 
 - thisArg
-   - 当绑定函数被调用时，该参数会作为原函数运行时的 this 指向。当使用new 操作符调用绑定函数时，该参数无效。
+  当绑定函数被调用时，该参数会作为原函数运行时的 this 指向。当使用new 操作符调用绑定函数时，该参数无效。
 
 - arg1, arg2, ...
-   - 当绑定函数被调用时，这些参数将置于实参之前传递给被绑定的方法。
+  当绑定函数被调用时，这些参数将置于实参之前传递给被绑定的方法。
 
 返回值：
 
@@ -1093,10 +1100,10 @@ flower.bloom();  // 一秒钟后, 调用'declare'方法
   - 可以用来指定内部 this 的指向，然后生成一个改变了 this 指向的新的函数
   - 它和 call、apply 最大的区别是：bind 不会调用
   - bind 支持传递参数，它的传参方式比较特殊，一共有两个位置可以传递
-    - 1. 在 bind 的同时，以参数列表的形式进行传递
-    - 2. 在调用的时候，以参数列表的形式进行传递
-    - 那到底以谁 bind 的时候传递的参数为准呢还是以调用的时候传递的参数为准
-    - 两者合并：bind 的时候传递的参数和调用的时候传递的参数会合并到一起，传递到函数内部
+    - 1.在 bind 的同时，以参数列表的形式进行传递
+    - 2.在调用的时候，以参数列表的形式进行传递
+  - 那到底以谁 bind 的时候传递的参数为准呢还是以调用的时候传递的参数为准
+  - 两者合并：bind 的时候传递的参数和调用的时候传递的参数会合并到一起，传递到函数内部
 
 ## 函数的其他成员
 
