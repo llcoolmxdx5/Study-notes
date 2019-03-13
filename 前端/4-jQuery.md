@@ -1,6 +1,8 @@
-# 1.选择器
+# jQuery
 
-## 1.DOM对象 和 jQuery对象之间的转换
+## 1.选择器
+
+### 1.DOM对象 和 jQuery对象之间的转换
 
 1.将DOM对象转换为jQuery对象
   var $变量 = $(DOM对象);
@@ -8,7 +10,7 @@
   1.var dom对象 = jQuery对象.get(0);
   2.var dom对象 = jQuery对象[0];
 
-## 2.基本选择器
+### 2.基本选择器
 
 | 名称    | 用法                 | 描述                     |
 | ----- | ------------------ | :--------------------- |
@@ -18,7 +20,7 @@
 | 并集选择器 | $(“div,p,li”);     | 使用逗号分隔，只要符合条件之一就可。     |
 | 交集选择器 | $(“div.redClass”); | 获取class为redClass的div元素 |
 
-## 2.层级选择器
+### 2.层级选择器
 
 | 名称    | 用法          | 描述                              |
 | ----- | ----------- | :------------------------------ |
@@ -27,7 +29,7 @@
 | 相邻兄弟选择器 | $("selector1+selector2") | 匹配紧紧跟在selector1后面且满足selector2选择器的元素 |
 | 通用兄弟选择器 | $("selector1~selector2") | 匹配selector1后面所有满足selector2的元素 |
 
-## 3.过滤选择器
+### 3.过滤选择器
 
 | 名称         | 用法                                 | 描述                                 |
 | ---------- | ---------------------------------- | :--------------------------------- |
@@ -49,7 +51,7 @@
 | :last-child | | 匹配属于其父元素中的最后一个子元素 |
 | :nth-child(n) | | 匹配属于其父元素中的第n个子元素 |
 
-## 4.筛选选择器(方法)
+### 4.筛选选择器(方法)
 
 | 名称                 | 用法                          | 描述                         |
 | ------------------ | --------------------------- | :------------------------- |
@@ -61,15 +63,15 @@
 | next()             | $(“li”).next()              | 找下一个兄弟                     |
 | prev()             | $(“li”).prev()              | 找上一次兄弟                     |
 
-# 2.jQuery事件
+## 2.jQuery事件
 
-## 1.页面加载后的执行
+### 1.页面加载后的执行
 
 $(document).ready(function(){});
 $().ready(function(){});
 $(function(){});
 
-## 2.jQuery的事件绑定/解绑
+### 2.jQuery的事件绑定/解绑
 
 ```js
 $obj.on(events[,selector][,data],handler);//事件名称不用加on
@@ -82,11 +84,11 @@ $obj.off() // 解绑元素所有事件
 $obj.off("click") // 解绑元素点击事件
 ```
 
-## 3.event 参数
+### 3.event 参数
 
 >在绑定事件的时候，允许传递 event 参数来表示事件对象
 
-## 4.事件冒泡
+### 4.事件冒泡
 
 >元素中有元素,这些元素都有相同的事件,一旦最里面的元素的事件触发了,外面的所有的元素的相同的事件都会被触发
 
@@ -97,9 +99,9 @@ $("#dv3").click(function () {
 });
 ```
 
-# 3.jQuery动画
+## 3.jQuery动画
 
-## 1.基本显示 / 隐藏
+### 1.基本显示 / 隐藏
 
 显示：$obj.show(speed,callback)
 隐藏：$obj.hide(speed,callback)
@@ -107,7 +109,7 @@ $("#dv3").click(function () {
 可选的 speed 参数规定隐藏/显示的速度，可以取以下值："slow"、"fast" 或毫秒。
 可选的 callback 参数是隐藏或显示完成后所执行的函数名称。
 
-## 2.滑动式 显示/隐藏
+### 2.滑动式 显示/隐藏
 
 显示：$obj.slideDown(speed,callback)
 隐藏：$obj.slideUp(speed,callback)
@@ -115,7 +117,7 @@ $("#dv3").click(function () {
 可选的 speed 参数规定隐藏/显示的速度，可以取以下值："slow"、"fast" 或毫秒。
 可选的 callback 参数是隐藏或显示完成后所执行的函数名称。
 
-## 3.淡入淡出式显示/隐藏
+### 3.淡入淡出式显示/隐藏
 
 淡入已隐藏的元素: $obj.fadeIn(speed,callback)
 淡出可见元素: $obj.fadeOut(speed,callback)
@@ -124,27 +126,27 @@ $obj.fadeTo(speed,opacity,callback)渐变为给定的不透明度（值介于 0 
 可选的 speed 参数规定隐藏/显示的速度，可以取以下值："slow"、"fast" 或毫秒。
 可选的 callback 参数是隐藏或显示完成后所执行的函数名称。
 
-## 4.停止动画
+### 4.停止动画
 
 $obj.stop(stopAll,goToEnd);
 可选的 stopAll 参数规定是否应该清除动画队列。默认是 false，即仅停止活动的动画，允许任何排入队列的动画向后执行。
 可选的 goToEnd 参数规定是否立即完成当前动画。默认是 false。
 因此，默认地，stop() 会清除在被选元素上指定的当前动画。
 
-# 4.jQueryHTML
+## 4.jQueryHTML
 
-## 1.创建对象
+### 1.创建对象
 
 $("创建的内容")
 
-## 2.插入元素
+### 2.插入元素
 
 $obj.append($new)插入obj的最后一个子元素处
 $obj.prepend($new)插入obj的第一个子元素处
 $obj.after($new)将$new作为$obj的下一个兄弟元素插入进来
 $obj.before($new)将$new作为$obj的上一个兄弟元素插入进来
 
-## 3.基本操作
+### 3.基本操作
 
 1.html()设置或返回所选元素的内容（包括 HTML 标记）
 2.text()设置或返回所选元素的文本内容
@@ -152,7 +154,7 @@ $obj.before($new)将$new作为$obj的上一个兄弟元素插入进来
 4.attr()设置/改变属性值 单个/多个
 5.removeAttr("attrName")
 
-## 4.样式操作
+### 4.样式操作
 
 1.attr("class","className")
 2.addClass("className")
@@ -162,7 +164,7 @@ $obj.before($new)将$new作为$obj的上一个兄弟元素插入进来
 6.css("属性","值")设置或返回被选元素的一个或多个样式属性。
 7.css({"propertyname":"value","propertyname":"value",...})设置多个 CSS 属性
 
-## 5.删除节点
+### 5.删除节点
 
 1.$obj.remove()
   删除$obj元素
@@ -171,16 +173,16 @@ $obj.before($new)将$new作为$obj的上一个兄弟元素插入进来
 3.$obj.empty()
   删除$obj的子元素
 
-## 6.each()方法
+### 6.each()方法
 
 $obj.each(function([index,[element]]))
   element当前元素也可用this选择器
 
-# 5.jQueryAJAX
+## 5.jQueryAJAX
 
 >AJAX 是与服务器交换数据的技术，它在不重载全部页面的情况下，实现了对部分网页的更新。
 
-## load() 方法
+### load() 方法
 
 从服务器加载数据，并把返回的数据放入被选元素中。
 
@@ -206,14 +208,14 @@ $("button").click(function(){
 });
 ```
 
-## get() 和 post() 方法
+### get() 和 post() 方法
 
 >jQuery get() 和 post() 方法用于通过 HTTP GET 或 POST 请求从服务器请求数据
 
 $.get(URL,callback);
 $.post(URL,data,callback);
 
-## ajax
+### ajax
 
 ```js
 function queryData(obj,callback){
@@ -237,14 +239,14 @@ function queryData(obj,callback){
 }
 ```
 
-# 6.其他
+## 6.其他
 
-## noConflict() 方法
+### noConflict() 方法
 
 var jq = $.noConflict();
 noConflict()可返回对 jQuery 的引用，您可以把它存入变量，以供稍后使用。
 
-## JSONP
+### JSONP
 
 >Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从别的域名（网站）那获取资料，即跨域读取数据。
 
@@ -272,9 +274,9 @@ $.getJSON("http://www.runoob.com/try/ajax/jsonp.php?jsoncallback=?", function(da
 </html>
 ```
 
-# 7.jQuery - 插件
+## 7.jQuery - 插件
 
-## jquery.color.js
+### jquery.color.js
 
 >animate不支持颜色的渐变，但是使用了jquery.color.js后，就可以支持颜色的渐变了
 
@@ -313,7 +315,7 @@ $.getJSON("http://www.runoob.com/try/ajax/jsonp.php?jsoncallback=?", function(da
 支持的其他属性如下
 backgroundColor, borderBottomColor, borderLeftColor, borderRightColor, borderTopColor, color, columnRuleColor, outlineColor, textDecorationColor, textEmphasisColor
 
-## jquery.lazyload.js
+### jquery.lazyload.js
 
 >用于长页面图片的延迟加载，视口外的图片会在窗口滚动到它的位置时再进行加载，这是与预加载相反的。
 
@@ -341,8 +343,23 @@ $(function(){
 })
 ```
 
-## jquery.ui.js
+### jquery.ui.js
 
 >jQueryUI专指由jQuery官方维护的UI方向的插件。
 
 http://www.runoob.com/jqueryui/jqueryui-tutorial.html
+
+### jquery.qrcode.js
+
+```js
+//生成100*100(宽度100，高度100)的二维码
+$('#qrcode').qrcode({
+    render: "canvas", //也可以替换为table
+    width: 100,
+    height: 100,
+    foreground: "#C00",
+    background: "#FFF",
+    text: "http://www.jq22.com"
+});
+$("#output").qrcode(encodeURI("http://中文中文"));//使用encodeURI进行转码
+```
