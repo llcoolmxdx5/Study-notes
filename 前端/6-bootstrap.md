@@ -196,42 +196,389 @@ class="col-md-6 col-md-offset-3"
 class="m-auto"/* bootstrap4水平居中 */
 ```
 
+### 3.7列表
+
+```css
+/* 这个类仅适用于直接子列表项 (如果需要移除嵌套的列表项，你需要在嵌套的列表中使用该样式) */
+.list-unstyled/* 移除默认的列表样式，列表项中左对齐(<ul>和<ol>中). */
+.list-inline/* 将所有列表项放置同一行 */
+```
+
 ## 4.组件
 
-### 图标字体
+### 4.1图标字体
+
+[字体图标展示](http://www.runoob.com/try/demo_source/bootstrap3-glyph-icons.htm)
 
 `<span class="glyphicon glyphicon-pencil"></span>`
 
-### 进度条
+### 4.2进度条
 
-    .progress  > .progress-bar
+```html
+<div class="progress">/* 标准模型 */
+    <div class="progress-bar progress-bar-success" role="progressbar"
+         aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+         style="width: 90%;">
+        <span class="sr-only">90% 完成（成功）</span>
+    </div>
+</div>
+.progress-bar-success/info/warning/danger/* 带颜色 */
+.progress-striped/* 带条纹 */
+.active/* 使之带有动画感 */
+/* 多个进度条放在相同的 .progress 中即可实现堆叠 */
+```
 
-### 小组件
+### 4.3缩略图
 
-面包屑
-分页条
-分页器
-徽章
-巨幕
-水井
+```html
+<!-- 在图像周围添加带有 class .thumbnail 的 <a> 标签。 -->
+<a href="#" class="thumbnail"><img src="" alt=""></a>
+<div class="thumbnail"><!-- 我们可以向缩略图添加各种 HTML 内容，比如标题、段落或按钮 -->
+    <img src="/wp-content/uploads/2014/06/kittens.jpg" alt="">
+    <div class="caption">
+        <h3>缩略图标签</h3>
+        <p>一些示例文本。一些示例文本。</p>
+        <p>
+            <a href="#" class="btn btn-primary" role="button">按钮</a>
+            <a href="#" class="btn btn-default" role="button">按钮</a>
+        </p>
+    </div>
+</div>
+```
 
-### 缩略图
+### 4.4多媒体对象
 
-.thumbnail
-img
-.caption
+在`<div>`元素上添加 `.media` 类来创建一个多媒体对象
 
-### 媒体对象
+`.media-left/right` 左/右对齐
 
-左中右
-media
-.media-left;.media-body;.media-right
+`media-top/middle/bottom` 置顶/居中/置底
 
-### 面板
+`.media-heading` 类来设置标题
 
-上中下
-panel
-.panel-heading;.panel-body;.panel-footer
+文本内容放在`class="media-body"`的`div`中
+
+```html
+<div class="media">
+  <div class="media-left media-bottom">
+    <img src="img_avatar1.png" class="media-object" style="width:60px">
+  </div>
+  <div class="media-body">
+    <h4 class="media-heading">置底</h4>
+    <p>这是一些示例文本...</p>
+  </div>
+</div>
+```
+
+### 4.5面板
+
+基本的面板:只需要向`<div>`元素添加`.panel`或`.panel-default`即可
+
+向面板添加标题容器:`.panel-heading`
+
+添加预定义样式的标题:`.panel-title`class的`<h1>-<h6>`
+
+面板内容:`.panel-body`
+
+面板脚注: `.panel-footer`面版脚注不会从带语境色彩的面板中继承颜色和边框，因为它不是前景中的内容
+
+带语境色彩的面板:panel-primary/success/info/warning/danger
+
+面板可以包含表格 `table.table` 或列表组 `ul.list-group`
+
+```html
+<div class="panel panel-default">
+    <div class="panel-heading">
+        不带 title 的面板标题
+        <h3 class="panel-title">
+            带有 title 的面板标题
+        </h3>
+    </div>
+    <div class="panel-body">
+        面板内容
+    </div>
+    <div class="panel-footer">面板脚注</div>
+</div>
+```
+
+### 4.6导航
+
+#### 4.6.1导航元素
+
+标签式的导航菜单：`<ul class="nav nav-tabs"></ul>`
+
+基本的胶囊式的导航菜单:`<ul class="nav nav-pills"></ul>`
+
+垂直的胶囊式导航菜单:`<ul class="nav nav-pills nav-stacked"></ul>`
+
+两端对齐的导航:添加`class="nav-justified"`
+
+禁用:`class="disabled"`
+
+#### 4.6.2下拉菜单
+
+带有下拉菜单的标签:
+
+```html
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#">Home</a></li>
+    <li><a href="#">SVN</a></li>
+    <li><a href="#">VB.Net</a></li>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        Java <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+        <li><a href="#">Swing</a></li>
+        <li><a href="#">EJB</a></li>
+        <li class="divider"></li>
+        <li><a href="#">分离的链接</a></li>
+        </ul>
+    </li>
+    <li><a href="#">PHP</a></li>
+</ul>
+```
+
+带有下拉菜单的胶囊:把 .nav-tabs class 改为 .nav-pills
+
+#### 4.6.3动态标签
+
+.tab-content与.tab-pane和data-toggle="tab"(data-toggle="pill")一同使用,设置标签页对应的内容随标签的切换而更改
+
+```html
+<div class="container">
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home">首页</a></li>
+    <li><a data-toggle="tab" href="#menu1">菜单 1</a></li>
+  </ul>
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+      <h3>首页</h3>
+      <p>菜鸟教程 —— 学的不仅是技术，更是梦想！！！</p>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+      <h3>菜单 1</h3>
+      <p>这是菜单 1 显示的内容。这是菜单 1 显示的内容。这是菜单 1 显示的内容。</p>
+    </div>
+  </div>
+</div>
+```
+
+### 4.7导航栏
+
+#### 4.7.1默认的导航栏
+
+向 `<nav>` 标签添加 class .navbar、.navbar-default。
+
+向上面的元素添加 role="navigation"，有助于增加可访问性。
+
+向`<div>`元素添加一个标题.navbar-header，内部包含了带有.navbar-brand的`<a>`元素。这会让文本看起来更大一号。
+
+为了向导航栏添加链接，只需要简单地添加带有.nav、.navbar-nav的无序列表即可。
+
+```html
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">菜鸟教程</a>
+    </div>
+    <div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">iOS</a></li>
+            <li><a href="#">SVN</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Java
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">jmeter</a></li>
+                    <li><a href="#">EJB</a></li>
+                    <li><a href="#">Jasper Report</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">分离的链接</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">另一个分离的链接</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    </div>
+</nav>
+```
+
+#### 4.7.2响应式的导航栏
+
+为了给导航栏添加响应式特性，您要折叠的内容必须包裹在带有 class .collapse、.navbar-collapse 的 `<div>` 中。折叠起来的导航栏实际上是一个带有 class .navbar-toggle 及两个 data- 元素的按钮。第一个是 data-toggle，用于告诉 JavaScript 需要对按钮做什么，第二个是 data-target，指示要切换到哪一个元素。三个带有 class .icon-bar 的 `<span>` 创建所谓的汉堡按钮。这些会切换为 .nav-collapse `<div>` 中的元素。为了实现以上这些功能，您必须包含 Bootstrap 折叠（Collapse）插件。
+
+```html
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid"> 
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                data-target="#example-navbar-collapse">
+            <span class="sr-only">切换导航</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">菜鸟教程</a>
+    </div>
+    <div class="collapse navbar-collapse" id="example-navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">iOS</a></li>
+            <li><a href="#">SVN</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Java <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">jmeter</a></li>
+                    <li><a href="#">EJB</a></li>
+                    <li><a href="#">Jasper Report</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">分离的链接</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">另一个分离的链接</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    </div>
+</nav>
+```
+
+#### 4.7.3导航栏中的表单
+
+导航栏中的表单不是使用 Bootstrap 表单 章节中所讲到的默认的 class，它是使用 .navbar-form class
+
+```html
+<form class="navbar-form navbar-left" role="search">
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">提交</button>
+</form>
+```
+
+#### 4.7.4导航栏中的按钮
+
+可以使用.navbar-btn向不在`<form>`中的`<button>`元素添加按钮，按钮在导航栏上垂直居中。.navbar-btn可被使用在`<a>`和`<input>`元素上。
+
+不要在.navbar-nav内的`<a>`元素上使用.navbar-btn，因为它不是标准的button class
+
+```html
+<button type="button" class="btn btn-default navbar-btn">
+    导航栏按钮
+</button>
+```
+
+#### 4.7.5导航栏中的文本
+
+如果需要在导航中包含文本字符串，请使用.navbar-text。这通常与`<p>`标签一起使用，确保适当的前导和颜色
+
+```html
+<div>
+    <p class="navbar-text">Runoob 用户登录</p>
+</div>
+```
+
+#### 4.7.6其他导航栏设置
+
+可以使用实用工具 class .navbar-left 或 .navbar-right 向左或向右对齐导航栏中的 导航链接、表单、按钮或文本 这些组件
+
+如果您想在常规的导航栏导航组件内使用图标，那么请使用 class glyphicon glyphicon-* 来设置图标
+
+想要让导航栏固定在页面的顶部，请向 .navbar class 添加 class .navbar-fixed-top
+
+为了防止导航栏与页面主体中的其他内容的顶部相交错，请向`<body`>`标签添加至少50像素的内边距（padding），内边距的值可以根据您的需要进行设置。
+
+如果您想要让导航栏固定在页面的底部，请向 .navbar class 添加 class .navbar-fixed-bottom
+
+如需创建能随着页面一起滚动的导航栏，请添加.navbar-static-top。该 class不要求向`<body>`添加内边距（padding）。
+
+为了创建一个带有黑色背景白色文本的反色的导航栏，只需要简单地向.navbar添加.navbar-inverse即可
+
+为了防止导航栏与页面主体中的其他内容的顶部相交错，请向`<body>`标签添加至少50像素的内边距（padding），内边距的值可以根据您的需要进行设置
+
+### 4.8小组件
+
+#### 4.8.1面包屑导航
+
+表示当前页面在导航层次结构内的位置。
+
+```html
+<ul class="breadcrumb">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">2013</a></li>
+    <li class="active">十一月</li>
+</ul>
+```
+
+#### 4.8.2分页条
+
+默认:ul.pagination
+
+分页状态:.active .disabled
+
+分页大小:.pagination-lg/sm
+
+```html
+<ul class="pagination pagination-lg">
+    <li><a href="#">&laquo;</a></li>
+    <li><a href="#">1</a></li>
+    <li><a href="#">2</a></li>
+    <li><a href="#">3</a></li>
+    <li><a href="#">&raquo;</a></li>
+</ul>
+```
+
+#### 4.8.3徽章
+
+徽章（Badges）主要用于突出显示新的或未读的项。如需使用徽章，只需要把 `<span class="badge">` 添加到链接、Bootstrap 导航等这些元素上即可。
+
+没有新的或未读的项时，通过 CSS 的 :empty 选择器，徽章会折叠起来，表示里边没有内容
+
+可以在激活状态的胶囊式导航和列表导航中放置徽章。通过使用 `<span class="badge">` 来激活链接
+
+```html
+<ul class="nav nav-pills">
+    <li class="active"><a href="#">首页<span class="badge">42</span></a></li>
+    <li><a href="#">简介</a></li>
+    <li><a href="#">消息<span class="badge">3</span></a></li>
+</ul>
+```
+
+#### 4.8.4超大屏幕
+
+该组件可以增加标题的大小，并为登陆页面内容添加更多的外边距（margin）
+
+为了获得占用全部宽度且不带圆角的超大屏幕，请在所有的 .container class 外使用 .jumbotron class
+
+div.jumbotron 也可作为div.container的子元素
+
+```html
+<div class="jumbotron">
+    <div class="container">
+        <h1>欢迎登陆页面！</h1>
+        <p>这是一个超大屏幕（Jumbotron）的实例。</p>
+        <p><a class="btn btn-primary btn-lg" role="button">
+         学习更多</a>
+        </p>
+    </div>
+</div>
+```
+
+#### 4.8.5水井(well)
+
+Well 是一种会引起内容凹陷显示或插图效果的容器`<div>`
+
+可以使用可选类 well-lg 或 well-sm 来改变 Well 的尺寸大小
+
+```html
+<div class="well well-lg">您好，我在大的 Well 中！</div>
+<div class="well well-sm">您好，我在小的 Well 中！</div>
+```
 
 ## 5.js插件
 
