@@ -413,7 +413,7 @@ class="m-auto"/* bootstrap4水平居中 */
 
 ```html
 <nav class="navbar navbar-default" role="navigation">
-    <div class="container-fluid"> 
+    <div class="container-fluid">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse"
                 data-target="#example-navbar-collapse">
@@ -582,13 +582,92 @@ Well 是一种会引起内容凹陷显示或插图效果的容器`<div>`
 
 ## 5.js插件
 
->响应式导航条
+### 5.1弹出框
 
-.navbar-header
-    .navbar-brand
-    .navbar-toggle
+```html
+<div class="container" style="padding: 100px 50px 10px;" >
+    <button type="button" class="btn btn-default" title="Popover title"
+            data-container="body" data-toggle="popover" data-placement="left"
+            data-content="左侧的 Popover 中的一些内容">
+        左侧的 Popover
+    </button>
+    <button type="button" class="btn btn-primary" title="Popover title"
+            data-container="body" data-toggle="popover" data-placement="top"
+            data-content="顶部的 Popover 中的一些内容">
+        顶部的 Popover
+    </button>
+    <button type="button" class="btn btn-success" title="Popover title"
+            data-container="body" data-toggle="popover" data-placement="bottom"
+            data-content="底部的 Popover 中的一些内容">
+        底部的 Popover
+    </button>
+    <button type="button" class="btn btn-warning" title="Popover title"
+            data-container="body" data-toggle="popover" data-placement="right"
+            data-content="右侧的 Popover 中的一些内容">
+        右侧的 Popover
+    </button>
+</div>
+```
 
-.navbar-collapse
+选项名称|类型/默认值|Data 属性名称|描述
+:---|:---|:---|:---
+animation|boolean 默认值：true|data-animation|向弹出框应用 CSS 褪色过渡效果。
+html|boolean 默认值：false|data-html|向弹出框插入 HTML。如果为 false，jQuery 的 text 方法将被用于向 dom 插入内容。如果您担心 XSS 攻击，请使用 text。
+placement|string\|function 默认值：top|data-placement|规定如何定位弹出框（即 top\|bottom\|left\|right\|auto）。当指定为 auto 时，会动态调整弹出框。例如，如果 placement 是 "auto left"，弹出框将会尽可能显示在左边，在情况不允许的情况下它才会显示在右边。
+selector|string 默认值：false|data-selector|如果提供了一个选择器，弹出框对象将被委派到指定的目标。
+title|string \| function 默认值：''|data-title|如果未指定 title 属性，则 title 选项是默认的 title 值。
+trigger|string 默认值：'hover focus'|data-trigger|定义如何触发弹出框： click\| hover \| focus \| manual。您可以传递多个触发器，每个触发器之间用空格分隔。
+delay|number \| object  默认值：0|data-delay|延迟显示和隐藏弹出框的毫秒数 - 对 manual 手动触发类型不适用。如果提供的是一个数字，那么延迟将会应用于显示和隐藏。如果提供的是对象，结构如下所示：delay:{ show: 500, hide: 100 }
+container|string \| false  默认值：false|data-container|向指定元素追加弹出框。实例： container: 'body'
+
+### 5.2轮播
+
+```html
+<div id="myCarousel" class="carousel slide">
+    <!-- 轮播（Carousel）指标 -->
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <!-- 轮播（Carousel）项目 -->
+    <div class="carousel-inner">
+        <div class="item active">
+            <img src="/wp-content/uploads/2014/07/slide1.png" alt="First slide">
+            <div class="carousel-caption">标题 1</div>
+        </div>
+        <div class="item">
+            <img src="/wp-content/uploads/2014/07/slide2.png" alt="Second slide">
+            <div class="carousel-caption">标题 2</div>
+        </div>
+        <div class="item">
+            <img src="/wp-content/uploads/2014/07/slide3.png" alt="Third slide">
+            <div class="carousel-caption">标题 3</div>
+        </div>
+    </div>
+    <!-- 轮播（Carousel）导航 -->
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+```
+
+选项名称|类型/默认值|Data 属性名称|描述
+:---|:---|:---|:---
+interval|number默认值：5000|data-interval|自动循环每个项目之间延迟的时间量。如果为 false，轮播将不会自动循环。
+pause|string默认值："hover"|data-pause|鼠标进入时暂停轮播循环，鼠标离开时恢复轮播循环。
+wrap|boolean默认值：true|data-wrap|轮播是否连续循环。
+
+### 5.3附加导航(Affix)
+
+>附加导航（Affix）插件允许指定 `<div>` 固定在页面的某个位置。一个常见的例子是社交图标。它们将在某个位置开始，但当页面点击某个标记，该 `<div>` 会锁定在某个位置，不会随着页面其他部分一起滚动。
+
+
 
 ## 6.less动态样式语言
 
