@@ -1,5 +1,19 @@
 # jQuery
 
+`<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>`
+
+`<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>`
+
+`<link href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">`
+
+`<script src="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js"></script>`
+
+`<script src="https://cdn.bootcss.com/jquery-color/2.1.2/jquery.color.min.js"></script>`
+
+`<script src="https://cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>`
+
+`<script src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>`
+
 ## 1.选择器
 
 ### 1.DOM对象 和 jQuery对象之间的转换

@@ -1,5 +1,11 @@
 # 响应式开发
 
+`<link rel="stylesheet" href="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">`
+
+`<script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>`
+
+`<script src="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>`
+
 ## 1.响应式网页
 
 >一个网页随浏览设备不同自动改变布局
@@ -633,6 +639,16 @@ container|string \| false  默认值：false|data-container|向指定元素追�
     <!-- 轮播（Carousel）项目 -->
     <div class="carousel-inner">
         <div class="item active">
+        <!--&lt;!&ndash;移动端&ndash;&gt;
+        <a href="javascript:;" class="mobileImg">
+            <img src="./images/slide_01_640x340.jpg" alt="...">
+        </a>
+        &lt;!&ndash;非移动端&ndash;&gt;
+        <a href="javascript:;" class="pcImg" style="background-image: url('./images/slide_01_2000x410.jpg');"></a>-->
+        <!-- .pcImg{width: 100%;height: 410px;display: block;background-position: center center;background-size: cover;}
+        .mobileImg{width: 100%;display: block;}
+        .mobileImg > img{width: 100%;display: block;} -->
+        <!-- cover与contain区别 图片宽高比均不变 但是cover会裁剪图片适应容器contain不会裁剪图片会有白边 -->
             <img src="/wp-content/uploads/2014/07/slide1.png" alt="First slide">
             <div class="carousel-caption">标题 1</div>
         </div>
