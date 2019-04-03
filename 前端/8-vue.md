@@ -22,7 +22,7 @@
 
 ![MVC和MVVM关系图解](./media/01.MVC和MVVM的关系图解.png)
 
-## vue基本指令
+## vue指令
 
 ### v-cloak
 
@@ -264,7 +264,7 @@ v-else-if:表示 v-if 的 “else if 块”。可以链式调用。
 > v-model 指令，可以实现 表单元素和 Model 中数据的双向数据绑定
 > v-model 只能运用在 表单元素中
 
-## 自定义指令
+### 自定义指令
 
 > 除了核心功能默认内置的指令 (v-model 和 v-show)，Vue 也允许注册自定义指令。注意，在 Vue2.0 中，代码复用和抽象的主要形式是组件。然而，有的情况下，你仍然需要对普通 DOM 元素进行底层操作，这时候就会用到自定义指令。
 
@@ -391,37 +391,23 @@ filterA 被定义为接收三个参数的过滤器函数。其中 message 的值
 
 ## 动画
 
-### 使用过渡类名
+### 在CSS过渡和动画中应用class
 
-1.HTML结构
+在进入/离开的过渡中可以应用6个class切换
 
-```html
-<div id="app">
-  <input type="button" value="动起来" @click="myAnimate">
-  <!-- 使用 transition 将需要过渡的元素包裹起来 -->
-  <transition name="fade">
-    <div v-show="isshow">动画哦</div>
-  </transition>
-</div>
-```
+1.v-enter：定义进入过渡的开始状态。在元素被插入之前生效，在元素被插入之后的下一帧移除。
 
-2.VM 实例
+2.v-enter-active：定义进入过渡生效时的状态。在整个进入过渡的阶段中应用，在元素被插入之前生效，在过渡/动画完成之后移除。这个类可以被用来定义进入过渡的过程时间，延迟和曲线函数。
 
-```js
-var vm = new Vue({// 创建 Vue 实例，得到 ViewModel
-  el: '#app',
-  data: {
-    isshow: false
-  },
-  methods: {
-    myAnimate() {
-      this.isshow = !this.isshow;
-    }
-  }
-});
-```
+3.v-enter-to: 2.1.8版及以上 定义进入过渡的结束状态。在元素被插入之后下一帧生效 (与此同时 v-enter 被移除)，在过渡/动画完成之后移除。
 
-3.定义两组类样式
+4.v-leave: 定义离开过渡的开始状态。在离开过渡被触发时立刻生效，下一帧被移除。
+
+5.v-leave-active：定义离开过渡生效时的状态。在整个离开过渡的阶段中应用，在离开过渡被触发时立刻生效，在过渡/动画完成之后移除。这个类可以被用来定义离开过渡的过程时间，延迟和曲线函数。
+
+6.v-leave-to: 2.1.8版及以上 定义离开过渡的结束状态。在离开过渡被触发之后下一帧生效 (与此同时 v-leave 被删除)，在过渡/动画完成之后移除。
+
+对于这些在过渡中切换的类名来说,如果你使用一个没有名字的`<transition>`,则 v- 是这些类名的默认前缀。如果你使用了`<transition name="my-transition">`，那么 v-enter 会替换为 my-transition-enter。
 
 ```css
 /* 定义进入和离开时候的过渡状态 */
@@ -438,6 +424,30 @@ var vm = new Vue({// 创建 Vue 实例，得到 ViewModel
 }
 ```
 
+```html
+<div id="app">
+  <input type="button" value="动起来" @click="myAnimate">
+  <!-- 使用 transition 将需要过渡的元素包裹起来 -->
+  <transition name="fade">
+    <div v-show="isshow">动画哦</div>
+  </transition>
+</div>
+```
+
+```js
+var vm = new Vue({// 创建 Vue 实例，得到 ViewModel
+  el: '#app',
+  data: {
+    isshow: false
+  },
+  methods: {
+    myAnimate() {
+      this.isshow = !this.isshow;
+    }
+  }
+});
+```
+
 ### 使用第三方动画库
 
 1.导入动画类库
@@ -447,11 +457,10 @@ var vm = new Vue({// 创建 Vue 实例，得到 ViewModel
 2.定义 transition 及属性
 
 ```html
-<transition
-  enter-active-class="fadeInRight"
-    leave-active-class="fadeOutRight"
-    :duration="{ enter: 500, leave: 800 }">
-    <div class="animated" v-show="isshow">动画哦</div>
+<transition enter-active-class="fadeInRight"
+  leave-active-class="fadeOutRight"
+  :duration="{ enter: 500, leave: 800 }">
+  <div class="animated" v-show="isshow">动画哦</div>
 </transition>
 ```
 
@@ -472,6 +481,7 @@ var vm = new Vue({// 创建 Vue 实例，得到 ViewModel
 ```
 
 2.定义三个 methods 钩子方法
+在 enter 和 leave 中必须使用 done 进行回调。否则，它们将被同步调用，过渡会立即完成
 
 ```js
 methods: {
@@ -564,6 +574,8 @@ var vm = new Vue({
 
 ## axios
 
+> `https://www.kancloud.cn/yunye/axios/234845`
+
 ### 安装
 
 ```html
@@ -575,6 +587,7 @@ $ bower install axios<!-- bower安装 -->
 
 ### API
 
+axios(config)
 请求方法的别名:
 axios.request(config)
 axios.get(url[, config])
