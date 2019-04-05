@@ -588,30 +588,48 @@ $ bower install axios<!-- bower安装 -->
 ### API
 
 axios(config)
+
 请求方法的别名:
-axios.request(config)
-axios.get(url[, config])
-axios.delete(url[, config])
-axios.head(url[, config])
-axios.post(url[, data[, config]])
-axios.put(url[, data[, config]])
-axios.patch(url[, data[, config]])
+
+- axios.request(config)
+
+- axios.get(url[, config])
+
+- axios.delete(url[, config])
+
+- axios.head(url[, config])
+
+- axios.post(url[, data[, config]])
+
+- axios.put(url[, data[, config]])
+
+- axios.patch(url[, data[, config]])
 
 处理并发请求的助手函数:
-axios.all(iterable)
-axios.spread(callback)
+
+- axios.all(iterable)
+
+- axios.spread(callback)
 
 创建实例
-axios.create([config])
+
+- axios.create([config])
 
 实例方法 指定的配置将与实例的配置合并
-axios#request(config)
-axios#get(url[, config])
-axios#delete(url[, config])
-axios#head(url[, config])
-axios#post(url[, data[, config]])
-axios#put(url[, data[, config]])
-axios#patch(url[, data[, config]])
+
+- axios#request(config)
+
+- axios#get(url[, config])
+
+- axios#delete(url[, config])
+
+- axios#head(url[, config])
+
+- axios#post(url[, data[, config]])
+
+- axios#put(url[, data[, config]])
+
+- axios#patch(url[, data[, config]])
 
 ### 配置
 
