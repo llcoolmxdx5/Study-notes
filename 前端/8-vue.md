@@ -24,245 +24,247 @@
 
 ## vue指令
 
-### v-cloak
+### 基本指令
 
-这个指令保持在元素上直到关联实例结束编译。和 CSS 规则如 [v-cloak] { display: none } 一起用时，这个指令可以隐藏未编译的 Mustache 标签直到实例准备完毕。
+1. v-cloak
 
-```html
-[v-cloak] {
-    display: none;
-}
-<div v-cloak>
-    {{ message }}
-</div>
-```
+    这个指令保持在元素上直到关联实例结束编译。和 CSS 规则如 [v-cloak] { display: none } 一起用时，这个指令可以隐藏未编译的 Mustache 标签直到实例准备完毕。
 
-### v-text v-html
+    ```html
+    [v-cloak] {
+        display: none;
+    }
+    <div v-cloak>
+        {{ message }}
+    </div>
+    ```
 
-v-text:更新元素的 textContent。如果要更新部分的 textContent ，需要使用 {{ Mustache }} 插值。
+2. v-text v-html
 
-```html
-<span v-text="msg"></span>
-<!-- 和下面的一样 -->
-<span>{{msg}}</span>
-```
+    v-text:更新元素的 textContent。如果要更新部分的 textContent ，需要使用 {{ Mustache }} 插值。
 
-v-html:更新元素的 innerHTML 。注意：内容按普通 HTML 插入 - 不会作为 Vue 模板进行编译 。如果试图使用 v-html 组合模板，可以重新考虑是否通过使用组件来替代。
+    ```html
+    <span v-text="msg"></span>
+    <!-- 和下面的一样 -->
+    <span>{{msg}}</span>
+    ```
 
-在网站上动态渲染任意 HTML 是非常危险的，因为容易导致 XSS 攻击。只在可信内容上使用 v-html，永不用在用户提交的内容上。
+    v-html:更新元素的 innerHTML 。注意：内容按普通 HTML 插入 - 不会作为 Vue 模板进行编译 。如果试图使用 v-html 组合模板，可以重新考虑是否通过使用组件来替代。
 
-`<div v-html="html"></div>`
+    在网站上动态渲染任意 HTML 是非常危险的，因为容易导致 XSS 攻击。只在可信内容上使用 v-html，永不用在用户提交的内容上。
 
-### v-show
+    `<div v-html="html"></div>`
 
-根据表达式之真假值，切换元素的 display CSS 属性。
+3. v-show
 
-当条件变化时该指令触发过渡效果。
+    根据表达式之真假值，切换元素的 display CSS 属性。
 
-### v-if else
+    当条件变化时该指令触发过渡效果。
 
-v-if:根据表达式的值的真假条件渲染元素。在切换时元素及它的数据绑定 / 组件被销毁并重建。如果元素是 `<template>` ，将提出它的内容作为条件块。
+4. v-if else
 
-当和 v-if 一起使用时，v-for 的优先级比 v-if 更高。
+    v-if:根据表达式的值的真假条件渲染元素。在切换时元素及它的数据绑定 / 组件被销毁并重建。如果元素是 `<template>` ，将提出它的内容作为条件块。
 
-v-else:不需要表达式 为 v-if 或者 v-else-if 添加“else 块”。
+    当和 v-if 一起使用时，v-for 的优先级比 v-if 更高。
 
-v-else-if:表示 v-if 的 “else if 块”。可以链式调用。
+    v-else:不需要表达式 为 v-if 或者 v-else-if 添加“else 块”。
 
->一般来说，v-if 有更高的切换消耗而 v-show 有更高的初始渲染消耗。因此，如果需要频繁切换 v-show 较好，如果在运行时条件不大可能改变 v-if 较好。
+    v-else-if:表示 v-if 的 “else if 块”。可以链式调用。
 
-### v-for
+    >一般来说，v-if 有更高的切换消耗而 v-show 有更高的初始渲染消耗。因此，如果需要频繁切换 v-show 较好，如果在运行时条件不大可能改变 v-if 较好。
 
-基于源数据多次渲染元素或模板块。此指令之值，必须使用特定语法 alias in expression ，为当前遍历的元素提供别名
+5. v-for
 
-```html
-<div v-for="item in items">
-  {{ item.text }}
-</div>
-<!-- 另外也可以为数组索引指定别名 (或者用于对象的键) -->
-<div v-for="(item, index) in items"></div>
-<div v-for="(val, key) in object"></div>
-<div v-for="(val, key, index) in object"></div>
-<!-- v-for 默认行为试着不改变整体，而是替换元素。迫使其重新排序的元素，你需要提供一个 key 的特殊属性 -->
-<div v-for="item in items" :key="item.id">
-  {{ item.text }}
-</div>
-```
+    基于源数据多次渲染元素或模板块。此指令之值，必须使用特定语法 alias in expression ，为当前遍历的元素提供别名
 
-### v-on
+    ```html
+    <div v-for="item in items">
+      {{ item.text }}
+    </div>
+    <!-- 另外也可以为数组索引指定别名 (或者用于对象的键) -->
+    <div v-for="(item, index) in items"></div>
+    <div v-for="(val, key) in object"></div>
+    <div v-for="(val, key, index) in object"></div>
+    <!-- v-for 默认行为试着不改变整体，而是替换元素。迫使其重新排序的元素，你需要提供一个 key 的特殊属性 -->
+    <div v-for="item in items" :key="item.id">
+      {{ item.text }}
+    </div>
+    ```
 
-- 缩写：@
+6. v-on
 
-- 预期：Function | Inline Statement | Object
+    - 缩写：@
 
-- 参数：event
+    - 预期：Function | Inline Statement | Object
 
-- 修饰符：
+    - 参数：event
 
-    .stop - 调用 event.stopPropagation()。
+    - 修饰符：
 
-    .prevent - 调用 event.preventDefault()。
+        .stop - 调用 event.stopPropagation()。
 
-    .capture - 添加事件侦听器时使用 capture 模式。
+        .prevent - 调用 event.preventDefault()。
 
-    .self - 只当事件是从侦听器绑定的元素本身触发时才触发回调。
+        .capture - 添加事件侦听器时使用 capture 模式。
 
-    .{keyCode | keyAlias} - 只当事件是从特定键触发时才触发回调。
+        .self - 只当事件是从侦听器绑定的元素本身触发时才触发回调。
 
-    .native - 监听组件根元素的原生事件。
+        .{keyCode | keyAlias} - 只当事件是从特定键触发时才触发回调。
 
-    .once - 只触发一次回调。
+        .native - 监听组件根元素的原生事件。
 
-    .left - (2.2.0) 只当点击鼠标左键时触发。
+        .once - 只触发一次回调。
 
-    .right - (2.2.0) 只当点击鼠标右键时触发。
+        .left - (2.2.0) 只当点击鼠标左键时触发。
 
-    .middle - (2.2.0) 只当点击鼠标中键时触发。
+        .right - (2.2.0) 只当点击鼠标右键时触发。
 
-    .passive - (2.3.0) 以 { passive: true } 模式添加侦听器
+        .middle - (2.2.0) 只当点击鼠标中键时触发。
 
-- 用法:
+        .passive - (2.3.0) 以 { passive: true } 模式添加侦听器
 
-    绑定事件监听器。事件类型由参数指定。表达式可以是一个方法的名字或一个内联语句，如果没有修饰符也可以省略。
+    - 用法:
 
-    用在普通元素上时，只能监听原生 DOM 事件。用在自定义元素组件上时，也可以监听子组件触发的自定义事件。
+        绑定事件监听器。事件类型由参数指定。表达式可以是一个方法的名字或一个内联语句，如果没有修饰符也可以省略。
 
-    在监听原生 DOM 事件时，方法以事件为唯一的参数。如果使用内联语句，语句可以访问一个 $event 属性：v-on:click="handle('ok', $event)"。
+        用在普通元素上时，只能监听原生 DOM 事件。用在自定义元素组件上时，也可以监听子组件触发的自定义事件。
 
-    从 2.4.0 开始，v-on 同样支持不带参数绑定一个事件/监听器键值对的对象。注意当使用对象语法时，是不支持任何修饰器的。
+        在监听原生 DOM 事件时，方法以事件为唯一的参数。如果使用内联语句，语句可以访问一个 $event 属性：v-on:click="handle('ok', $event)"。
 
-```html
-<button v-on:click="doThis"></button><!-- 方法处理器 -->
-<button v-on:[event]="doThis"></button><!-- 动态事件 (2.6.0+) -->
-<button v-on:click="doThat('hello', $event)"></button><!-- 内联语句 -->
-<button @click="doThis"></button><!-- 缩写 -->
-<button @[event]="doThis"></button><!-- 动态事件缩写 (2.6.0+) -->
-<button @click.stop="doThis"></button><!-- 停止冒泡 -->
-<button @click.prevent="doThis"></button><!-- 阻止默认行为 -->
-<form @submit.prevent></form><!-- 阻止默认行为，没有表达式 -->
-<button @click.stop.prevent="doThis"></button><!--  串联修饰符 -->
-<input @keyup.enter="onEnter"><!-- 键修饰符，键别名 -->
-<input @keyup.13="onEnter"><!-- 键修饰符，键代码 -->
-<button v-on:click.once="doThis"></button><!-- 点击回调只会触发一次 -->
-<button v-on="{ mousedown: doThis, mouseup: doThat }"></button><!-- 对象语法 (2.4.0+) -->
-```
+        从 2.4.0 开始，v-on 同样支持不带参数绑定一个事件/监听器键值对的对象。注意当使用对象语法时，是不支持任何修饰器的。
 
-在子组件上监听自定义事件 (当子组件触发“my-event”时将调用事件处理器)：
+    ```html
+    <button v-on:click="doThis"></button><!-- 方法处理器 -->
+    <button v-on:[event]="doThis"></button><!-- 动态事件 (2.6.0+) -->
+    <button v-on:click="doThat('hello', $event)"></button><!-- 内联语句 -->
+    <button @click="doThis"></button><!-- 缩写 -->
+    <button @[event]="doThis"></button><!-- 动态事件缩写 (2.6.0+) -->
+    <button @click.stop="doThis"></button><!-- 停止冒泡 -->
+    <button @click.prevent="doThis"></button><!-- 阻止默认行为 -->
+    <form @submit.prevent></form><!-- 阻止默认行为，没有表达式 -->
+    <button @click.stop.prevent="doThis"></button><!--  串联修饰符 -->
+    <input @keyup.enter="onEnter"><!-- 键修饰符，键别名 -->
+    <input @keyup.13="onEnter"><!-- 键修饰符，键代码 -->
+    <button v-on:click.once="doThis"></button><!-- 点击回调只会触发一次 -->
+    <button v-on="{ mousedown: doThis, mouseup: doThat }"></button><!-- 对象语法 (2.4.0+) -->
+    ```
 
-```html
-<my-component @my-event="handleThis"></my-component>
-<my-component @my-event="handleThis(123, $event)"></my-component><!-- 内联语句 -->
-<my-component @click.native="onClick"></my-component><!-- 组件中的原生事件 -->
-```
+    在子组件上监听自定义事件 (当子组件触发“my-event”时将调用事件处理器)：
 
-示例:跑马灯
+    ```html
+    <my-component @my-event="handleThis"></my-component>
+    <my-component @my-event="handleThis(123, $event)"></my-component><!-- 内联语句 -->
+    <my-component @click.native="onClick"></my-component><!-- 组件中的原生事件 -->
+    ```
 
-```html
-<div id="app">
-    <p>{{info}}</p>
-    <input type="button" value="开启" @click="go">
-    <input type="button" value="停止" @click="stop">
-</div>
-<script>
-    var vm = new Vue({
-        el: "#app",
-        data: {
-            info: "猥琐发育,别浪",
-            intervalId: null
-        },
-        methods: {
-            go(){
-                if (this.intervalId != null) return;
-                this.intervalId = setInterval(()=>{
-                    this.info = this.info.substring(1) + this.info.substring(0, 1);
-                },500);
+    示例:跑马灯
+
+    ```html
+    <div id="app">
+        <p>{{info}}</p>
+        <input type="button" value="开启" @click="go">
+        <input type="button" value="停止" @click="stop">
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                info: "猥琐发育,别浪",
+                intervalId: null
             },
-            stop(){
-                clearInterval(this.intervalId);
-                this.intervalId = null;
+            methods: {
+                go(){
+                    if (this.intervalId != null) return;
+                    this.intervalId = setInterval(()=>{
+                        this.info = this.info.substring(1) + this.info.substring(0, 1);
+                    },500);
+                },
+                stop(){
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
             }
-        }
-    });
-</script>
-```
+        });
+    </script>
+    ```
 
-### v-bind
+7. v-bind
 
-- 缩写：:
+    - 缩写：:
 
-- 预期：any (with argument) | Object (without argument)
+    - 预期：any (with argument) | Object (without argument)
 
-- 参数：attrOrProp (optional)
+    - 参数：attrOrProp (optional)
 
-- 修饰符：
+    - 修饰符：
 
-    .prop - 被用于绑定 DOM 属性 (property)。(差别在哪里？)
+        .prop - 被用于绑定 DOM 属性 (property)。(差别在哪里？)
 
-    .camel - (2.1.0+) 将 kebab-case 特性名转换为 camelCase. (从 2.1.0 开始支持)
+        .camel - (2.1.0+) 将 kebab-case 特性名转换为 camelCase. (从 2.1.0 开始支持)
 
-    .sync (2.3.0+) 语法糖，会扩展成一个更新父组件绑定值的 v-on 侦听器。
+        .sync (2.3.0+) 语法糖，会扩展成一个更新父组件绑定值的 v-on 侦听器。
 
-- 用法：
+    - 用法：
 
-    动态地绑定一个或多个特性，或一个组件 prop 到表达式。
+        动态地绑定一个或多个特性，或一个组件 prop 到表达式。
 
-    在绑定 class 或 style 特性时，支持其它类型的值，如数组或对象。可以通过下面的教程链接查看详情。
+        在绑定 class 或 style 特性时，支持其它类型的值，如数组或对象。可以通过下面的教程链接查看详情。
 
-    在绑定 prop 时，prop 必须在子组件中声明。可以用修饰符指定不同的绑定类型。
+        在绑定 prop 时，prop 必须在子组件中声明。可以用修饰符指定不同的绑定类型。
 
-    没有参数时，可以绑定到一个包含键值对的对象。注意此时 class 和 style 绑定不支持数组和对象。
+        没有参数时，可以绑定到一个包含键值对的对象。注意此时 class 和 style 绑定不支持数组和对象。
 
-```html
-<img v-bind:src="imageSrc"><!-- 绑定一个属性 -->
-<button v-bind:[key]="value"></button><!-- 动态特性名 (2.6.0+) -->
-<img :src="imageSrc"><!-- 缩写 -->
-<button :[key]="value"></button><!-- 动态特性名缩写 (2.6.0+) -->
-<img :src="'/path/to/images/' + fileName"><!-- 内联字符串拼接 -->
-<div :class="{ red: isRed }"></div><!-- class 绑定 -->
-<div :class="[classA, classB]"></div>
-<div :class="[classA, { classB: isB, classC: isC }]">
-<div :style="{ fontSize: size + 'px' }"></div><!-- style 绑定 -->
-<div :style="[styleObjectA, styleObjectB]"></div>
-<div v-bind="{ id: someProp, 'other-attr': otherProp }"></div><!-- 绑定一个有属性的对象 -->
-<div v-bind:text-content.prop="text"></div><!-- 通过 prop 修饰符绑定 DOM 属性 -->
-<my-component :prop="someThing"></my-component><!-- prop 绑定。“prop”必须在 my-component 中声明。-->
-<child-component v-bind="$props"></child-component><!-- 通过 $props 将父组件的 props 一起传给子组件 -->
-<svg><a :xlink:special="foo"></a></svg><!-- XLink -->
-```
+    ```html
+    <img v-bind:src="imageSrc"><!-- 绑定一个属性 -->
+    <button v-bind:[key]="value"></button><!-- 动态特性名 (2.6.0+) -->
+    <img :src="imageSrc"><!-- 缩写 -->
+    <button :[key]="value"></button><!-- 动态特性名缩写 (2.6.0+) -->
+    <img :src="'/path/to/images/' + fileName"><!-- 内联字符串拼接 -->
+    <div :class="{ red: isRed }"></div><!-- class 绑定 -->
+    <div :class="[classA, classB]"></div>
+    <div :class="[classA, { classB: isB, classC: isC }]">
+    <div :style="{ fontSize: size + 'px' }"></div><!-- style 绑定 -->
+    <div :style="[styleObjectA, styleObjectB]"></div>
+    <div v-bind="{ id: someProp, 'other-attr': otherProp }"></div><!-- 绑定一个有属性的对象 -->
+    <div v-bind:text-content.prop="text"></div><!-- 通过 prop 修饰符绑定 DOM 属性 -->
+    <my-component :prop="someThing"></my-component><!-- prop 绑定。“prop”必须在 my-component 中声明。-->
+    <child-component v-bind="$props"></child-component><!-- 通过 $props 将父组件的 props 一起传给子组件 -->
+    <svg><a :xlink:special="foo"></a></svg><!-- XLink -->
+    ```
 
-.camel 修饰符允许在使用 DOM 模板时将 v-bind 属性名称驼峰化，例如 SVG 的 viewBox 属性：
+    .camel 修饰符允许在使用 DOM 模板时将 v-bind 属性名称驼峰化，例如 SVG 的 viewBox 属性：
 
-`<svg :view-box.camel="viewBox"></svg>`
+    `<svg :view-box.camel="viewBox"></svg>`
 
-在使用字符串模板或通过 vue-loader/vueify 编译时，无需使用 .camel。
+    在使用字符串模板或通过 vue-loader/vueify 编译时，无需使用 .camel。
 
-### v-model
+8. v-model
 
-- 预期：随表单控件类型不同而不同。
+    - 预期：随表单控件类型不同而不同。
 
-- 限制：
+    - 限制：
 
-    `<input>`
+        `<input>`
 
-    `<select>`
+        `<select>`
 
-    `<textarea>`
+        `<textarea>`
 
-    `components`
+        `components`
 
-- 修饰符：
+    - 修饰符：
 
-    .lazy - 取代 input 监听 change 事件
+        .lazy - 取代 input 监听 change 事件
 
-    .number - 输入字符串转为有效的数字
+        .number - 输入字符串转为有效的数字
 
-    .trim - 输入首尾空格过滤
+        .trim - 输入首尾空格过滤
 
-- 用法：在表单控件或者组件上创建双向绑定。
+    - 用法：在表单控件或者组件上创建双向绑定。
 
-> v-bind 只能实现数据的单向绑定，从 M 自动绑定到 V， 无法实现数据的双向绑定
-> v-model 指令，可以实现 表单元素和 Model 中数据的双向数据绑定
-> v-model 只能运用在 表单元素中
+    > v-bind 只能实现数据的单向绑定，从 M 自动绑定到 V， 无法实现数据的双向绑定
+    > v-model 指令，可以实现 表单元素和 Model 中数据的双向数据绑定
+    > v-model 只能运用在 表单元素中
 
 ### 自定义指令
 
@@ -361,29 +363,27 @@ filterA 被定义为接收三个参数的过滤器函数。其中 message 的值
 
 - 生命周期钩子 = 生命周期函数 = 生命周期事件
 
-### 主要的生命周期函数分类
+### 1. 创建期间的生命周期函数
 
-1. 创建期间的生命周期函数：
+- beforeCreate：实例刚在内存中被创建出来，此时，还没有初始化好 data 和 methods 属性
 
-   - beforeCreate：实例刚在内存中被创建出来，此时，还没有初始化好 data 和 methods 属性
+- created：实例已经在内存中创建OK，此时 data 和 methods 已经创建OK，此时还没有开始 编译模板
 
-   - created：实例已经在内存中创建OK，此时 data 和 methods 已经创建OK，此时还没有开始 编译模板
+- beforeMount：此时已经完成了模板的编译，但是还没有挂载到页面中
 
-   - beforeMount：此时已经完成了模板的编译，但是还没有挂载到页面中
+- mounted：此时，已经将编译好的模板，挂载到了页面指定的容器中显示
 
-   - mounted：此时，已经将编译好的模板，挂载到了页面指定的容器中显示
+### 2. 运行期间的生命周期函数
 
-2. 运行期间的生命周期函数：
+- beforeUpdate：状态更新之前执行此函数， 此时 data 中的状态值是最新的，但是界面上显示的 数据还是旧的，因为此时还没有开始重新渲染DOM节点
 
-   - beforeUpdate：状态更新之前执行此函数， 此时 data 中的状态值是最新的，但是界面上显示的 数据还是旧的，因为此时还没有开始重新渲染DOM节点
+- updated：实例更新完毕之后调用此函数，此时 data 中的状态值 和 界面上显示的数据，都已经完成了更新，界面已经被重新渲染好了！
 
-   - updated：实例更新完毕之后调用此函数，此时 data 中的状态值 和 界面上显示的数据，都已经完成了更新，界面已经被重新渲染好了！
+### 3. 销毁期间的生命周期函数
 
-3. 销毁期间的生命周期函数：
+- beforeDestroy：实例销毁之前调用。在这一步，实例仍然完全可用。
 
-   - beforeDestroy：实例销毁之前调用。在这一步，实例仍然完全可用。
-
-   - destroyed：Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。
+- destroyed：Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。
 
 ![生命周期图示](./media/lifecycle.png)
 
@@ -571,6 +571,55 @@ var vm = new Vue({
 ```
 
 ## 路由
+
+### 概念
+
+> `https://router.vuejs.org/zh/guide/`
+
+1. **后端路由：**对于普通的网站，所有的超链接都是URL地址，所有的URL地址都对应服务器上对应的资源；
+
+2. **前端路由：**对于单页面应用程序来说，主要通过URL中的hash(#号)来实现不同页面之间的切换，同时，hash有一个特点：HTTP请求中不会包含hash相关的内容；所以，单页面程序中的页面跳转主要用hash实现；
+
+3. 在单页面应用程序中，这种通过hash改变来切换页面的方式，称作前端路由(区别于后端路由)
+
+### 使用
+
+```html
+<!-- 1. 导入 vue-router 组件类库 -->
+<script src="./lib/vue-router-2.7.0.js"></script>
+<div id="app">
+  <!-- 2. 使用 router-link 组件来导航 默认渲染为一个a 标签 -->
+  <router-link to="/login" tag="a">登录</router-link>
+  <router-link to="/register">注册</router-link>
+  <!-- 3. 使用 router-view 组件来显示匹配到的组件 -->
+  <!-- 可以把 router-view 认为是一个占位符 -->
+  <router-view></router-view>
+</div>
+<script>
+  // 4.1 使用 Vue.extend 来创建登录组件
+  var login = Vue.extend({
+    template: '<h1>登录组件</h1>'
+  });
+  // 4.2 使用 Vue.extend 来创建注册组件
+  var register = Vue.extend({
+    template: '<h1>注册组件</h1>'
+  });
+  // 5. 创建一个路由 router 实例，通过 routers 属性来定义路由匹配规则
+  var routerObj = new VueRouter({
+    routes: [
+      { path: '/login', component: login },
+      { path: '/register', component: register }
+    ]
+  });
+  // 6. 创建 Vue 实例，得到 ViewModel
+  var vm = new Vue({
+    el: '#app',
+    router: routerObj // 将路由规则对象，注册到 vm 实例上，用来监听 URL 地址的变化，然后展示对应的组件
+  });
+</script>
+```
+
+
 
 ## axios
 
@@ -855,3 +904,9 @@ axios.get('/user/12345')
     console.log(error.config);
   });
 ```
+
+## 状态管理 vuex
+
+## iView
+
+## element-ui

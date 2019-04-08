@@ -1,67 +1,71 @@
+[TOC]
+
 # 1.数据类型的转换
 
 ## 1. 转为str
 
 ```js
-1.num.toString() //不能转换undefied 和 null
-2.String()
-3.字符串与其他数据类型直接拼接
+num.toString() //不能转换undefied 和 null
+String()
+字符串与其他数据类型直接拼接
 ```
 
 ## 2. 转为num
 
 ```js
-1.Number() //要转换的有一个不是数字,返回NaN
-2.parseInt() //解析到非数字结束,第一个为非数字则返回NaN
-3.parseFloat() //解析到非数字结束,第一个为非数字则返回NaN
+Number() //要转换的有一个不是数字,返回NaN
+parseInt() //解析到非数字结束,第一个为非数字则返回NaN
+parseFloat() //解析到非数字结束,第一个为非数字则返回NaN
   //会解析第一个. 遇到第二个.或者非数字结束如果解析的内容里只有整数，解析成整数
 ```
 
 ## 3. 转换成布尔类型
   
-```js
-  Boolean() //0  ''(空字符串) null undefined NaN 会转换成false  其它都会转换成true
-```
+`Boolean()` 0  ''(空字符串) null undefined NaN 会转换成false  其它都会转换成true
 
 # 2.数组
 
 [数组](http://www.runoob.com/jsref/jsref-obj-array.html)
 
-## 1. 遍历数组
+## 1.遍历数组
 
-### 1. 索引数组
+### 1.索引数组
 
 ```js
-  for(var i = 0; i < arr.length; i++) {
-  数组遍历的固定结构
-  }
+for(var i = 0; i < arr.length; i++) {
+数组遍历的固定结构
+}
 ```
 
 ### 2. 关联数组
 
 ```js
-  var hash=[]
-  hash["下标名(key)"]=值(value)
-  for(var key in hash){
-      key //仅获取当前下标名称
-      hash[key] //获取当前元素值
-  }
-  var keys=[];
-  var i=0;
-  for(keys[i++] in hash);
-  //结束后: keys中保存了hash的所有key
+var hash=[]
+hash["下标名(key)"]=值(value)
+for(var key in hash){
+    key //仅获取当前下标名称
+    hash[key] //获取当前元素值
+}
+var keys=[];
+var i=0;
+for(keys[i++] in hash);
+//结束后: keys中保存了hash的所有key
 ```
 
 ## 2. 方法
 
-### 1.栈操作(先进后出)队尾插入元素，在队尾删除元素
+### 1.栈操作(先进后出)
+
+> 队尾插入元素，在队尾删除元素
 
 ```js
 push()    //在数组的最后添加元素
 pop() //取出数组中的最后一项，修改length属性
 ```
 
-### 2.队列操作(先进先出)队尾插入元素，在队首删除元素
+### 2.队列操作(先进先出)
+
+> 队尾插入元素，在队首删除元素
 
 ```js
 push()
@@ -94,7 +98,9 @@ indexOf()
 lastIndexOf()   //如果没找到返回-1
 ```
 
-### 6.迭代方法 不会修改原数组(可选)
+### 6.迭代方法
+
+> 不会修改原数组(可选)
 
 ```js
 every()
@@ -166,65 +172,65 @@ fromCharCode() //把ASCII码转换成字符串
 ### 1.new Object()创建对象
 
 ```js
-    var person = new Object();
-    person.name = 'lisi';
-    person.sayHi = function(){
-      console.log('Hello,everyBody');
-    }
+var person = new Object();
+person.name = 'lisi';
+person.sayHi = function(){
+  console.log('Hello,everyBody');
+}
 ```
 
 ### 2.工厂函数创建对象
 
 ```js
-    function createPerson(name, age, job) {
-      var person = new Object();
-      person.name = name;
-      person.age = age;
-      person.job = job;
-      person.sayHi = function(){
-        console.log('Hello,everyBody');
-      }
-      return person;
-    }
-    var p1 = createPerson('张三', 22, 'actor');
+function createPerson(name, age, job) {
+  var person = new Object();
+  person.name = name;
+  person.age = age;
+  person.job = job;
+  person.sayHi = function(){
+    console.log('Hello,everyBody');
+  }
+  return person;
+}
+var p1 = createPerson('张三', 22, 'actor');
 ```
 
 ### 3.自定义构造函数
 
 ```js
-  function Person(name,age,job){
-    this.name = name;
-    this.age = age;
-    this.job = job;
-    this.sayHi = function(){
-      console.log('Hello,everyBody');
-    }
+function Person(name,age,job){
+  this.name = name;
+  this.age = age;
+  this.job = job;
+  this.sayHi = function(){
+    console.log('Hello,everyBody');
   }
-  var p1 = new Person('张三', 22, 'actor');
+}
+var p1 = new Person('张三', 22, 'actor');
 ```
 
 ## 2.遍历对象的属性
 
 ```js
-    var obj = {};
-    for (var i = 0; i < 10; i++) {
-      obj[i] = i * 2;
-    }
-    for(var key in obj) {
-      console.log(key + "==" + obj[key]);
-    }
+var obj = {};
+for (var i = 0; i < 10; i++) {
+  obj[i] = i * 2;
+}
+for(var key in obj) {
+  console.log(key + "==" + obj[key]);
+}
 ```
 
 ## 3.删除对象的属性
 
 ```js
-    function fun() {
-      this.name = 'mm';
-    }
-    var obj = new fun();
-    console.log(obj.name);
-    delete obj.name;
-    console.log(obj.name); // undefined
+function fun() {
+  this.name = 'mm';
+}
+var obj = new fun();
+console.log(obj.name);
+delete obj.name;
+console.log(obj.name); // undefined
 ```
 
 ## 4.JSON对象
@@ -415,7 +421,9 @@ keydown //键盘按键抬起触发
 
 ## 3. 属性操作
 
-### 1. 非表单元素的属性:href、title、id、src、className
+### 1. 非表单元素的属性
+
+> href、title、id、src、className
 
 ```js
 var pic = document.getElementById('pic');
@@ -551,8 +559,8 @@ clearInterval(timerId);// 取消定时器的执行
 
 location可以获取或者设置浏览器地址栏的URL 使用的时候可以省略window对象
 scheme://host:port/path?query#fragment
-location.href = "https://www.baidu.com"
-location.assign("https://www.baidu.com")
+`location.href = "https://www.baidu.com"`
+`location.assign("https://www.baidu.com")`
 
 ## 5. history对象
 
@@ -579,7 +587,7 @@ console.log(box.scrollHeight)
 
 ## 2.偏移量即外边距
 
-  offsetParent用于获取定位的父级元素
+offsetParent用于获取定位的父级元素
 
 ```js
 var box = document.getElementById('box');
@@ -985,9 +993,7 @@ s1.sayName() // => hello 张三
 
 `call()` 方法调用一个函数, 其具有一个指定的 `this` 值和分别地提供的参数(参数的列表)。
 
-<p class="danger">
-  注意：该方法的作用和 `apply()` 方法类似，只有一个区别，就是 `call()` 方法接受的是若干个参数的列表，而 `apply()` 方法接受的是一个包含多个参数的数组。
-</p>
+注意：该方法的作用和 `apply()` 方法类似，只有一个区别，就是 `call()` 方法接受的是若干个参数的列表，而 `apply()` 方法接受的是一个包含多个参数的数组。
 
 语法：
 
@@ -1007,9 +1013,7 @@ fun.call(thisArg[, arg1[, arg2[, ...]]])
 
 `apply()` 方法调用一个函数, 其具有一个指定的 `this` 值，以及作为一个数组（或类似数组的对象）提供的参数。
 
-<p class="danger">
-  注意：该方法的作用和 `call()` 方法类似，只有一个区别，就是 `call()` 方法接受的是若干个参数的列表，而 `apply()` 方法接受的是一个包含多个参数的数组。
-</p>
+注意：该方法的作用和 `call()` 方法类似，只有一个区别，就是 `call()` 方法接受的是若干个参数的列表，而 `apply()` 方法接受的是一个包含多个参数的数组。
 
 语法：
 
@@ -1049,9 +1053,7 @@ fun.bind(thisArg[, arg1[, arg2[, ...]]])
 - arg1, arg2, ...
   当绑定函数被调用时，这些参数将置于实参之前传递给被绑定的方法。
 
-返回值：
-
-返回由指定的this值和初始化参数改造的原函数拷贝。
+返回值:返回由指定的this值和初始化参数改造的原函数拷贝。
 
 示例1：
 
@@ -1193,9 +1195,7 @@ fns.getCount() // => 1
 {
   var foo = 'bar'
 }
-
 console.log(foo)
-
 if (true) {
   var a = 123
 }
@@ -1206,20 +1206,16 @@ console.log(a)
 
 ```javascript
 var a = 10
-
 function fn () {
   var b = 20
-
   function fn1 () {
     var c = 30
     console.log(a + b + c)
   }
-
   function fn2 () {
     var d = 40
     console.log(c + d)
   }
-
   fn1()
   fn2()
 }
@@ -1256,7 +1252,6 @@ for(var i = 0; i < arr.length; i++) {
 
 ```javascript
 console.log(111)
-
 for(var i = 0; i < 3; i++) {
   setTimeout(function () {
     console.log(i)
@@ -1314,17 +1309,31 @@ function factorial (num) {
 | {n,}  | 重复n次或更多次 |
 | {n,m} | 重复n到m次   |
 
+### 前瞻后顾
+
+| 方法   | 语法       | 备注 |
+| ----- | -------- | ------ |
+| 前瞻 | exp1(?=exp2) | 查找exp2前面的exp1 |
+| 后顾 | (?<=exp2)exp1 | 查找exp2后面的exp1 |
+| 负前瞻 | exp1(?=exp2) | 查找后面不是exp2的exp1 |
+| 负后顾 | (?<=exp2)exp1 | 查找前面不是exp2的exp1 |
+
+> js不支持后顾
+
 ### 其它
 
-```
 [] 字符串用中括号括起来，表示匹配其中的任一字符，相当于或的意思
+
 [^]  匹配除中括号以内的内容
+
 \ 转义符
+
 | 或者，选择两者中的一个。注意|将左右两边分为两部分，而不管左右两边有多长多乱
+
 () 从两个直接量中选择一个，分组
    eg：gr(a|e)y匹配gray和grey
+
 [\u4e00-\u9fa5]  匹配汉字
-```
 
 ## JavaScript 中使用正则表达式
 
@@ -1385,7 +1394,7 @@ console.log(str);
 
 # 14.es6
 
-## 变量声明
+## 1.变量声明
 
 ### 1.let
 
@@ -1400,7 +1409,7 @@ const用来声明常量
 const声明的常量不允许重新赋值
 const声明的常量必须初始化
 
-## 变量的解构赋值
+## 2.变量的解构赋值
 
 ### 1. 数组的解构赋值
 
@@ -1425,7 +1434,7 @@ let {length} = "hi";
 //length==2
 ```
 
-## 字符串扩展
+## 3.字符串扩展
 
 ### 1.includes()
 
@@ -1464,7 +1473,7 @@ let tpl = `
 console.log(tpl);
 ```
 
-## 函数扩展
+## 4.函数扩展
 
 ### 1. 参数默认值
 
@@ -1537,39 +1546,39 @@ foo(1,2);
 
   1. 箭头函数中this取决于函数的定义，而不是调用
 
-  ```js
-  function foo(){
-      // 使用call调用foo时，这里的this其实就是call的第一个参数
-      // console.log(this);
-      setTimeout(()=>{
-          console.log(this.num);
-      },100);
-  }
-  foo.call({num:1});
-  ```
+      ```js
+      function foo(){
+          // 使用call调用foo时，这里的this其实就是call的第一个参数
+          // console.log(this);
+          setTimeout(()=>{
+              console.log(this.num);
+          },100);
+      }
+      foo.call({num:1});
+      ```
 
   2. 箭头函数不可以new
 
-  ```js
-  let foo = () => { this.num = 123;};
-  new foo();
-  ```
+      ```js
+      let foo = () => { this.num = 123;};
+      new foo();
+      ```
 
   3. 箭头函数不可以使用arguments获取参数列表，可以使用rest参数代替
 
-  ```js
-  let foo = (a,b) => {
-      // console.log(a,b);
-      console.log(arguments);//这种方式获取不到实参列表
-  }
-  foo(123,456);
-  let foo = (...param) => {
-      console.log(param);
-  }
-  foo(123,456);
-  ```
+      ```js
+      let foo = (a,b) => {
+          // console.log(a,b);
+          console.log(arguments);//这种方式获取不到实参列表
+      }
+      foo(123,456);
+      let foo = (...param) => {
+          console.log(param);
+      }
+      foo(123,456);
+      ```
 
-## 类与继承
+## 5.类与继承
 
 ### 类
 
@@ -1612,6 +1621,24 @@ d.showColor();
 // d.showInfo();
 Dog.showInfo();
 ```
+
+## 6.Promise对象
+
+```js
+const promise = new Promise(function(resolve, reject){
+  // 内容
+});
+promise
+.then(result => {···})
+.catch(error => {···})
+.finally(() => {···}); //ES2018引入
+```
+
+resolve函数的作用是，将Promise对象的状态从“未完成”变为“成功”，在异步操作成功时调用，并将异步操作的结果，作为参数传递出去；
+
+reject函数的作用是，将Promise对象的状态从“未完成”变为“失败”，在异步操作失败时调用，并将异步操作报出的错误，作为参数传递出去。
+
+Promise实例生成以后，可以用then方法分别指定resolved状态和rejected状态的回调函数。
 
 # 15.AJAX
 
