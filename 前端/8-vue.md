@@ -389,6 +389,236 @@ filterA 被定义为接收三个参数的过滤器函数。其中 message 的值
 
 ## 组件
 
+### 组件与复用
+
+```html
+<div id="components-demo">
+  <button-counter></button-counter>
+</div>
+<script>
+  // 定义一个名为 button-counter 的新组件
+  Vue.component('button-counter', {
+    data: function () {
+      return {
+        count: 0
+      }
+    },
+    template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+  })
+  new Vue({ el: '#components-demo' })
+</script>
+```
+
+组件是可复用的 Vue 实例，且带有一个名字 名字以短横线分割
+
+因为组件是可复用的 `Vue` 实例，所以它们与 `new Vue` 接收相同的选项，例如 `data`、`computed`、`watch`、`methods` 以及生命周期钩子等。仅有的例外是像 `el` 这样根实例特有的选项。
+
+你可以将组件进行任意次数的复用
+
+一个组件的`data`选项必须是一个函数，因此每个实例可以维护一份被返回对象的独立的拷贝
+
+为了能在模板中使用，这些组件必须先注册以便`Vue`能够识别。这里有两种组件的注册类型：全局注册和局部注册。至此，我们的组件都只是通过`Vue.component`全局注册的,全局注册的组件可以用在其被注册之后的任何 (通过`new Vue`)新创建的`Vue`根实例，也包括其组件树中的所有子组件的模板中。
+
+```js
+// 局部注册
+var ComponentA = { /* ... */ }
+var ComponentB = { /* ... */ }
+var ComponentC = { /* ... */ }
+new Vue({
+  el: '#app',
+  components: {
+    'component-a': ComponentA,
+    'component-b': ComponentB
+  }
+})
+```
+
+局部注册的组件在其子组件中不可用。例如，如果你希望 ComponentA 在 ComponentB 中可用，则你需要这样写:
+
+```js
+var ComponentA = { /* ... */ }
+var ComponentB = {
+  components: {
+    'component-a': ComponentA
+  },
+  // ...
+}
+```
+
+或者如果你通过 Babel 和 webpack 使用 ES2015 模块，那么代码看起来更像：
+
+```js
+import ComponentA from './ComponentA.vue'
+export default {
+  components: {
+    ComponentA
+  },
+  // ...
+}
+```
+
+### 使用props传递数据
+
+`Prop` 是你可以在组件上注册的一些自定义特性。当一个值传递给一个 `prop` 特性的时候，它就变成了那个组件实例的一个属性。
+
+一个组件默认可以拥有任意数量的`prop`，任何值都可以传递给任何`prop`。在上述模板中，你会发现我们能够在组件实例中访问这个值，就像访问`data`中的值一样。
+
+```html
+<blog-post title="My journey with Vue"></blog-post>
+<blog-post title="Blogging with Vue"></blog-post>
+<blog-post title="Why Vue is so fun"></blog-post>
+<script>
+  Vue.component('blog-post', {
+    props: ['title'],
+    template: '<h3>{{ title }}</h3>'
+  })
+</script>
+```
+
+然而在一个典型的应用中，你可能在 data 里有一个博文的数组,并想要为每篇博文渲染一个组件
+
+发现我们可以使用 v-bind 来动态传递 prop。这在你一开始不清楚要渲染的具体内容，比如从一个 API 获取博文列表的时候，是非常有用的
+
+```html
+<blog-post
+  v-for="post in posts"
+  v-bind:key="post.id"
+  v-bind:title="post.title"
+></blog-post>
+<script>
+  new Vue({
+    el: '#blog-post-demo',
+    data: {
+      posts: [
+        { id: 1, title: 'My journey with Vue' },
+        { id: 2, title: 'Blogging with Vue' },
+        { id: 3, title: 'Why Vue is so fun' }
+      ]
+    }
+  })
+</script>
+```
+
+当你使用 DOM 中的模板时，camelCase (驼峰命名法) 的 prop 名需要使用其等价的 kebab-case (短横线分隔命名) 命名,如果你使用字符串模板，那么这个限制就不存在了
+
+```js
+// 可以以对象形式列出prop各自的名称和类型
+props: {
+  title: String,
+  likes: Number,
+  isPublished: Boolean,
+  commentIds: Array,
+  author: Object,
+  callback: Function,
+  contactsPromise: Promise // or any other constructor
+}
+```
+
+任何类型的值都可以传给一个 prop
+
+```html
+<blog-post title="My journey with Vue"></blog-post> <!-- 给 prop 传入一个静态的值 -->
+<blog-post v-bind:title="post.title"></blog-post> <!-- 动态赋予一个变量的值 -->
+<blog-post v-bind:title="post.title + ' by ' + post.author.name"
+></blog-post><!-- 动态赋予一个复杂表达式的值 -->
+<blog-post v-bind:likes="42"></blog-post> <!-- 传入一个数字 -->
+<blog-post v-bind:is-published="false"></blog-post> <!-- 传入一个布尔值 -->
+<blog-post v-bind:comment-ids="[234, 266, 273]"></blog-post> <!-- 传入一个数组 -->
+<blog-post
+  v-bind:author="{
+    name: 'Veronica',
+    company: 'Veridian Dynamics'
+  }"
+></blog-post> <!-- 传入一个对象 -->
+<blog-post v-bind="post"></blog-post> <!-- 传入一个对象的所有属性,使用不带参数的 v-bind -->
+```
+
+所有的 prop 都使得其父子 prop 之间形成了一个单向下行绑定：父级 prop 的更新会向下流动到子组件中，但是反过来则不行。
+
+可以为组件的 prop 指定验证要求，为了定制 prop 的验证方式，你可以为 props 中的值提供一个带有验证需求的对象，而不是一个字符串数组
+
+```js
+Vue.component('my-component', {
+  props: {
+    propA: Number,// 基础的类型检查 (`null` 和 `undefined` 会通过任何类型验证)
+    propB: [String, Number],// 多个可能的类型
+    propC: {// 必填的字符串
+      type: String,
+      required: true
+    },
+    propD: {// 带有默认值的数字
+      type: Number,
+      default: 100
+    },
+    propE: {// 带有默认值的对象
+      type: Object,
+      default: function () {// 对象或数组默认值必须从一个工厂函数获取
+        return { message: 'hello' }
+      }
+    },
+    propF: {// 自定义验证函数
+      validator: function (value) {
+        // 这个值必须匹配下列字符串中的一个
+        return ['success', 'warning', 'danger'].indexOf(value) !== -1
+      }
+    }
+  }
+})
+```
+
+那些 prop 会在一个组件实例创建之前进行验证，所以实例的属性 (如 data、computed 等) 在 default 或 validator 函数中是不可用的。
+
+type 可以是下列原生构造函数中的一个：String/Number/Boolean/Array/Object/Date/Function/Symbol/自定义构造函数
+
+对于绝大多数特性来说，从外部提供给组件的值会替换掉组件内部设置好的值。class 和 style 特性会稍微智能一些，即两边的值会被合并起来，从而得到最终的值
+
+### 组件通信
+
+### 使用slot分发内容
+
+### 组件高级用法
+
+### 其他
+
+推荐你始终使用 kebab-case 的事件名
+
+一个组件上的 v-model 默认会利用名为 value 的 prop 和名为 input 的事件，但是像单选框、复选框等类型的输入控件可能会将 value 特性用于不同的目的。model 选项可以用来避免这样的冲突
+
+```html
+<base-checkbox v-model="lovingVue"></base-checkbox>
+<script>
+  Vue.component('base-checkbox', {
+    model: {
+      prop: 'checked',
+      event: 'change'
+    },
+    props: {},
+    template: ``
+  })
+</script>
+```
+
+这里的lovingVue的值将会传入这个名为`checked`的`prop`。同时当`<base-checkbox>`触发一个`change`事件并附带一个新的值的时候，这个lovingVue的属性将会被更新
+
+可能需要对一个 prop 进行“双向绑定”。不幸的是，真正的双向绑定会带来维护上的问题，因为子组件可以修改父组件，且在父组件和子组件都没有明显的改动来源。这也是为什么我们推荐以 update:myPropName 的模式触发事件取而代之。
+
+在一个包含 title prop 的假设的组件中，我们可以用以下方法表达对其赋新值的意图：`this.$emit('update:title', newTitle)`
+
+然后父组件可以监听那个事件并根据需要更新一个本地的数据属性。
+
+```html
+<text-document
+  v-bind:title="doc.title"
+  v-on:update:title="doc.title = $event"
+></text-document>
+```
+
+为了方便起见，我们为这种模式提供一个缩写，即 `.sync` 修饰符：`<text-document v-bind.sync="doc"></text-document>`
+
+这样会把 doc 对象中的每一个属性 (如 title) 都作为一个独立的 prop 传进去，然后各自添加用于更新的 v-on 监听器。
+
+将 `v-bind.sync` 用在一个字面量的对象上，例如 `v-bind.sync=”{ title: doc.title }”`，是无法正常工作的，因为在解析一个像这样的复杂表达式的时候，有很多边缘情况需要考虑。
+
 ## 动画
 
 ### 在CSS过渡和动画中应用class
