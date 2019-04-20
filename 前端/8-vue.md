@@ -535,6 +535,30 @@ props: {
 
 所有的 prop 都使得其父子 prop 之间形成了一个单向下行绑定：父级 prop 的更新会向下流动到子组件中，但是反过来则不行。
 
+有两种常见的试图改变一个 prop 的情形：
+
+  1. 这个 prop 用来传递一个初始值；这个子组件接下来希望将其作为一个本地的 prop 数据来使用。在这种情况下，最好定义一个本地的 data 属性并将这个 prop 用作其初始值：
+
+      ```js
+      props: ['initialCounter'],
+      data: function () {
+        return {
+          counter: this.initialCounter
+        }
+      }
+      ```
+
+  2. 这个 prop 以一种原始的值传入且需要进行转换。在这种情况下，最好使用这个 prop 的值来定义一个计算属性：
+
+      ```js
+      props: ['size'],
+      computed: {
+        normalizedSize: function () {
+          return this.size.trim().toLowerCase()
+        }
+      }
+      ```
+
 可以为组件的 prop 指定验证要求，为了定制 prop 的验证方式，你可以为 props 中的值提供一个带有验证需求的对象，而不是一个字符串数组
 
 ```js
@@ -572,17 +596,15 @@ type 可以是下列原生构造函数中的一个：String/Number/Boolean/Array
 
 对于绝大多数特性来说，从外部提供给组件的值会替换掉组件内部设置好的值。class 和 style 特性会稍微智能一些，即两边的值会被合并起来，从而得到最终的值
 
-### 组件通信
+### 自定义事件
 
-### 使用slot分发内容
+v-on可用于监听DOM事件,还可用于组件之间的自定义事件,子组件用$emit来触发事件,父组件用$on()来监听子组件的事件
 
-### 组件高级用法
+父组件也可直接在子组件的自定义标签上使用v-on来监听子组件触发的自定义事件 `$emit('自定义事件名',传递的数据0-无限多个)`
 
-### 其他
+`v-on`在组件上监听原生事件用`.native`修饰符 `v-on:click.native=""`
 
-推荐你始终使用 kebab-case 的事件名
-
-一个组件上的 v-model 默认会利用名为 value 的 prop 和名为 input 的事件，但是像单选框、复选框等类型的输入控件可能会将 value 特性用于不同的目的。model 选项可以用来避免这样的冲突
+还可在自定义组件上使用`v-model` 一个组件上的 v-model 默认会利用名为 value 的 prop 和名为 input 的事件，但是像单选框、复选框等类型的输入控件可能会将 value 特性用于不同的目的。model 选项可以用来避免这样的冲突
 
 ```html
 <base-checkbox v-model="lovingVue"></base-checkbox>
@@ -618,6 +640,887 @@ type 可以是下列原生构造函数中的一个：String/Number/Boolean/Array
 这样会把 doc 对象中的每一个属性 (如 title) 都作为一个独立的 prop 传进去，然后各自添加用于更新的 v-on 监听器。
 
 将 `v-bind.sync` 用在一个字面量的对象上，例如 `v-bind.sync=”{ title: doc.title }”`，是无法正常工作的，因为在解析一个像这样的复杂表达式的时候，有很多边缘情况需要考虑。
+
+### 组件通信总结
+
+#### 1.props和$emit-父子通信
+
+父组件向子组件传递数据是通过prop传递的，子组件传递数据给父组件是通过$emit触发事件来做到的。
+
+```js
+Vue.component('child',{
+    data(){
+        return {
+            mymessage:this.message
+        }
+    },
+    template:`
+        <div>
+            <input type="text" v-model="mymessage" @input="passData(mymessage)"> </div>
+    `,
+    props:['message'],//得到父组件传递过来的数据
+    methods:{
+        passData(val){
+            //触发父组件中的事件
+            this.$emit('getChildData',val)
+        }
+    }
+})
+Vue.component('parent',{
+    template:`
+        <div>
+            <p>this is parent compoent!</p>
+            <child :message="message" v-on:getChildData="getChildData"></child>
+        </div>
+    `,
+    data(){
+        return {
+            message:'hello'
+        }
+    },
+    methods:{
+        //执行子组件触发的事件
+        getChildData(val){
+            console.log(val)
+        }
+    }
+})
+var app=new Vue({
+    el:'#app',
+    template:`
+        <div>
+            <parent></parent>
+        </div>
+    `
+})
+```
+
+在上面的例子中，有父组件parent和子组件child。
+
+1).父组件传递了message数据给子组件，并且通过v-on绑定了一个getChildData事件来监听子组件的触发事件；
+
+2).子组件通过props得到相关的message数据,最后通过this.$emit触发了getChildData事件。
+
+#### 2.$attrs和$listeners-跨级通信
+
+第一种方式处理父子组件之间的数据传输有一个问题：如果父组件A下面有子组件B，组件B下面有组件C,这时如果组件A想传递数据给组件C怎么办呢？
+
+如果采用第一种方法，我们必须让组件A通过prop传递消息给组件B，组件B在通过prop传递消息给组件C；要是组件A和组件C之间有更多的组件，那采用这种方式就很复杂了。Vue 2.4开始提供了$attrs和$listeners来解决这个问题，能够让组件A之间传递消息给组件C。
+
+```js
+Vue.component('C',{
+    template:`
+        <div>
+            <input type="text" v-model="$attrs.messagec" @input="passCData($attrs.messagec)"> </div>
+    `,
+    methods:{
+        passCData(val){
+            //触发父组件A中的事件
+            this.$emit('getCData',val)
+        }
+    }
+})
+Vue.component('B',{
+    data(){
+        return {
+            mymessage:this.message
+        }
+    },
+    template:`
+        <div>
+            <input type="text" v-model="mymessage" @input="passData(mymessage)">
+            <!-- C组件中能直接触发getCData的原因在于 B组件调用C组件时 使用 v-on 绑定了$listeners 属性 -->
+            <!-- 通过v-bind 绑定$attrs属性，C组件可以直接获取到A组件中传递下来的props（除了B组件中props声明的） -->
+            <C v-bind="$attrs" v-on="$listeners"></C>
+        </div>
+    `,
+    props:['message'],//得到父组件传递过来的数据
+    methods:{
+        passData(val){
+            //触发父组件中的事件
+            this.$emit('getChildData',val)
+        }
+    }
+})
+Vue.component('A',{
+    template:`
+        <div>
+            <p>this is parent compoent!</p>
+            <B :messagec="messagec" :message="message" v-on:getCData="getCData" v-on:getChildData="getChildData(message)"></B>
+        </div>
+    `,
+    data(){
+        return {
+            message:'hello',
+            messagec:'hello c' //传递给c组件的数据
+        }
+    },
+    methods:{
+        getChildData(val){
+            console.log('这是来自B组件的数据')
+        },
+        //执行C子组件触发的事件
+        getCData(val){
+            console.log("这是来自C组件的数据："+val)
+        }
+    }
+})
+var app=new Vue({
+    el:'#app',
+    template:`
+        <div>
+            <A></A>
+        </div>
+    `
+})
+```
+
+#### 3.中央事件总线-同级组件通信
+
+上面两种方式处理的都是父子组件之间的数据传递，而如果两个组件不是父子关系呢？这种情况下可以使用中央事件总线的方式。新建一个Vue事件bus对象，然后通过bus.$emit触发事件，bus.$on监听触发的事件。
+
+```js
+Vue.component('brother1',{
+    data(){
+        return {
+            mymessage:'hello brother1'
+        }
+    },
+    template:`
+        <div>
+            <p>this is brother1 compoent!</p>
+            <input type="text" v-model="mymessage" @input="passData(mymessage)">
+        </div>
+    `,
+    methods:{
+        passData(val){
+            bus.$emit('globalEvent',val)//触发全局事件globalEvent
+        }
+    }
+})
+Vue.component('brother2',{
+    template:`
+        <div>
+            <p>this is brother2 compoent!</p>
+            <p>brother1传递过来的数据：{{brothermessage}}</p>
+        </div>
+    `,
+    data(){
+        return {
+            mymessage:'hello brother2',
+            brothermessage:''
+        }
+    },
+    mounted(){
+        bus.$on('globalEvent',(val)=>{//绑定全局事件globalEvent
+            this.brothermessage=val;
+        })
+    }
+})
+var bus=new Vue();//中央事件总线
+var app=new Vue({
+    el:'#app',
+    template:`
+        <div>
+            <brother1></brother1>
+            <brother2></brother2>
+        </div>
+    `
+})
+```
+
+#### 4.provide和inject-深层跨级通信
+
+父组件中通过provider来提供变量，然后在子组件中通过inject来注入变量。不论子组件有多深，只要调用了inject那么就可以注入provider中的数据。而不是局限于只能从当前父组件的prop属性来获取数据，只要在父组件的生命周期内，子组件都可以调用。
+
+```js
+Vue.component('child',{
+    inject:['for'],//得到父组件传递过来的数据
+    data(){
+        return {
+            mymessage:this.for
+        }
+    },
+    template:`
+        <div>
+            <input type="tet" v-model="mymessage">
+        </div>
+    `
+})
+Vue.component('parent',{
+    template:`
+        <div>
+            <p>this is parent compoent!</p>
+            <child></child>
+        </div>
+    `,
+    provide:{
+        for:'test'
+    },
+    data(){
+        return {
+            message:'hello'
+        }
+    }
+})
+var app=new Vue({
+    el:'#app',
+    template:`
+        <div>
+            <parent></parent>
+        </div>
+    `
+})
+```
+
+#### 5.v-model-父子组件通信
+
+父组件通过v-model传递值给子组件时，会自动传递一个value的prop属性，在子组件中通过this.$emit(‘input’,val)自动修改v-model绑定的值
+
+```js
+Vue.component('child',{
+    props:{
+        value:String, //v-model会自动传递一个字段为value的prop属性
+    },
+    data(){
+        return {
+            mymessage:this.value
+        }
+    },
+    methods:{
+        changeValue(){
+            this.$emit('input',this.mymessage);//通过如此调用可以改变父组件上v-model绑定的值
+        }
+    },
+    template:`
+        <div>
+            <input type="text" v-model="mymessage" @change="changeValue">
+        </div>
+    `
+})
+Vue.component('parent',{
+    template:`
+        <div>
+            <p>this is parent compoent!</p>
+            <p>{{message}}</p>
+            <child v-model="message"></child>
+        </div>
+    `,
+    data(){
+        return {
+            message:'hello'
+        }
+    }
+})
+var app=new Vue({
+    el:'#app',
+    template:`
+        <div>
+            <parent></parent>
+        </div>
+    `
+})
+```
+
+#### 6.$parent和$children-父子组件通信
+
+```js
+Vue.component('child',{
+    props:{
+        value:String, //v-model会自动传递一个字段为value的prop属性
+    },
+    data(){
+        return {
+            mymessage:this.value
+        }
+    },
+    methods:{
+        changeValue(){
+            this.$parent.message = this.mymessage;//通过如此调用可以改变父组件的值
+        }
+    },
+    template:`
+        <div>
+            <input type="text" v-model="mymessage" @change="changeValue">
+        </div>
+    `
+})
+Vue.component('parent',{
+    template:`
+        <div>
+            <p>this is parent compoent!</p>
+            <button @click="changeChildValue">test</button >
+            <child></child>
+        </div>
+    `,
+    methods:{
+        changeChildValue(){
+            this.$children[0].mymessage = 'hello';
+        }
+    },
+    data(){
+        return {
+            message:'hello'
+        }
+    }
+})
+var app=new Vue({
+    el:'#app',
+    template:`
+        <div>
+            <parent></parent>
+        </div>
+    `
+})
+```
+
+#### 7.boradcast和dispatch-特定父子组件通信
+
+vue1.0中提供了这种方式，但vue2.0中没有，但很多开源软件都自己封装了这种方式，比如min ui、element ui和iview等。
+
+比如如下代码，一般都作为一个mixins去使用, broadcast是向特定的父组件，触发事件，dispatch是向特定的子组件触发事件，本质上这种方式还是on和on和emit的封装，但在一些基础组件中却很实用。
+
+```js
+function broadcast(componentName, eventName, params) {
+  this.$children.forEach(child => {
+    var name = child.$options.componentName;
+    if (name === componentName) {
+      child.$emit.apply(child, [eventName].concat(params));
+    } else {
+      broadcast.apply(child, [componentName, eventName].concat(params));
+    }
+  });
+}
+export default {
+  methods: {
+    dispatch(componentName, eventName, params) {
+      var parent = this.$parent;
+      var name = parent.$options.componentName;
+      while (parent && (!name || name !== componentName)) {
+        parent = parent.$parent;
+
+        if (parent) {
+          name = parent.$options.componentName;
+        }
+      }
+      if (parent) {
+        parent.$emit.apply(parent, [eventName].concat(params));
+      }
+    },
+    broadcast(componentName, eventName, params) {
+      broadcast.call(this, componentName, eventName, params);
+    }
+  }
+};
+```
+
+#### 8.$ref子组件索引
+
+尽管存在 prop 和事件，有的时候你仍可能需要在 JavaScript 里直接访问一个子组件。为了达到这个目的，你可以通过 ref 特性为这个子组件赋予一个 ID 引用。例如：`<base-input ref="usernameInput"></base-input>`
+
+现在在你已经定义了这个 ref 的组件里，你可以使用：`this.$refs.usernameInput`来访问这个 `<base-input>` 实例，以便不时之需。比如程序化地从一个父级组件聚焦这个输入框。在刚才那个例子中，该 `<base-input>` 组件也可以使用一个类似的 ref 提供对内部这个指定元素的访问，例如：`<input ref="input">`
+
+甚至可以通过其父级组件定义方法：
+
+```js
+methods: {
+  // 用来从父级组件聚焦输入框
+  focus: function () {
+    this.$refs.input.focus()
+  }
+}
+```
+
+这样就允许父级组件通过下面的代码聚焦 `<base-input>` 里的输入框：`this.$refs.usernameInput.focus()`
+
+当 ref 和 v-for 一起使用的时候，你得到的引用将会是一个包含了对应数据源的这些子组件的数组。
+
+> $refs 只会在组件渲染完成之后生效，并且它们不是响应式的。这仅作为一个用于直接操作子组件的“逃生舱”——你应该避免在模板或计算属性中访问 $refs。
+
+#### 9.vuex处理组件之间的数据交互
+
+如果业务逻辑复杂，很多组件之间需要同时处理一些公共的数据，这个时候才有上面这一些方法可能不利于项目的维护，vuex的做法就是将这一些公共的数据抽离出来，然后其他组件就可以对这个公共数据进行读写操作，这样达到了解耦的目的。
+
+详情可参考：`https://vuex.vuejs.org/zh-cn/`
+
+### 使用slot分发内容
+
+> 在 2.6.0 中，我们为具名插槽和作用域插槽引入了一个新的统一的语法 (即 v-slot 指令)。它取代了 slot 和 slot-scope 这两个目前已被废弃但未被移除且仍在文档中的特性。
+
+#### 插槽内容
+
+将 `<slot>` 元素作为承载分发内容的出口。它允许你像这样合成组件：
+
+```html
+<navigation-link url="/profile">
+  Your Profile
+</navigation-link>
+```
+
+然后你在 `<navigation-link>` 的模板中可能会写为：
+
+```html
+<a
+  v-bind:href="url"
+  class="nav-link"
+>
+  <slot></slot>
+</a>
+```
+
+当组件渲染的时候，`<slot></slot>` 将会被替换为“Your Profile”。插槽内可以包含任何模板代码，包括 HTML：
+
+```html
+<navigation-link url="/profile">
+  <!-- 添加一个 Font Awesome 图标 -->
+  <span class="fa fa-user"></span>
+  Your Profile
+</navigation-link>
+```
+
+甚至其它的组件：
+
+```html
+<navigation-link url="/profile">
+  <!-- 添加一个图标的组件 -->
+  <font-awesome-icon name="user"></font-awesome-icon>
+  Your Profile
+</navigation-link>
+```
+
+如果 `<navigation-link>` 没有包含一个 `<slot>` 元素，则该组件起始标签和结束标签之间的任何内容都会被抛弃。
+
+#### 作用域问题
+
+当你想在一个插槽中使用数据时，例如：
+
+```html
+<navigation-link url="/profile">
+  Logged in as {{ user.name }}
+</navigation-link>
+```
+
+该插槽跟模板的其它地方一样可以访问相同的实例属性 (也就是相同的“作用域”)，而不能访问 `<navigation-link>` 的作用域。例如 url 是访问不到的：
+
+```html
+<navigation-link url="/profile">
+  Clicking here will send you to: {{ url }}
+  <!--
+  这里的 `url` 会是 undefined，因为 "/profile" 是
+  _传递给_ <navigation-link> 的而不是
+  在 <navigation-link> 组件*内部*定义的。
+  -->
+</navigation-link>
+```
+
+作为一条规则，请记住：父级模板里的所有内容都是在父级作用域中编译的；子模板里的所有内容都是在子作用域中编译的。
+
+#### 后备(默认)内容
+
+有时为一个插槽设置具体的后备 (也就是默认的) 内容是很有用的，它只会在没有提供内容的时候被渲染。例如在一个 `<submit-button>` 组件中：
+
+```html
+<button type="submit">
+  <slot></slot>
+</button>
+```
+
+我们可能希望这个 `<button>` 内绝大多数情况下都渲染文本“Submit”。为了将“Submit”作为后备内容，我们可以将它放在 `<slot>` 标签内：
+
+```html
+<button type="submit">
+  <slot>Submit</slot>
+</button>
+```
+
+现在当我在一个父级组件中使用 `<submit-button>` 并且不提供任何插槽内容时,`<submit-button></submit-button>`后备内容“Submit”将会被渲染：
+
+```html
+<button type="submit">
+  Submit
+</button>
+```
+
+但是如果我们提供内容：
+
+```html
+<submit-button>
+  Save
+</submit-button>
+```
+
+则这个提供的内容将会被渲染从而取代后备内容：
+
+```html
+<button type="submit">
+  Save
+</button>
+```
+
+#### 具名插槽
+
+自 2.6.0 起有所更新。
+
+有时我们需要多个插槽。例如对于一个带有如下模板的 `<base-layout>` 组件：
+
+```html
+<div class="container">
+  <header>
+    <!-- 我们希望把页头放这里 -->
+  </header>
+  <main>
+    <!-- 我们希望把主要内容放这里 -->
+  </main>
+  <footer>
+    <!-- 我们希望把页脚放这里 -->
+  </footer>
+</div>
+```
+
+对于这样的情况，`<slot>` 元素有一个特殊的特性：`name`。这个特性可以用来定义额外的插槽：
+
+```html
+<div class="container">
+  <header>
+    <slot name="header"></slot>
+  </header>
+  <main>
+    <slot></slot>
+  </main>
+  <footer>
+    <slot name="footer"></slot>
+  </footer>
+</div>
+```
+
+一个不带 name 的 `<slot>` 出口会带有隐含的名字“default”。
+
+在向具名插槽提供内容的时候，我们可以在一个 `<template>` 元素上使用 `v-slot` 指令，并以 `v-slot` 的参数的形式提供其名称：
+
+```html
+<base-layout>
+  <template v-slot:header>
+  <!-- <template slot="header">已废弃的语法 -->
+    <h1>Here might be a page title</h1>
+  </template>
+  <p>A paragraph for the main content.</p>
+  <p>And another one.</p>
+  <template v-slot:footer>
+    <p>Here's some contact info</p>
+  </template>
+</base-layout>
+```
+
+现在 `<template>` 元素中的所有内容都将会被传入相应的插槽。任何没有被包裹在带有 `v-slot` 的 `<template>` 中的内容都会被视为默认插槽的内容。
+
+然而，如果你希望更明确一些，仍然可以在一个 `<template>` 中包裹默认插槽的内容：
+
+```html
+<base-layout>
+  <template v-slot:header>
+    <h1>Here might be a page title</h1>
+  </template>
+  <template v-slot:default>
+    <p>A paragraph for the main content.</p>
+    <p>And another one.</p>
+  </template>
+  <template v-slot:footer>
+    <p>Here's some contact info</p>
+  </template>
+</base-layout>
+```
+
+任何一种写法都会渲染出：
+
+```html
+<div class="container">
+  <header>
+    <h1>Here might be a page title</h1>
+  </header>
+  <main>
+    <p>A paragraph for the main content.</p>
+    <p>And another one.</p>
+  </main>
+  <footer>
+    <p>Here's some contact info</p>
+  </footer>
+</div>
+```
+
+注意: `v-slot` 只能添加在一个 `<template>` 上 (只有一种例外情况)，这一点和已经废弃的 `slot` 特性不同。
+
+具名插槽的缩写:v-slot:header 可以被重写为 #header,没有参数时会警告#="{{user}}",无参数时可以写作#defalt="{{user}}"
+
+#### 作用域插槽
+
+>自 2.6.0 起有所更新。slot-scope 特性的语法已废弃使用
+
+时让插槽内容能够访问子组件中才有的数据是很有用的。例如，设想一个带有如下模板的 `<current-user>` 组件,我们想让它的后备内容显示用户的名，以取代正常情况下用户的姓
+
+```html
+<span>
+  <slot>{{ user.lastName }}</slot>
+</span>
+<current-user>
+  {{ user.firstName }}
+</current-user>
+```
+
+然而上述代码不会正常工作，因为只有 `<current-user>` 组件可以访问到 user 而我们提供的内容是在父级渲染的。为了让 user 在父级的插槽内容可用，我们可以将 user 作为一个 `<slot>` 元素的特性绑定上去：
+
+```html
+<span>
+  <slot v-bind:user="user">
+    {{ user.lastName }}
+  </slot>
+</span>
+```
+
+绑定在 `<slot>` 元素上的特性被称为插槽 prop。现在在父级作用域中，我们可以给 v-slot 带一个值来定义我们提供的插槽 prop 的名字：
+
+```html
+<current-user>
+  <template v-slot:default="slotProps">
+    {{ slotProps.user.firstName }}
+  </template>
+</current-user>
+```
+
+在上述情况下，当被提供的内容只有默认插槽时，组件的标签才可以被当作插槽的模板来使用。这样我们就可以把 v-slot 直接用在组件上：
+
+```html
+<current-user v-slot:default="slotProps">
+  {{ slotProps.user.firstName }}
+</current-user>
+```
+
+这种写法还可以更简单。就像假定未指明的内容对应默认插槽一样，不带参数的 v-slot 被假定对应默认插槽：
+
+```html
+<current-user v-slot="slotProps">
+  {{ slotProps.user.firstName }}
+</current-user>
+```
+
+注意默认插槽的缩写语法不能和具名插槽混用，因为它会导致作用域不明确：
+
+```html
+<!-- 无效，会导致警告 -->
+<current-user v-slot="slotProps">
+  {{ slotProps.user.firstName }}
+  <template v-slot:other="otherSlotProps">
+    slotProps is NOT available here
+  </template>
+</current-user>
+```
+
+只要出现多个插槽，请始终为所有的插槽使用完整的基于 `<template>` 的语法：
+
+```html
+<current-user>
+  <template v-slot:default="slotProps">
+    {{ slotProps.user.firstName }}
+  </template>
+  <template v-slot:other="otherSlotProps">
+    ...
+  </template>
+</current-user>
+```
+
+作用域插槽的内部工作原理是将你的插槽内容包括在一个传入单个参数的函数里,这意味着 v-slot 的值实际上可以是任何能够作为函数定义中的参数的 JavaScript 表达式。所以在支持的环境下 (单文件组件或现代浏览器)，你也可以使用 ES2015 解构来传入具体的插槽 prop，如下:
+
+```html
+<current-user v-slot="{ user }">
+  {{ user.firstName }}
+</current-user>
+```
+
+这样可以使模板更简洁，尤其是在该插槽提供了多个 prop 的时候。它同样开启了 prop 重命名等其它可能，例如将 user 重命名为 person：
+
+```html
+<current-user v-slot="{ user: person }">
+  {{ person.firstName }}
+</current-user>
+```
+
+你甚至可以定义后备内容，用于插槽 prop 是 undefined 的情形：
+
+```html
+<current-user v-slot="{ user = { firstName: 'Guest' } }">
+  {{ user.firstName }}
+</current-user>
+```
+
+### 组件高级用法
+
+> 实际业务中不常用,独立组件开发中可能会用到
+
+#### 递归组件
+
+组件是可以在它们自己的模板中调用自身的。不过它们只能通过 name 选项来做这件事：`name: 'unique-name-of-my-component'`
+
+当你使用 `Vue.component` 全局注册一个组件时，这个全局的 ID 会自动设置为该组件的 name 选项。
+
+```js
+Vue.component('unique-name-of-my-component', {
+  // ...
+})
+```
+
+稍有不慎，递归组件就可能导致无限循环：
+
+```js
+name: 'stack-overflow',
+template: '<div><stack-overflow></stack-overflow></div>'
+```
+
+类似上述的组件将会导致“max stack size exceeded”错误，所以请确保递归调用是条件性的 (例如使用一个最终会得到 `false` 的 `v-if`)
+
+#### 内联模板
+
+当 `inline-template` 这个特殊的特性出现在一个子组件上时，这个组件将会使用其里面的内容作为模板，而不是将其作为被分发的内容。这使得模板的撰写工作更加灵活。
+
+```html
+<my-component inline-template>
+  <div>
+    <p>These are compiled as the component's own template.</p>
+    <p>Not parent's transclusion content.</p>
+  </div>
+</my-component>
+```
+
+内联模板需要定义在 Vue 所属的 DOM 元素内。
+
+不过，`inline-template` 会让模板的作用域变得更加难以理解。所以作为最佳实践，请在组件内优先选择 template 选项或 .vue 文件里的一个 `<template>` 元素来定义模板。
+
+#### 动态组件
+
+有的时候，在不同组件之间进行动态切换是非常有用的，比如在一个多标签的界面里
+
+![动态组件](./media/动态组件.png)
+
+上述内容可以通过 Vue 的 `<component>` 元素加一个特殊的 `is` 特性来实现,组件会在 `currentTabComponent`改变时改变
+
+`<component v-bind:is="currentTabComponent"></component>`
+
+在上述示例中，`currentTabComponent` 可以包括已注册组件的名字，或一个组件的选项对象
+
+```html
+<script src="https://unpkg.com/vue"></script>
+<div id="dynamic-component-demo" class="demo">
+  <button
+    v-for="tab in tabs"
+    v-bind:key="tab"
+    v-bind:class="['tab-button', { active: currentTab === tab }]"
+    v-on:click="currentTab = tab"
+  >{{ tab }}</button>
+  <component
+    v-bind:is="currentTabComponent"
+    class="tab"
+  ></component>
+</div>
+<script>
+  Vue.component('tab-home', {
+    template: '<div>Home component</div>'
+  })
+  Vue.component('tab-posts', {
+    template: '<div>Posts component</div>'
+  })
+  Vue.component('tab-archive', {
+    template: '<div>Archive component</div>'
+  })
+  new Vue({
+    el: '#dynamic-component-demo',
+    data: {
+      currentTab: 'Home',
+      tabs: ['Home', 'Posts', 'Archive']
+    },
+    computed: {
+      currentTabComponent: function () {
+        return 'tab-' + this.currentTab.toLowerCase()
+      }
+    }
+  })
+</script>
+```
+
+当在这些组件之间切换的时候，你有时会想保持这些组件的状态，以避免反复重渲染导致的性能问题.重新创建动态组件的行为通常是非常有用的，但是在这个案例中，我们更希望那些标签的组件实例能够被在它们第一次被创建的时候缓存下来。为了解决这个问题，我们可以用一个 `<keep-alive>` 元素将其动态组件包裹起来。
+
+```html
+<!-- 失活的组件将会被缓存！-->
+<keep-alive>
+  <component v-bind:is="currentTabComponent"></component>
+</keep-alive>
+```
+
+注意这个 `<keep-alive>` 要求被切换到的组件都有自己的名字，不论是通过组件的 `name` 选项还是局部/全局注册。
+
+#### 异步组件
+
+在大型应用中，我们可能需要将应用分割成小一些的代码块，并且只在需要的时候才从服务器加载一个模块。为了简化，Vue 允许你以一个工厂函数的方式定义你的组件，这个工厂函数会异步解析你的组件定义。Vue 只有在这个组件需要被渲染的时候才会触发该工厂函数，且会把结果缓存起来供未来重渲染。
+
+```js
+Vue.component('async-example', function (resolve, reject) {
+  setTimeout(function () {
+    // 向 `resolve` 回调传递组件定义
+    resolve({
+      template: '<div>I am async!</div>'
+    })
+  }, 1000)
+})
+```
+
+这个工厂函数会收到一个 `resolve` 回调，这个回调函数会在你从服务器得到组件定义的时候被调用。你也可以调用 `reject(reason)` 来表示加载失败。这里的 `setTimeout` 是为了演示用的，如何获取组件取决于你自己。一个推荐的做法是将异步组件和 `webpack` 的 `code-splitting` 功能一起配合使用
+
+```js
+Vue.component('async-webpack-example', function (resolve) {
+  // 这个特殊的 `require` 语法将会告诉 webpack
+  // 自动将你的构建代码切割成多个包，这些包
+  // 会通过 Ajax 请求加载
+  require(['./my-async-component'], resolve)
+})
+```
+
+你也可以在工厂函数中返回一个 `Promise`，所以把 `webpack 2` 和 `ES2015` 语法加在一起，我们可以写成这样：
+
+```js
+Vue.component(
+  'async-webpack-example',
+  // 这个 `import` 函数会返回一个 `Promise` 对象。
+  () => import('./my-async-component')
+)
+```
+
+当使用局部注册的时候，你也可以直接提供一个返回 `Promise` 的函数：
+
+```js
+new Vue({
+  // ...
+  components: {
+    'my-component': () => import('./my-async-component')
+  }
+})
+```
+
+#### X-Template
+
+另一个定义模板的方式是在一个 `<script>` 元素中，并为其带上 `text/x-template` 的类型，然后通过一个 id 将模板引用过去。例如：
+
+```html
+<script type="text/x-template" id="hello-world-template">
+  <p>Hello hello hello</p>
+</script>
+```
+
+```js
+Vue.component('hello-world', {
+  template: '#hello-world-template'
+})
+```
+
+`x-template` 需要定义在 Vue 所属的 DOM 元素外。
+
+这些可以用于模板特别大的 demo 或极小型的应用，但是其它情况下请避免使用，因为这会将模板和该组件的其它定义分离开。
 
 ## 动画
 
