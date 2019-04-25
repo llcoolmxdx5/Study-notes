@@ -20,6 +20,10 @@
 
 `https://cdn.staticfile.org/axios/0.18.0/axios.min.js`
 
+`https://unpkg.com/element-ui/lib/theme-chalk/index.css`
+
+`https://unpkg.com/element-ui/lib/index.js`
+
 ![MVC和MVVM关系图解](./media/01.MVC和MVVM的关系图解.png)
 
 ## vue指令
@@ -2817,6 +2821,609 @@ Vuex 并不限制你的代码结构。但是，它规定了一些需要遵守的
 
 [购物车示例](https://github.com/vuejs/vuex/tree/dev/examples/shopping-cart)
 
+## 渲染函数 & JSX
+
 ## iView
 
 ## element-ui
+
+### 快速开始
+
+npm i element-ui -S
+
+```js
+// main.js
+import Vue from 'vue';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import App from './App.vue';
+Vue.use(ElementUI);
+new Vue({
+  el: '#app',
+  render: h => h(App)
+});
+```
+
+### 内置动画
+
+```html
+<transition name="el-fade-in-linear">
+  <div v-show="show" class="transition-box">.el-fade-in-linear</div>
+</transition>
+```
+
+1. 淡入淡出
+
+    el-fade-in-linear/el-fade-in
+
+2. zoom 缩放
+
+    el-zoom-in-center/el-zoom-in-top/el-zoom-in-bottom
+
+3. collapse 展开折叠
+
+    el-collapse-transition组件
+
+    ```html
+    <el-collapse-transition>
+      <div v-show="show3">
+        <div class="transition-box">el-collapse-transition</div>
+        <div class="transition-box">el-collapse-transition</div>
+      </div>
+    </el-collapse-transition>
+    ```
+
+### Layout 布局
+
+>通过基础的 24 分栏，迅速简便地创建布局
+
+1. 基础布局
+
+    通过 row 和 col 组件，并通过 col 组件的 span 属性我们就可以自由地组合布局。
+
+    ```html
+    <el-row>
+      <el-col :span="12"><div class="grid-content bg-purple"></div></el-col>
+      <el-col :span="12"><div class="grid-content bg-purple-light"></div></el-col>
+    </el-row>
+    ```
+
+2. 分栏间隔
+
+    Row 组件 提供 gutter 属性来指定每一栏之间的间隔，默认间隔为 0。
+
+    ```html
+    <el-row :gutter="20">
+      <el-col :span="12"><div class="grid-content bg-purple"></div></el-col>
+      <el-col :span="12"><div class="grid-content bg-purple-light"></div></el-col>
+    </el-row>
+    ```
+
+3. 混合布局
+
+    通过基础的 1/24 分栏任意扩展组合形成较为复杂的混合布局。
+
+    ```html
+    <el-row :gutter="20">
+      <el-col :span="16"><div class="grid-content bg-purple"></div></el-col>
+      <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
+    </el-row>
+    ```
+
+4. 分栏偏移
+
+    通过制定 col 组件的 offset 属性可以指定分栏偏移的栏数。
+
+    ```html
+    <el-row :gutter="20">
+      <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+      <el-col :span="6" :offset="6"><div class="grid-content bg-purple"></div></el-col>
+    </el-row>
+    ```
+
+5. 对齐方式
+
+    将 type 属性赋值为 'flex'，可以启用 flex 布局，并可通过 justify 属性来指定 start, center, end, space-between, space-around 其中的值来定义子元素的排版方式。
+
+    ```html
+    <el-row type="flex" class="row-bg" justify="center">
+      <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+      <el-col :span="6"><div class="grid-content bg-purple-light"></div></el-col>
+      <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+    </el-row>
+    ```
+
+6. 响应式布局
+
+    参照了 Bootstrap 的 响应式设计，预设了五个响应尺寸：xs、sm、md、lg 和 xl
+
+    ```html
+    <el-row :gutter="10">
+      <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"><div class="grid-content bg-purple"></div></el-col>
+      <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"><div class="grid-content bg-purple-light"></div></el-col>
+      <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"><div class="grid-content bg-purple"></div></el-col>
+      <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"><div class="grid-content bg-purple-light"></div></el-col>
+    </el-row>
+    ```
+
+7. 基于断点的隐藏类
+
+    Element 额外提供了一系列类名，用于在某些条件下隐藏元素。这些类名可以添加在任何 DOM 元素或自定义组件上。如果需要，请自行引入以下文件：`import 'element-ui/lib/theme-chalk/display.css';`
+
+    - hidden-xs-only - 当视口在 xs 尺寸时隐藏
+    - hidden-sm-only - 当视口在 sm 尺寸时隐藏
+    - hidden-sm-and-down - 当视口在 sm 及以下尺寸时隐藏
+    - hidden-sm-and-up - 当视口在 sm 及以上尺寸时隐藏
+    - hidden-md-only - 当视口在 md 尺寸时隐藏
+    - hidden-md-and-down - 当视口在 md 及以下尺寸时隐藏
+    - hidden-md-and-up - 当视口在 md 及以上尺寸时隐藏
+    - hidden-lg-only - 当视口在 lg 尺寸时隐藏
+    - hidden-lg-and-down - 当视口在 lg 及以下尺寸时隐藏
+    - hidden-lg-and-up - 当视口在 lg 及以上尺寸时隐藏
+    - hidden-xl-only - 当视口在 xl 尺寸时隐藏
+
+### Container 布局容器
+
+用于布局的容器组件，方便快速搭建页面的基本结构：
+
+- `<el-container>`：外层容器。当子元素中包含 `<el-header>` 或 `<el-footer>` 时，全部子元素会垂直上下排列，否则会水平左右排列。参数:direction 描述:子元素的排列方向 类型:string 可选值:horizontal / vertical 默认值:子元素中有 el-header 或 el-footer 时为 vertical，否则为 horizontal
+
+- `<el-header>`：顶栏容器。参数:height 描述:顶栏高度 类型:string 默认值:60px
+
+- `<el-aside>`：侧边栏容器。参数:weight 描述:侧边栏宽度 类型:string 默认值:300px
+
+- `<el-main>`：主要区域容器。
+
+- `<el-footer>`：底栏容器。参数:height 描述:底栏高度 类型:string 默认值:60px
+
+> 以上组件采用了 flex 布局，使用前请确定目标浏览器是否兼容。此外，`<el-container>` 的子元素只能是后四者，后四者的父元素也只能是 `<el-container>`。
+
+### Color & 字体 规范
+
+主题色:蓝色#409EFF,可以修改主题
+
+辅助色:除了主色外的场景色，需要在不同的场景中使用（例如危险色表示危险的操作）
+
+- Success #67C23A
+
+- Warning #E6A23C
+
+- Danger #F56C6C
+
+- Info #909399
+
+中性色:中性色用于文本、背景和边框颜色。通过运用不同的中性色，来表现层次结构
+
+- 主要文字 #303133
+- 常规文字 #606266
+- 次要文字 #909399
+- 占位文字 #C0C4CC
+- 一级边框 #DCDFE6
+- 二级边框 #E4E7ED
+- 三级边框 #EBEEF5
+- 四级边框 #F2F6FC
+- 基础黑色 #000000
+- 基础白色 #FFFFFF
+- 透明 Transparent
+
+`font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;`
+
+层级|字体大小
+:--:|:--:|
+辅助文字|12px Extra Small
+正文（小）|13px Small
+正文|14px Base
+小标题|16px Medium
+标题|18px large
+主标题|20px Extra large
+
+### icon图标
+
+直接通过设置类名为 el-icon-iconName 来使用即可
+
+```html
+<i class="el-icon-edit"></i>
+<i class="el-icon-share"></i>
+<i class="el-icon-delete"></i>
+<el-button type="primary" icon="el-icon-search">搜索</el-button>
+```
+
+![icon图标](./media/icon1.png)
+![icon图标](./media/icon2.png)
+
+### Button 按钮
+
+基本用法
+
+使用type、plain、round和circle属性来定义 Button 的样式。
+
+```html
+<el-row>
+  <el-button>默认按钮</el-button>
+  <el-button type="primary">主要按钮</el-button>
+  <el-button type="success">成功按钮</el-button>
+  <el-button type="info">信息按钮</el-button>
+  <el-button type="warning">警告按钮</el-button>
+  <el-button type="danger">危险按钮</el-button>
+</el-row>
+<el-row>
+  <el-button plain>朴素按钮</el-button>
+  <el-button type="primary" plain>主要按钮</el-button>
+  <el-button type="success" plain>成功按钮</el-button>
+  <el-button type="info" plain>信息按钮</el-button>
+  <el-button type="warning" plain>警告按钮</el-button>
+  <el-button type="danger" plain>危险按钮</el-button>
+</el-row>
+<el-row>
+  <el-button round>圆角按钮</el-button>
+  <el-button type="primary" round>主要按钮</el-button>
+  <el-button type="success" round>成功按钮</el-button>
+  <el-button type="info" round>信息按钮</el-button>
+  <el-button type="warning" round>警告按钮</el-button>
+  <el-button type="danger" round>危险按钮</el-button>
+</el-row>
+<el-row>
+  <el-button icon="el-icon-search" circle></el-button>
+  <el-button type="primary" icon="el-icon-edit" circle></el-button>
+  <el-button type="success" icon="el-icon-check" circle></el-button>
+  <el-button type="info" icon="el-icon-message" circle></el-button>
+  <el-button type="warning" icon="el-icon-star-off" circle></el-button>
+  <el-button type="danger" icon="el-icon-delete" circle></el-button>
+</el-row>
+```
+
+![基本按钮](./media/base-button.png)
+
+禁用状态:你可以使用disabled属性来定义按钮是否可用，它接受一个Boolean值。
+
+文字按钮:没有边框和背景色的按钮
+
+```html
+<el-button type="text">文字按钮</el-button>
+<el-button type="text" disabled>文字按钮</el-button>
+```
+
+按钮组:以按钮组的方式出现，常用于多项类似操作。使用`<el-button-group>`标签来嵌套你的按钮
+
+```html
+<el-button-group>
+  <el-button type="primary" icon="el-icon-arrow-left">上一页</el-button>
+  <el-button type="primary">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+</el-button-group>
+<el-button-group>
+  <el-button type="primary" icon="el-icon-edit"></el-button>
+  <el-button type="primary" icon="el-icon-share"></el-button>
+  <el-button type="primary" icon="el-icon-delete"></el-button>
+</el-button-group>
+```
+
+![按钮组](./media/botton-group.png)
+
+加载中:点击按钮后进行数据加载操作，在按钮上显示加载状态。要设置为 loading 状态，只要设置loading属性为true即可。`<el-button type="primary" :loading="true">加载中</el-button>`
+
+不同尺寸:Button 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的按钮尺寸.medium、small、mini，通过设置size属性来配置它们。`size="medium"`
+
+默认聚焦:autofocus
+
+### Radio 单选框
+
+要使用 Radio 组件，只需要设置v-model绑定变量，选中意味着变量的值为相应 Radio label属性的值，label可以是String、Number或Boolean。
+
+```html
+<template>
+  <el-radio v-model="radio" label="1">备选项</el-radio>
+  <el-radio v-model="radio" label="2">备选项</el-radio>
+</template>
+<script>
+  export default {
+    data () {
+      return {
+        radio: '1'
+      };
+    }
+  }
+</script>
+```
+
+禁用状态:只要在el-radio元素中设置disabled属性即可，它接受一个Boolean，true为禁用。
+
+单选框组:结合el-radio-group元素和子元素el-radio可以实现单选组，在el-radio-group中绑定v-model，在el-radio中设置好label即可，无需再给每一个el-radio绑定变量，另外，还提供了change事件来响应变化，它会传入一个参数value
+
+```html
+<template>
+  <el-radio-group v-model="radio">
+    <el-radio :label="3">备选项</el-radio>
+    <el-radio :label="6">备选项</el-radio>
+    <el-radio :label="9">备选项</el-radio>
+  </el-radio-group>
+</template>
+<script>
+  export default {
+    data () {
+      return {
+        radio: 3
+      };
+    }
+  }
+</script>
+```
+
+按钮样式:只需要把el-radio元素换成el-radio-button元素即可，此外，Element 还提供了size属性
+
+带有边框:设置border属性可以渲染为带有边框的单选框。
+
+### Checkbox 多选框
+
+单一的:单独使用可以表示两种状态之间的切换，写在标签中的内容为 checkbox 按钮后的介绍,在el-checkbox元素中定义v-model绑定变量，单一的checkbox中，默认绑定变量的值会是Boolean，选中为true。
+
+```html
+<template>
+  <!-- `checked` 为 true 或 false -->
+  <el-checkbox v-model="checked">备选项</el-checkbox>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        checked: true
+      };
+    }
+  };
+</script>
+```
+
+禁用状态:设置disabled属性即可。
+
+多选框组:checkbox-group元素能把多个 checkbox 管理为一组，只需要在 Group 中使用v-model绑定Array类型的变量即可。 el-checkbox 的 label属性是该 checkbox 对应的值，若该标签中无内容，则该属性也充当 checkbox 按钮后的介绍。label与数组中的元素值相对应，如果存在指定的值则为选中状态，否则为不选中。
+
+```html
+<template>
+  <el-checkbox-group v-model="checkList">
+    <el-checkbox label="复选框 A"></el-checkbox>
+    <el-checkbox label="复选框 B"></el-checkbox>
+    <el-checkbox label="复选框 C"></el-checkbox>
+    <el-checkbox label="禁用" disabled></el-checkbox>
+    <el-checkbox label="选中且禁用" disabled></el-checkbox>
+  </el-checkbox-group>
+</template>
+<script>
+  export default {
+    data () {
+      return {
+        checkList: ['选中且禁用','复选框 A']
+      };
+    }
+  };
+</script>
+```
+
+indeterminate 状态:绑定indeterminate 属性用以表示 checkbox 的不确定状态，一般用于实现全选的效果
+
+```html
+<template>
+  <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+  <div style="margin: 15px 0;"></div>
+  <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+    <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+  </el-checkbox-group>
+</template>
+<script>
+  const cityOptions = ['上海', '北京', '广州', '深圳'];
+  export default {
+    data() {
+      return {
+        checkAll: false,
+        checkedCities: ['上海', '北京'],
+        cities: cityOptions,
+        isIndeterminate: true
+      };
+    },
+    methods: {
+      handleCheckAllChange(val) {
+        this.checkedCities = val ? cityOptions : [];
+        this.isIndeterminate = false;
+      },
+      handleCheckedCitiesChange(value) {
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.cities.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+      }
+    }
+  };
+</script>
+```
+
+可选项目数量的限制:绑定 min 和 max 属性能够限制可以被勾选的项目的数量 `<el-checkbox-group :min="1" :max="2">`
+
+按钮样式: 只需要把el-checkbox元素替换为el-checkbox-button元素即可。此外，Element 还提供了size属性。
+
+带有边框:设置border属性可以渲染为带有边框的多选框。
+
+### input 输入框
+
+> Input 为受控组件，它总会显示 Vue 绑定值。通常情况下，应当处理 input 事件，并更新组件的绑定值（或使用v-model）。否则，输入框内显示的值将不会改变。不支持 v-model 修饰符。
+
+```html
+<el-input v-model="input" placeholder="请输入内容"></el-input>
+<script>
+export default {
+  data() {
+    return {
+      input: ''
+    }
+  }
+}
+</script>
+```
+
+禁用状态:通过 绑定 disabled 属性指定是否禁用 input 组件
+
+可清空:使用clearable属性即可得到一个可清空的输入框
+
+密码框:使用show-password属性即可得到一个可切换显示隐藏的密码框
+
+带 icon 的输入框:可以通过 prefix-icon 和 suffix-icon 属性在 input 组件首部和尾部增加显示图标，也可以通过 slot 来放置图标。
+
+```html
+<div class="demo-input-suffix">
+  属性方式：
+  <el-input
+    placeholder="请选择日期"
+    suffix-icon="el-icon-date"
+    v-model="input1">
+  </el-input>
+  <el-input
+    placeholder="请输入内容"
+    prefix-icon="el-icon-search"
+    v-model="input2">
+  </el-input>
+</div>
+<div class="demo-input-suffix">
+  slot 方式：
+  <el-input
+    placeholder="请选择日期"
+    v-model="input3">
+    <i slot="suffix" class="el-input__icon el-icon-date"></i>
+  </el-input>
+  <el-input
+    placeholder="请输入内容"
+    v-model="input4">
+    <i slot="prefix" class="el-input__icon el-icon-search"></i>
+  </el-input>
+</div>
+<script>
+export default {
+  data() {
+    return {
+      input1: '',
+      input2: '',
+      input3: '',
+      input4: ''
+    }
+  }
+}
+</script>
+```
+
+文本域:用于输入多行文本信息，通过将 type 属性的值指定为 textarea,文本域高度可通过 绑定 rows 属性控制
+
+可自适应文本高度的文本域:通过设置 autosize 属性可以使得文本域的高度能够根据文本内容自动进行调整，并且 autosize 还可以设定为一个对象，指定最小行数和最大行数。`:autosize="{ minRows: 2, maxRows: 4}"/autosize`
+
+复合型输入框:可前置或后置元素，一般为标签或按钮 可通过 slot 来指定在 input 中前置或者后置内容。
+
+```html
+<div>
+  <el-input placeholder="请输入内容" v-model="input1">
+    <template slot="prepend">Http://</template>
+  </el-input>
+</div>
+<div style="margin-top: 15px;">
+  <el-input placeholder="请输入内容" v-model="input2">
+    <template slot="append">.com</template>
+  </el-input>
+</div>
+<div style="margin-top: 15px;">
+  <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
+    <el-select v-model="select" slot="prepend" placeholder="请选择">
+      <el-option label="餐厅名" value="1"></el-option>
+      <el-option label="订单号" value="2"></el-option>
+      <el-option label="用户电话" value="3"></el-option>
+    </el-select>
+    <el-button slot="append" icon="el-icon-search"></el-button>
+  </el-input>
+</div>
+<style>
+  .el-select .el-input {
+    width: 130px;
+  }
+  .input-with-select .el-input-group__prepend {
+    background-color: #fff;
+  }
+</style>
+<script>
+export default {
+  data() {
+    return {
+      input1: '',
+      input2: '',
+      input3: '',
+      select: ''
+    }
+  }
+}
+</script>
+```
+
+尺寸:可通过 size 属性指定输入框的尺寸，除了默认的大小外，还提供了 large、small 和 mini 三种尺寸。
+
+带输入建议:autocomplete 是一个可带输入建议的输入框组件，fetch-suggestions 是一个返回输入建议的方法属性，如 querySearch(queryString, cb)，在该方法中你可以在你的输入建议数据准备好时通过 cb(data) 返回到 autocomplete 组件中。
+
+```html
+<el-row class="demo-autocomplete">
+  <el-col :span="12">
+    <div class="sub-title">激活即列出输入建议</div>
+    <el-autocomplete
+      class="inline-input"
+      v-model="state1"
+      :fetch-suggestions="querySearch"
+      placeholder="请输入内容"
+      @select="handleSelect"
+    ></el-autocomplete>
+  </el-col>
+  <el-col :span="12">
+    <div class="sub-title">输入后匹配输入建议</div>
+    <el-autocomplete
+      class="inline-input"
+      v-model="state2"
+      :fetch-suggestions="querySearch"
+      placeholder="请输入内容"
+      :trigger-on-focus="false"
+      @select="handleSelect"
+    ></el-autocomplete>
+  </el-col>
+</el-row>
+<script>
+  export default {
+    data() {
+      return {
+        restaurants: [],
+        state1: '',
+        state2: ''
+      };
+    },
+    methods: {
+      querySearch(queryString, cb) {
+        var restaurants = this.restaurants;
+        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      loadAll() {
+        return [
+          { "value": "福荣祥烧腊（平溪路店）", "address": "上海市长宁区协和路福泉路255弄57-73号" },
+          { "value": "速记黄焖鸡米饭", "address": "上海市长宁区北新泾街道金钟路180号1层01号摊位" },
+          { "value": "红辣椒麻辣烫", "address": "上海市长宁区天山西路492号" },
+          { "value": "(小杨生煎)西郊百联餐厅", "address": "长宁区仙霞西路88号百联2楼" },
+          { "value": "阳阳麻辣烫", "address": "天山西路389号" },
+          { "value": "南拳妈妈龙虾盖浇饭", "address": "普陀区金沙江路1699号鑫乐惠美食广场A13" }
+        ];
+      },
+      handleSelect(item) {
+        console.log(item);
+      }
+    },
+    mounted() {
+      this.restaurants = this.loadAll();
+    }
+  }
+</script>
+```
+
+自定义模板:可自定义输入建议的显示 使用scoped slot自定义输入建议的模板。该 scope 的参数为item，表示当前输入建议对象。
+
+远程搜索:从服务端搜索数据
