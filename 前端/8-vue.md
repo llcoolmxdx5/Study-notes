@@ -3434,6 +3434,484 @@ export default {
 
 #### InputNumber 计数器
 
+> 仅允许输入标准的数字值，可定义范围
+
+基础用法:要使用它，只需要在`el-input-number`元素中使用`v-model`绑定变量即可，变量的初始值即为默认值。
+
+```html
+<template>
+  <el-input-number v-model="num" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        num: 1
+      };
+    },
+    methods: {
+      handleChange(value) {
+        console.log(value);
+      }
+    }
+  };
+</script>
+```
+
+禁用状态:disabled属性接受一个Boolean，设置为true即可禁用整个组件，如果你只需要控制数值在某一范围内，可以设置min属性和max属性，不设置min和max时，最小值为 0。
+
+步数:允许定义递增递减的步数控制 绑定`step`属性可以控制步长，接受一个Number。
+
+严格步数:step-strictly属性接受一个Boolean。如果这个属性被设置为true，则只能输入步数的倍数。
+
+精度:绑定 precision 属性可以控制数值精度，接收一个 Number precision 的值必须是一个非负整数，并且不能小于 step 的小数位数。
+
+尺寸:额外提供了 medium、small、mini 三种尺寸的数字输入框 `size="medium"`
+
+按钮位置:设置 controls-position 属性可以控制按钮位置。`controls-position="right"`
+
+#### Select 选择器
+
+> 当选项过多时，使用下拉菜单展示并选择内容。
+
+基础用法:适用广泛的基础单选 `v-model`的值为当前被选中的`el-option`的 value 属性值
+
+```html
+<template>
+  <el-select v-model="value" placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }],
+        value: ''
+      }
+    }
+  }
+</script>
+```
+
+有禁用选项:在`el-option`中，设定disabled值为 true，即可禁用该选项 `:disabled="item.disabled"`
+
+禁用状态:选择器不可用状态 为`el-select`设置`disabled`属性，则整个选择器不可用
+
+可清空单选:包含清空按钮，可将选择器清空为初始状态 为`el-select`设置clearable属性，则可将选择器清空。需要注意的是，clearable属性仅适用于单选。
+
+基础多选:适用性较广的基础多选，用 Tag 展示已选项 为`el-select`设置multiple属性即可启用多选，此时v-model的值为当前选中值所组成的数组。默认情况下选中值会以 Tag 的形式展现，你也可以设置collapse-tags属性将它们合并为一段文字。
+
+自定义模板:可以自定义备选项 将自定义的 HTML 模板插入`el-option`的 slot 中即可。
+
+分组:备选项进行分组展示 使用`el-option-group`对备选项进行分组，它的label属性为分组名
+
+```html
+<template>
+  <el-select v-model="value" placeholder="请选择">
+    <el-option-group
+      v-for="group in options"
+      :key="group.label"
+      :label="group.label">
+      <el-option
+        v-for="item in group.options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-option-group>
+  </el-select>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        options: [{
+          label: '热门城市',
+          options: [{
+            value: 'Shanghai',
+            label: '上海'
+          }, {
+            value: 'Beijing',
+            label: '北京'
+          }]
+        }, {
+          label: '城市名',
+          options: [{
+            value: 'Chengdu',
+            label: '成都'
+          }, {
+            value: 'Shenzhen',
+            label: '深圳'
+          }]
+        }],
+        value: ''
+      }
+    }
+  }
+</script>
+```
+
+可搜索:可以利用搜索功能快速查找选项 为`el-select`添加`filterable`属性即可启用搜索功能。默认情况下，Select 会找出所有label属性包含输入值的选项。如果希望使用其他的搜索逻辑，可以通过传入一个`filter-method`来实现。filter-method为一个Function，它会在输入值发生变化时调用，参数为当前输入值。
+
+远程搜索:从服务器搜索数据，输入关键字进行查找 为了启用远程搜索，需要将`filterable`和`remote`设置为true，同时传入一个`remote-method`。remote-method为一个Function，它会在输入值发生变化时调用，参数为当前输入值。需要注意的是，如果`el-option`是通过`v-for`指令渲染出来的，此时需要为`el-option`添加key属性，且其值需具有唯一性，比如此例中的item.value。
+
+创建条目:可以创建并选中选项中不存在的条目 使用`allow-create`属性即可通过在输入框中输入文字来创建新的条目。注意此时`filterable`必须为真。本例还使用了`default-first-option`属性，在该属性打开的情况下，按下回车就可以选中当前选项列表中的第一个选项，无需使用鼠标或键盘方向键进行定位。
+
+#### Cascader 级联选择器
+
+>当一个数据集合有清晰的层级结构时，可通过级联选择器逐级查看并选择。
+
+基础用法:有两种触发子菜单的方式 只需为 Cascader 的options属性指定选项数组即可渲染出一个级联选择器。通过expand-trigger可以定义展开子级菜单的触发方式。本例还展示了change事件，它的参数为 Cascader 的绑定值：一个由各级菜单的值所组成的数组。
+
+```html
+<div class="block">
+  <span class="demonstration">默认 click 触发子菜单</span>
+  <el-cascader
+    :options="options"
+    v-model="selectedOptions"
+    @change="handleChange">
+  </el-cascader>
+</div>
+<div class="block">
+  <span class="demonstration">hover 触发子菜单</span>
+  <el-cascader
+    expand-trigger="hover"
+    :options="options"
+    v-model="selectedOptions2"
+    @change="handleChange">
+  </el-cascader>
+</div>
+<script>
+  export default {
+    data() {
+      return {
+        options: [{
+          value: 'zhinan',
+          label: '指南',
+          children: [{
+            value: 'shejiyuanze',
+            label: '设计原则',
+            children: [{
+              value: 'yizhi',
+              label: '一致'
+            }, {
+              value: 'fankui',
+              label: '反馈'
+            }]
+          }, {
+            value: 'daohang',
+            label: '导航',
+            children: [{
+              value: 'cexiangdaohang',
+              label: '侧向导航'
+            }, {
+              value: 'dingbudaohang',
+              label: '顶部导航'
+            }]
+          }]
+        }],
+        selectedOptions: [],
+        selectedOptions2: []
+      };
+    },
+    methods: {
+      handleChange(value) {
+        console.log(value);
+      }
+    }
+  };
+</script>
+```
+
+禁用选项:通过在数据源中设置 `disabled` 字段来声明该选项是禁用的 `options`指定的数组中的第一个元素含有`disabled: true`键值对，因此是禁用的。在默认情况下，Cascader 会检查数据中每一项的disabled字段是否为true，如果你的数据中表示禁用含义的字段名不为disabled，可以通过props属性来指定（详见下方 API 表格）。当然，value、label和children这三个字段名也可以通过同样的方式指定。
+
+仅显示最后一级:可以仅在输入框中显示选中项最后一级的标签，而不是选中项所在的完整路径。属性`show-all-levels`定义了是否显示完整的路径，将其赋值为false则仅显示最后一级 `:show-all-levels="false"`
+
+默认值:默认值通过数组的方式指定。 在最后写`selectedOptions: ['zujian', 'data', 'tag']`
+
+选择即改变:点击或移入选项即表示选中该项，可用于选择任意一级菜单的选项。若需要允许用户选择任意一级选项，则可将`change-on-select`赋值为true
+
+动态加载次级选项:当选中某一级时，动态加载该级下的选项。利用`active-item-change`事件，可以在用户点击某个省份时拉取该省份下的城市数据。
+
+```html
+<el-cascader
+  :options="options"
+  @active-item-change="handleItemChange"
+  :props="props"
+></el-cascader>
+<script>
+  export default {
+    data() {
+      return {
+        options: [{
+          label: '江苏',
+          cities: []
+        }, {
+          label: '浙江',
+          cities: []
+        }],
+        props: {
+          value: 'label',
+          children: 'cities'
+        }
+      };
+    },
+    methods: {
+      handleItemChange(val) {
+        console.log('active item:', val);
+        setTimeout(_ => {
+          if (val.indexOf('江苏') > -1 && !this.options2[0].cities.length) {
+            this.options2[0].cities = [{
+              label: '南京'
+            }];
+          } else if (val.indexOf('浙江') > -1 && !this.options2[1].cities.length) {
+            this.options2[1].cities = [{
+              label: '杭州'
+            }];
+          }
+        }, 300);
+      }
+    }
+  };
+</script>
+```
+
+可搜索:可以快捷地搜索选项并选择。将filterable赋值为true即可打开搜索功能。
+
+#### Switch 开关
+
+> 表示两种相互对立的状态间的切换，多用于触发「开/关」。
+
+基本用法:绑定`v-model`到一个Boolean类型的变量。可以使用`active-color`属性与`inactive-color`属性来设置开关的背景色。
+
+```html
+<el-switch
+  v-model="value2"
+  active-color="#13ce66"
+  inactive-color="#ff4949">
+</el-switch>
+<script>
+  export default {
+    data() {
+      return {
+        value1: true,
+        value2: true
+      }
+    }
+  };
+</script>
+```
+
+文字描述:使用`active-text`属性与`inactive-text`属性来设置开关的文字描述。
+
+扩展的 value 类型:设置`active-value`和`inactive-value`属性，接受Boolean, String或Number类型的值。
+
+禁用状态:设置disabled属性，接受一个Boolean，设置true即可禁用。
+
+#### Slider 滑块
+
+> 通过拖动滑块在一个固定区间内进行选择
+
+基础用法:在拖动滑块时，显示当前值
+
+```html
+<template>
+  <div class="block">
+    <span class="demonstration">默认</span>
+    <el-slider v-model="value1"></el-slider>
+  </div>
+  <div class="block">
+    <span class="demonstration">自定义初始值</span>
+    <el-slider v-model="value2"></el-slider>
+  </div>
+  <div class="block">
+    <span class="demonstration">隐藏 Tooltip</span>
+    <el-slider v-model="value3" :show-tooltip="false"></el-slider>
+  </div>
+  <div class="block">
+    <span class="demonstration">格式化 Tooltip</span>
+    <el-slider v-model="value4" :format-tooltip="formatTooltip"></el-slider>
+  </div>
+  <div class="block">
+    <span class="demonstration">禁用</span>
+    <el-slider v-model="value5" disabled></el-slider>
+  </div>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        value1: 0,
+        value2: 50,
+        value3: 36,
+        value4: 48,
+        value5: 42
+      }
+    },
+    methods: {
+      formatTooltip(val) {
+        return val / 100;
+      }
+    }
+  }
+</script>
+```
+
+离散值:选项可以是离散的 绑定`step`的值可以改变步长，通过设置`show-stops`属性可以显示间断点
+
+带有输入框:通过输入框设置精确数值 设置`show-input`属性会在右侧显示一个输入框
+
+范围选择:支持选择某一数值范围 设置`range`即可开启范围选择，此时绑定值是一个数组，其元素分别为最小边界值和最大边界值
+
+竖向模式:设置`vertical`可使 Slider 变成竖向模式，此时必须设置高度height属性
+
+展示标记:设置 `marks` 属性可以展示标记
+
+```html
+<template>
+  <div class="block">
+    <el-slider
+      v-model="value"
+      range
+      :marks="marks">
+    </el-slider>
+  </div>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        value: [30, 60],
+        marks: {
+          0: '0°C',
+          8: '8°C',
+          37: '37°C',
+          50: {
+            style: {
+              color: '#1989FA'
+            },
+            label: this.$createElement('strong', '50%')
+          }
+        }
+      }
+    }
+  }
+</script>
+```
+
+#### TimePicker 时间选择器
+
+> 用于选择或输入日期
+
+#### DatePicker 日期选择器
+
+> 用于选择或输入日期
+
+#### DateTimePicker 日期时间选择器
+
+#### Upload 上传
+
+> 通过点击或者拖拽上传文件
+
+基础用法:通过 `slot` 你可以传入自定义的上传按钮类型和文字提示。可通过设置`limit`和`on-exceed`来限制上传文件的个数和定义超出限制时的行为。可通过设置`before-remove`来阻止文件移除操作。
+
+```html
+<el-upload
+  class="upload-demo"
+  action="https://jsonplaceholder.typicode.com/posts/"
+  :on-preview="handlePreview"
+  :on-remove="handleRemove"
+  :before-remove="beforeRemove"
+  multiple
+  :limit="3"
+  :on-exceed="handleExceed"
+  :file-list="fileList">
+  <el-button size="small" type="primary">点击上传</el-button>
+  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+</el-upload>
+<script>
+  export default {
+    data() {
+      return {
+        fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+      };
+    },
+    methods: {
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      }
+    }
+  }
+</script>
+```
+
+用户头像上传:使用 `before-upload` 限制用户上传的图片格式和大小。
+
+照片墙:使用 `list-type` 属性来设置文件列表的样式。 `list-type="picture-card"`
+
+图片列表缩略图:`list-type="picture"`
+
+上传文件列表控制:通过 `on-change` 钩子函数来对列表进行控制
+
+拖拽上传:`drag`
+
+手动上传:`:auto-upload="false"`
+
+#### Rate 评分
+
+基础用法:评分默认被分为三个等级，可以利用颜色数组对分数及情感倾向进行分级（默认情况下不区分颜色）。三个等级所对应的颜色用colors属性设置，而它们对应的两个阈值则通过 `low-threshold` 和 `high-threshold` 设定。你也可以通过传入颜色对象来自定义分段，键名为分段的界限值，键值为对应的颜色。
+
+```html
+<div class="block">
+  <span class="demonstration">默认不区分颜色</span>
+  <el-rate v-model="value1"></el-rate>
+</div>
+<div class="block">
+  <span class="demonstration">区分颜色</span>
+  <el-rate
+    v-model="value2"
+    :colors="colors">
+  </el-rate>
+</div>
+<script>
+  export default {
+    data() {
+      return {
+        value1: null,
+        value2: null,
+        colors: ['#99A9BF', '#F7BA2A', '#FF9900']  // 等同于 { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+      }
+    }
+  }
+</script>
+```
+
+辅助文字:用辅助文字直接地表达对应分数 为组件设置 `show-text` 属性会在右侧显示辅助文字。通过设置 texts 可以为每一个分值指定对应的辅助文字。texts 为一个数组，长度应等于最大值 max。
+
 ### Data
 
 ### Notice
