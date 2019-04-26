@@ -2844,7 +2844,9 @@ new Vue({
 });
 ```
 
-### 内置动画
+### el组件
+
+#### 内置动画
 
 ```html
 <transition name="el-fade-in-linear">
@@ -2873,7 +2875,7 @@ new Vue({
     </el-collapse-transition>
     ```
 
-### Layout 布局
+#### Layout 布局
 
 >通过基础的 24 分栏，迅速简便地创建布局
 
@@ -2962,7 +2964,7 @@ new Vue({
     - hidden-lg-and-up - 当视口在 lg 及以上尺寸时隐藏
     - hidden-xl-only - 当视口在 xl 尺寸时隐藏
 
-### Container 布局容器
+#### Container 布局容器
 
 用于布局的容器组件，方便快速搭建页面的基本结构：
 
@@ -2978,7 +2980,7 @@ new Vue({
 
 > 以上组件采用了 flex 布局，使用前请确定目标浏览器是否兼容。此外，`<el-container>` 的子元素只能是后四者，后四者的父元素也只能是 `<el-container>`。
 
-### Color & 字体 规范
+#### Color & 字体 规范
 
 主题色:蓝色#409EFF,可以修改主题
 
@@ -3017,7 +3019,7 @@ new Vue({
 标题|18px large
 主标题|20px Extra large
 
-### icon图标
+#### icon图标
 
 直接通过设置类名为 el-icon-iconName 来使用即可
 
@@ -3031,7 +3033,7 @@ new Vue({
 ![icon图标](./media/icon1.png)
 ![icon图标](./media/icon2.png)
 
-### Button 按钮
+#### Button 按钮
 
 基本用法
 
@@ -3105,7 +3107,9 @@ new Vue({
 
 默认聚焦:autofocus
 
-### Radio 单选框
+### 表单
+
+#### Radio 单选框
 
 要使用 Radio 组件，只需要设置v-model绑定变量，选中意味着变量的值为相应 Radio label属性的值，label可以是String、Number或Boolean。
 
@@ -3152,7 +3156,7 @@ new Vue({
 
 带有边框:设置border属性可以渲染为带有边框的单选框。
 
-### Checkbox 多选框
+#### Checkbox 多选框
 
 单一的:单独使用可以表示两种状态之间的切换，写在标签中的内容为 checkbox 按钮后的介绍,在el-checkbox元素中定义v-model绑定变量，单一的checkbox中，默认绑定变量的值会是Boolean，选中为true。
 
@@ -3239,7 +3243,7 @@ indeterminate 状态:绑定indeterminate 属性用以表示 checkbox 的不确�
 
 带有边框:设置border属性可以渲染为带有边框的多选框。
 
-### input 输入框
+#### input 输入框
 
 > Input 为受控组件，它总会显示 Vue 绑定值。通常情况下，应当处理 input 事件，并更新组件的绑定值（或使用v-model）。否则，输入框内显示的值将不会改变。不支持 v-model 修饰符。
 
@@ -3427,3 +3431,13 @@ export default {
 自定义模板:可自定义输入建议的显示 使用scoped slot自定义输入建议的模板。该 scope 的参数为item，表示当前输入建议对象。
 
 远程搜索:从服务端搜索数据
+
+#### InputNumber 计数器
+
+### Data
+
+### Notice
+
+### 导航
+
+### 其他
