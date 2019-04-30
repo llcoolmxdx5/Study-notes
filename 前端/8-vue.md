@@ -4067,9 +4067,226 @@ export default {
 
 表单验证:在防止用户犯错的前提下，尽可能让用户更早地发现并纠正错误。Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可。校验规则参见 async-validator
 
+```html
+<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+  <el-form-item label="活动名称" prop="name">
+    <el-input v-model="ruleForm.name"></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+    <el-button @click="resetForm('ruleForm')">重置</el-button>
+  </el-form-item>
+</el-form>
+<script>
+  export default {
+    data() {
+      return {
+        ruleForm: {
+          name: ''
+        },
+        rules: {
+          name: [
+            { required: true, message: '请输入活动名称', trigger: 'blur' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          ]
+        }
+      };
+    },
+    methods: {
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      }
+    }
+  }
+</script>
+```
 
+校验规则:{type:string/number/boolean/method/regexp/integer/float/array/object/enum/date/url/hex/email,
+         required:true,pattern:regular expression,min:,max:,len://对于数组或字符串比较length属性,对于数字则为等于len,
+         enum:["可能值1","可能值2"]//同时type:"enum",message:可以为一个字符串/jsx format/函数,trigger:blur/change
+
+自定义校验规则:status-icon属性为输入框添加了表示校验结果的反馈图标,加在`el-form`中 自定义校验 callback 必须被调用。
+
+```js
+var checkAge = (rule, value, callback) => {
+  if (!value) {
+    return callback(new Error('年龄不能为空'));
+  }
+  setTimeout(() => {
+    if (!Number.isInteger(value)) {
+      callback(new Error('请输入数字值'));
+    } else {
+      if (value < 18) {
+        callback(new Error('必须年满18岁'));
+      } else {
+        callback();
+      }
+    }
+  }, 1000);
+};
+```
+
+动态增减表单项:除了在 Form 组件上一次性传递所有的验证规则外还可以在单个的表单域上传递属性的验证规则
+
+```html
+<el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+  ...
+  <el-button @click="addDomain">新增域名</el-button>
+  ...
+<script>
+  export default {
+    data() {
+      return {
+        dynamicValidateForm: {
+          domains: [{
+            value: ''
+          }],
+          email: ''
+        }
+      };
+    },
+    methods: {
+      addDomain() {
+        this.dynamicValidateForm.domains.push({
+          value: '',
+          key: Date.now()
+        });
+      }
+    }
+  }
+</script>
+```
+
+数字类型验证:数字类型的验证需要在 v-model 处加上 `.number` 的修饰符，这是 Vue 自身提供的用于将绑定值转化为 number 类型的修饰符。
+
+嵌套在 el-form-item 中的 el-form-item 标签宽度默认为零，不会继承 el-form 的 label-width。如果需要可以为其单独设置 label-width 属性。
+
+表单内组件尺寸控制:通过设置 Form 上的 size 属性可以使该表单内所有可调节大小的组件继承该尺寸。Form-Item 也具有该属性。
 
 ### Data
+
+#### Table 表格
+
+>用于展示多条结构类似的数据，可对数据进行排序、筛选、对比或其他自定义操作。
+
+基础表格:基础的表格展示用法。当`el-table`元素中注入data对象数组后，在`el-table-column`中用prop属性来对应对象中的键名即可填入数据，用label属性来定义表格的列名。可以使用width属性来定义列宽。
+
+```html
+<template>
+  <el-table
+    :data="tableData"
+    style="width: 100%">
+    <el-table-column
+      prop="date"
+      label="日期"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="地址">
+    </el-table-column>
+  </el-table>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }]
+      }
+    }
+  }
+</script>
+```
+
+带斑马纹表格:使用带斑马纹的表格，可以更容易区分出不同行的数据。stripe属性可以创建带斑马纹的表格。它接受一个Boolean，默认为false，设置为true即为启用。
+
+带边框表格:默认情况下，Table 组件是不具有竖直方向的边框的，如果需要，可以使用border属性，它接受一个Boolean，设置为true即可启用。
+
+带状态表格:可将表格内容 highlight 显示，方便区分「成功、信息、警告、危险」等内容。可以通过指定 Table 组件的 `row-class-name` 属性来为 Table 中的某一行添加 class，表明该行处于某种状态。
+
+固定表头:纵向内容过多时，可选择固定表头。只要在`el-table`元素中定义了height属性，即可实现固定表头的表格，而不需要额外的代码。`height="250"`
+
+固定列:横向内容过多时，可选择固定列。固定列需要使用fixed属性，它接受 Boolean 值或者leftright，表示左边固定还是右边固定。`fixed="right"`
+
+固定列和表头:横纵内容过多时，可选择固定列和表头。固定列和表头可以同时使用，只需要将上述两个属性分别设置好即可。
+
+流体高度:当数据量动态变化时，可以为 Table 设置一个最大高度。通过设置max-height属性为 Table 指定最大高度。此时若表格所需的高度大于最大高度，则会显示一个滚动条 `max-height="250"`
+
+多级表头:数据结构比较复杂的时候，可使用多级表头来展现数据的层次关系。只需要在 el-table-column 里面嵌套 el-table-column，就可以实现多级表头。
+
+单选:选择单行数据时使用色块表示。Table 组件提供了单选的支持，只需要配置`highlight-current-row`属性即可实现单选。之后由current-change事件来管理选中时触发的事件，它会传入currentRow，oldCurrentRow。如果需要显示索引，可以增加一列el-table-column，设置type属性为index即可显示从 1 开始的索引号。
+
+多选:选择多行数据时使用 Checkbox。实现多选非常简单: 手动添加一个`el-table-column`，设type属性为selection即可；默认情况下若内容过多会折行显示，若需要单行显示可以使用show-overflow-tooltip属性，它接受一个Boolean，为true时多余的内容会在 hover 时以 tooltip 的形式显示出来。
+
+排序:对表格进行排序，可快速查找或对比数据。在列中设置sortable属性即可实现以该列为基准的排序，接受一个Boolean，默认为false。可以通过 Table 的default-sort属性设置默认的排序列和排序顺序。可以使用sort-method或者sort-by使用自定义的排序规则。如果需要后端排序，需将sortable设置为custom，同时在 Table 上监听sort-change事件，在事件回调中可以获取当前排序的字段名和排序顺序，从而向接口请求排序后的表格数据。在本例中，我们还使用了formatter属性，它用于格式化指定列的值，接受一个Function，会传入两个参数：row和column，可以根据自己的需求进行处理。`:default-sort = "{prop: 'date', order: 'descending'}"`
+
+筛选:对表格进行筛选，可快速查找到自己想看的数据。在列中设置`filters` `filter-method`属性即可开启该列的筛选，filters 是一个数组，filter-method是一个方法，它用于决定某些数据是否显示，会传入三个参数：value, row 和 column。
+
+自定义列模板:自定义列的显示内容，可组合其他组件使用。
+
+展开行:当行内容过多并且不想显示横向滚动条时，可以使用 Table 展开行功能。通过设置 `type="expand"` 和 `Scoped slot` 可以开启展开行功能，`el-table-column` 的模板会被渲染成为展开行的内容，展开行可访问的属性与使用自定义列模板时的 `Scoped slot` 相同。
+
+```html
+<el-table-column type="expand">
+  <template slot-scope="props">
+    <el-form label-position="left" inline class="demo-table-expand">
+      <el-form-item label="商品名称">
+        <span>{{ props.row.name }}</span>
+      </el-form-item>
+```
+
+树形数据与懒加载:支持树类型的数据。此时，必须要指定 row-key。支持子节点数据异步加载。设置 Table 的 lazy 属性为 true 与 加载函数 load ，指定 row 中的 hasChildren 来确定哪些行是包含子节点。
+
+自定义表头:表头支持自定义。通过设置 `Scoped slot` 来自定义表头。
+
+表尾合计行:若表格展示的是各类数字，可以在表尾显示各列的合计。将`show-summary`设置为true就会在表格尾部展示合计行。默认情况下，对于合计行，第一列不进行数据求合操作，而是显示「合计」二字（可通过sum-text配置），其余列会将本列所有数值进行求合操作，并显示出来。当然，你也可以定义自己的合计逻辑。使用summary-method并传入一个方法，返回一个数组，这个数组中的各项就会显示在合计行的各列中，具体可以参考本例中的第二个表格。
+
+合并行或列:多行或多列共用一个数据时，可以合并行或列。通过给table传入span-method方法可以实现合并行或列，方法的参数是一个对象，里面包含当前行row、当前列column、当前行号rowIndex、当前列号columnIndex四个属性。该函数可以返回一个包含两个元素的数组，第一个元素代表rowspan，第二个元素代表colspan。 也可以返回一个键名为rowspan和colspan的对象。
+
+自定义索引:自定义 type=index 列的行号。通过给 type=index 的列传入 index 属性，可以自定义索引。该属性传入数字时，将作为索引的起始值。也可以传入一个方法，它提供当前行的行号（从 0 开始）作为参数，返回值将作为索引展示。
+
+```html
+<el-table-column
+  type="index"
+  :index="indexMethod">
+</el-table-column>
+```
+
+#### Tag 标签
+
+
 
 ### Notice
 
