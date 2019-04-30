@@ -4286,6 +4286,124 @@ var checkAge = (rule, value, callback) => {
 
 #### Tag 标签
 
+基础用法:由type属性来选择tag的类型，也可以通过color属性来自定义背景色。
+
+```html
+<el-tag>标签一</el-tag>
+<el-tag type="success">标签二</el-tag>
+<el-tag type="info">标签三</el-tag>
+<el-tag type="warning">标签四</el-tag>
+<el-tag type="danger">标签五</el-tag>
+```
+
+可移除标签:设置closable属性可以定义一个标签是否可移除。默认的标签移除时会附带渐变动画，如果不想使用，可以设置disable-transitions属性，它接受一个Boolean，true 为关闭。
+
+动态编辑标签:动态编辑标签可以通过点击标签关闭按钮后触发的 close 事件来实现 `@close="handleClose(tag)"`
+
+不同尺寸:Tag 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的按钮尺寸。额外的尺寸：medium、small、mini，通过设置size属性来配置它们。
+
+#### Progress 进度条
+
+> 用于展示操作进度，告知用户当前状态和预期。
+
+线形进度条 — 百分比外显:Progress 组件设置percentage属性即可，表示进度条对应的百分比，必填，必须在 0-100。
+
+```html
+<el-progress :percentage="80" color="#8e71c7"></el-progress>
+<el-progress :percentage="100" status="success"></el-progress>
+<el-progress :percentage="50" status="exception"></el-progress>
+```
+
+线形进度条 — 百分比内显:百分比不占用额外控件，适用于文件上传等场景。
+
+线形进度条 — 百分比内显:百分比不占用额外控件，适用于文件上传等场景。Progress 组件可通过 stroke-width 属性更改进度条的高度，并可通过 text-inside 属性来将进度条描述置于进度条内部。`:text-inside="true" :stroke-width="18"`
+
+环形进度条:Progress 组件可通过 type 属性来指定使用环形进度条，在环形进度条中，还可以通过 width 属性来设置其大小`type="circle"`
+
+#### Tree 树形控件
+
+> 用清晰的层级结构展示信息，可展开或折叠。
+
+基础用法:基础的树形结构展示。
+
+```html
+<el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+<script>
+  export default {
+    data() {
+      return {
+        data: [{
+          label: '一级 1',
+          children: [{
+            label: '二级 1-1',
+            children: [{
+              label: '三级 1-1-1'
+            }]
+          }]
+        }],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        }
+      };
+    },
+    methods: {
+      handleNodeClick(data) {
+        console.log(data);
+      }
+    }
+  };
+</script>
+```
+
+可选择:适用于需要选择层级时使用。
+
+```html
+<el-tree
+  :props="props"
+  :load="loadNode"
+  lazy
+  show-checkbox
+  @check-change="handleCheckChange">
+</el-tree>
+```
+
+懒加载自定义叶子节点:由于在点击节点时才进行该层数据的获取，默认情况下 Tree 无法预知某个节点是否为叶子节点，所以会为每个节点添加一个下拉按钮，如果节点没有下层数据，则点击后下拉按钮会消失。同时，你也可以提前告知 Tree 某个节点是否为叶子节点，从而避免在叶子节点前渲染下拉按钮
+
+```html
+<el-tree
+  :props="props"
+  :load="loadNode1"
+  lazy
+  show-checkbox>
+</el-tree>
+<script>
+  export default {
+    data() {
+      return {
+        props: {
+          label: 'name',
+          children: 'zones',
+          isLeaf: 'leaf' // 叶子节点
+        },
+      };
+    },
+    // ...
+```
+
+默认展开和默认选中:可将 Tree 的某些节点设置为默认展开或默认选中 分别通过`default-expanded-keys`和`default-checked-keys`设置默认展开和默认选中的节点。需要注意的是，此时必须设置node-key，其值为节点数据中的一个字段名，该字段在整棵树中是唯一的。
+
+```html
+<el-tree
+  :data="data"
+  show-checkbox
+  node-key="id"
+  :default-expanded-keys="[2, 3]"
+  :default-checked-keys="[5]"
+  :props="defaultProps">
+</el-tree>
+```
+
 
 
 ### Notice
