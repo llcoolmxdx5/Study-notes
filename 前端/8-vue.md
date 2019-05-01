@@ -4404,7 +4404,71 @@ var checkAge = (rule, value, callback) => {
 </el-tree>
 ```
 
+禁用状态:可将 Tree 的某些节点设置为禁用状态 通过disabled设置禁用状态。
 
+```html
+<script>
+  export default {
+    data() {
+      return {
+        props: {
+          label: 'name',
+          children: 'zones',
+          isLeaf: 'leaf' // 叶子节点
+          disabled: true
+        },
+      };
+    },
+    // ..
+```
+
+节点过滤:通过关键字过滤树节点 在需要对节点进行过滤时，调用 Tree 实例的filter方法，参数为关键字。需要注意的是，此时需要设置filter-node-method，值为过滤函数。
+
+```html
+<el-input
+  placeholder="输入关键字进行过滤"
+  v-model="filterText">
+</el-input>
+<el-tree
+  ...
+  :filter-node-method="filterNode">
+</el-tree>
+<script>
+  export default {
+    methods: {
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.label.indexOf(value) !== -1;
+      }
+    },
+```
+
+手风琴模式:对于同一级的节点，每次只能展开一个 在 `el-tree` 中 设置 accordion 属性
+
+可拖拽节点:通过 draggable 属性可让节点变为可拖拽。
+
+#### Pagination 分页
+
+> 当数据量过多时，使用分页分解数据。
+
+基础用法:设置`layout`，表示需要显示的内容，用逗号分隔，布局元素会依次显示。`prev`表示上一页，`next`为下一页，`pager`表示页码列表，除此以外还提供了`jumper`和`total`，`size`和特殊的布局符号`->`，`->`后的元素会靠右显示，`jumper`表示跳页元素，`total`表示总条目数，`size`用于设置每页显示的页码数量。
+
+```html
+<div class="block">
+  <span class="demonstration">页数较少时的效果</span>
+  <el-pagination
+    layout="prev, pager, next"
+    :total="50">
+  </el-pagination>
+</div>
+<div class="block">
+  <span class="demonstration">大于 7 页时的效果</span>
+  <el-pagination
+    layout="prev, pager, next"
+    :total="1000">
+  </el-pagination>
+</div>
+```
 
 ### Notice
 
