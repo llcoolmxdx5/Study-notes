@@ -4470,7 +4470,85 @@ var checkAge = (rule, value, callback) => {
 </div>
 ```
 
+设置最大页码按钮数:默认情况下，当总页数超过 7 页时，Pagination 会折叠多余的页码按钮。通过pager-count属性可以设置最大页码按钮数。`:pager-count="11"`
+
+带有背景色的分页:设置background属性可以为分页按钮添加背景色。 `background`
+
+小型分页:在空间有限的情况下，可以使用简单的小型分页。只需要一个small属性，它接受一个Boolean，默认为false，设为true即可启用。
+
+附加功能:根据场景需要，可以添加其他功能模块。此例是一个完整的用例，使用了size-change和current-change事件来处理页码大小和当前页变动时候触发的事件。page-sizes接受一个整型数组，数组元素为展示的选择每页显示个数的选项，[100, 200, 300, 400]表示四个选项，每页显示 100 个，200 个，300 个或者 400 个。
+
+```html
+<!-- 跳页 -->
+<div class="block">
+  <span class="demonstration">直接前往</span>
+  <el-pagination
+    @current-change="handleCurrentChange"
+    :current-page.sync="currentPage3"
+    :page-size="100"
+    layout="prev, pager, next, jumper"
+    :total="1000">
+  </el-pagination>
+</div>
+```
+
+当只有一页时隐藏分页:当只有一页时，通过设置 hide-on-single-page 属性来隐藏分页。`:hide-on-single-page="false"`
+
+#### Badge 标记
+
+> 出现在按钮、图标旁的数字或状态标记。
+
+基础用法:展示新消息数量。定义value属性，它接受Number或者String。
+
+```html
+<el-badge :value="12" class="item">
+  <el-button size="small">评论</el-button>
+</el-badge>
+<el-badge :value="3" class="item">
+  <el-button size="small">回复</el-button>
+</el-badge>
+<el-badge :value="1" class="item" type="primary">
+  <el-button size="small">评论</el-button>
+</el-badge>
+<el-badge :value="2" class="item" type="warning">
+  <el-button size="small">回复</el-button>
+</el-badge>
+<el-dropdown trigger="click">
+  <span class="el-dropdown-link">
+    点我查看<i class="el-icon-caret-bottom el-icon--right"></i>
+  </span>
+  <el-dropdown-menu slot="dropdown">
+    <el-dropdown-item class="clearfix">
+      评论
+      <el-badge class="mark" :value="12" />
+    </el-dropdown-item>
+    <el-dropdown-item class="clearfix">
+      回复
+      <el-badge class="mark" :value="3" />
+    </el-dropdown-item>
+  </el-dropdown-menu>
+</el-dropdown>
+<style>
+.item {
+  margin-top: 10px;
+  margin-right: 40px;
+}
+</style>
+```
+
+最大值:可自定义最大值。由max属性定义，它接受一个Number，需要注意的是，只有当value为Number时，它才会生效。`:max="99"`
+
+自定义内容:可以显示数字以外的文本内容。定义value为String类型时可以用于显示自定义文本。
+
+小红点:以红点的形式标注需要关注的内容。除了数字外，设置is-dot属性，它接受一个Boolean
+
 ### Notice
+
+#### Alert 警告
+
+>用于页面中展示重要的提示信息。
+
+
 
 ### 导航
 
