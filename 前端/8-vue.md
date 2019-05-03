@@ -4670,6 +4670,278 @@ console.log(loadingInstance1 === loadingInstance2); // true
 
 > 常用于主动操作后的反馈提示。与 Notification 的区别是后者更多用于系统级通知的被动提醒。
 
+基础用法:从顶部出现，3 秒后自动消失。Message 在配置上与 Notification 非常类似，所以部分 options 在此不做详尽解释，文末有 options 列表，可以结合 Notification 的文档理解它们。Element 注册了一个$message方法用于调用，Message 可以接收一个字符串或一个 VNode 作为参数，它会被显示为正文内容。
+
+```html
+<template>
+  <el-button :plain="true" @click="open">打开消息提示</el-button>
+  <el-button :plain="true" @click="openVn">VNode</el-button>
+</template>
+<script>
+  export default {
+    methods: {
+      open() {
+        this.$message('这是一条消息提示');
+      },
+      openVn() {
+        const h = this.$createElement;
+        this.$message({
+          message: h('p', null, [
+            h('span', null, '内容可以是 '),
+            h('i', { style: 'color: teal' }, 'VNode')
+          ])
+        });
+      }
+    }
+  }
+</script>
+```
+
+不同状态:用来显示「成功、警告、消息、错误」类的操作反馈。当需要自定义更多属性时，Message 也可以接收一个对象为参数。比如，设置type字段可以定义不同的状态，默认为info。此时正文内容以message的值传入。同时，我们也为 Message 的各种 type 注册了方法，可以在不传入type字段的情况下像open4那样直接调用。
+
+```html
+<template>
+  <el-button :plain="true" @click="open2">成功</el-button>
+  <el-button :plain="true" @click="open4">错误</el-button>
+</template>
+<script>
+  export default {
+    methods: {
+      open2() {
+        this.$message({
+          message: '恭喜你，这是一条成功消息',
+          type: 'success' // warning error info
+        });
+      },
+      open4() {
+        this.$message.error('错了哦，这是一条错误消息');
+      }
+    }
+  }
+</script>
+```
+
+可关闭:可以添加关闭按钮。默认的 Message 是不可以被人工关闭的，如果需要可手动关闭的 Message，可以使用showClose字段。此外，和 Notification 一样，Message 拥有可控的duration，设置0为不会被自动关闭，默认为 3000 毫秒。
+
+```js
+open6() {
+  this.$message({
+    showClose: true,
+    message: '恭喜你，这是一条成功消息',
+    type: 'success'
+  });
+}
+```
+
+文字居中:使用 center 属性让文字水平居中。在方法中`center: true`
+
+使用 HTML 片段:message 属性支持传入 HTML 片段 将dangerouslyUseHTMLString属性设置为 true，message 就会被当作 HTML 片段处理。
+
+```js
+openHTML() {
+  this.$message({
+    dangerouslyUseHTMLString: true,
+    message: '<strong>这是 <i>HTML</i> 片段</strong>'
+  });
+}
+```
+
+> message 属性虽然支持传入 HTML 片段，但是在网站上动态渲染任意 HTML 是非常危险的，因为容易导致 XSS 攻击。因此在 dangerouslyUseHTMLString 打开的情况下，请确保 message 的内容是可信的，永远不要将用户提交的内容赋值给 message 属性。
+
+全局方法:Element 为 Vue.prototype 添加了全局方法 $message。因此在 vue instance 中可以采用本页面中的方式调用 Message。
+
+单独引用-单独引入 Message：`import { Message } from 'element-ui';` 此时调用方法为 Message(options)。我们也为每个 type 定义了各自的方法，如 Message.success(options)。并且可以调用 Message.closeAll() 手动关闭所有实例。
+
+![msgoption](./media/msg-opt.png)
+
+调用 Message 或 this.$message 会返回当前 Message 的实例。如果需要手动关闭实例，可以调用它的 close 方法。
+
+#### MessageBox 弹框
+
+> 模拟系统的消息提示框而实现的一套模态对话框组件，用于消息提示、确认消息和提交内容。从场景上说，MessageBox 的作用是美化系统自带的 alert、confirm 和 prompt，因此适合展示较为简单的内容。如果需要弹出较为复杂的内容，请使用 Dialog。
+
+消息提示:当用户进行操作时会被触发，该对话框中断用户操作，直到用户确认知晓后才可关闭。调用$alert方法即可打开消息提示，它模拟了系统的 alert，无法通过按下 ESC 或点击框外关闭。此例中接收了两个参数，message和title。值得一提的是，窗口被关闭后，它默认会返回一个Promise对象便于进行后续操作的处理。若不确定浏览器是否支持Promise，可自行引入第三方 polyfill 或像本例一样使用回调进行后续处理。
+
+```html
+<template>
+  <el-button type="text" @click="open">点击打开 Message Box</el-button>
+</template>
+<script>
+  export default {
+    methods: {
+      open() {
+        this.$alert('这是一段内容', '标题名称', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: `action: ${ action }`
+            });
+          }
+        });
+      }
+    }
+  }
+</script>
+```
+
+确认消息:提示用户确认其已经触发的动作，并询问是否进行此操作时会用到此对话框。调用$confirm方法即可打开消息提示，它模拟了系统的 confirm。Message Box 组件也拥有极高的定制性，我们可以传入options作为第三个参数，它是一个字面量对象。type字段表明消息类型，可以为success，error，info和warning，无效的设置将会被忽略。注意，第二个参数title必须定义为String类型，如果是Object，会被理解为options。在这里我们用了 Promise 来处理后续响应。
+
+```js
+export default {
+  methods: {
+    open() {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    }
+  }
+}
+```
+
+提交内容:当用户进行操作时会被触发，中断用户操作，提示用户进行输入的对话框。调用$prompt方法即可打开消息提示，它模拟了系统的 prompt。可以用inputPattern字段自己规定匹配模式，或者用inputValidator规定校验函数，可以返回Boolean或String，返回false或字符串时均表示校验未通过，同时返回的字符串相当于定义了inputErrorMessage字段。此外，可以用inputPlaceholder字段来定义输入框的占位符。
+
+自定义:可自定义配置不同内容。以上三个方法都是对$msgbox方法的再包装。本例直接调用$msgbox方法，使用了showCancelButton字段，用于显示取消按钮。另外可使用cancelButtonClass为其添加自定义样式，使用cancelButtonText来自定义按钮文本（Confirm 按钮也具有相同的字段，在文末的字段说明中有完整的字段列表）。此例还使用了beforeClose属性，它的值是一个方法，会在 MessageBox 的实例关闭前被调用，同时暂停实例的关闭。它有三个参数：action、实例本身和done方法。使用它能够在关闭前对实例进行一些操作，比如为确定按钮添加loading状态等；此时若需要关闭实例，可以调用done方法（若在beforeClose中没有调用done，则实例不会关闭）。
+
+```js
+export default {
+  methods: {
+    open() {
+      const h = this.$createElement;
+      this.$msgbox({
+        title: '消息',
+        message: h('p', null, [
+          h('span', null, '内容可以是 '),
+          h('i', { style: 'color: teal' }, 'VNode')
+        ]),
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        beforeClose: (action, instance, done) => {
+          if (action === 'confirm') {
+            instance.confirmButtonLoading = true;
+            instance.confirmButtonText = '执行中...';
+            setTimeout(() => {
+              done();
+              setTimeout(() => {
+                instance.confirmButtonLoading = false;
+              }, 300);
+            }, 3000);
+          } else {
+            done();
+          }
+        }
+      }).then(action => {
+        this.$message({
+          type: 'info',
+          message: 'action: ' + action
+        });
+      });
+    }
+  }
+}
+```
+
+> 弹出层的内容可以是 VNode，所以我们能把一些自定义组件传入其中。每次弹出层打开后，Vue 会对新老 VNode 节点进行比对，然后将根据比较结果进行最小单位地修改视图。这也许会造成弹出层内容区域的组件没有重新渲染，例如 #8931。当这类问题出现时，解决方案是给 VNode 加上一个不相同的 key，参考这里。
+
+使用 HTML 片段:message 属性支持传入 HTML 片段。message 属性虽然支持传入 HTML 片段，但是在网站上动态渲染任意 HTML 是非常危险的，因为容易导致 XSS 攻击。因此在 dangerouslyUseHTMLString 打开的情况下，请确保 message 的内容是可信的，永远不要将用户提交的内容赋值给 message 属性。将`dangerouslyUseHTMLString`属性设置为 true，message 就会被当作 HTML 片段处理。
+
+区分取消与关闭:有些场景下，点击取消按钮与点击关闭按钮有着不同的含义。默认情况下，当用户触发取消（点击取消按钮）和触发关闭（点击关闭按钮或遮罩层、按下 ESC 键）时，Promise 的 reject 回调和callback回调的参数均为 'cancel'。如果将distinguishCancelAndClose属性设置为 true，则上述两种行为的参数分别为 'cancel' 和 'close'。
+
+```js
+open() {
+  this.$confirm('检测到未保存的内容，是否在离开页面前保存修改？', '确认信息', {
+    distinguishCancelAndClose: true,
+    confirmButtonText: '保存',
+    cancelButtonText: '放弃修改'
+  })
+  .then(() => {
+    this.$message({
+      type: 'info',
+      message: '保存修改'
+    });
+  })
+  .catch(action => {
+    this.$message({
+      type: 'info',
+      message: action === 'cancel'
+        ? '放弃保存并离开页面'
+        : '停留在当前页面'
+    })
+  });
+}
+```
+
+居中布局:内容支持居中布局 将 center 设置为 true 即可开启居中布局
+
+全局方法:如果你完整引入了 Element，它会为 Vue.prototype 添加如下全局方法：$msgbox, $alert, $confirm 和 $prompt。因此在 Vue instance 中可以采用本页面中的方式调用 MessageBox。调用参数为：
+
+```js
+$msgbox(options)
+$alert(message, title, options) 或 $alert(message, options)
+$confirm(message, title, options) 或 $confirm(message, options)
+$prompt(message, title, options) 或 $prompt(message, options)
+```
+
+单独引用:如果单独引入 MessageBox：`import { MessageBox } from 'element-ui';`
+那么对应于上述四个全局方法的调用方法依次为：MessageBox, MessageBox.alert, MessageBox.confirm 和 MessageBox.prompt，调用参数与全局方法相同。
+
+#### Notification 通知
+
+> 悬浮出现在页面角落，显示全局的通知提醒消息。
+
+基本用法:适用性广泛的通知栏 Notification 组件提供通知功能，Element 注册了$notify方法，接收一个options字面量参数，在最简单的情况下，你可以设置title字段和message字段，用于设置通知的标题和正文。默认情况下，经过一段时间后 Notification 组件会自动关闭，但是通过设置duration，可以控制关闭的时间间隔，特别的是，如果设置为0，则不会自动关闭。注意：duration接收一个Number，单位为毫秒，默认为4500。
+
+```html
+<template>
+  <el-button
+    plain
+    @click="open">
+    可自动关闭
+  </el-button>
+</template>
+<script>
+  export default {
+    methods: {
+      open() {
+        const h = this.$createElement;
+        this.$notify({
+          title: '标题名称',
+          message: h('i', { style: 'color: teal'}, '这是提示文案'),
+          duration: 0
+        });
+      },
+    }
+  }
+</script>
+```
+
+带有倾向性:带有 icon，常用来显示「成功、警告、消息、错误」类的系统消息 Element 为 Notification 组件准备了四种通知类型：success, warning, info, error。通过type字段来设置，除此以外的值将被忽略。同时，我们也为 Notification 的各种 type 注册了方法，可以在不传入type字段的情况下像这样直接调用。`this.$notify.info({title: '消息',message: '这是一条消息的提示消息'});`
+
+自定义弹出位置:可以让 Notification 从屏幕四角中的任意一角弹出 使用position属性定义 Notification 的弹出位置，支持四个选项：top-right、top-left、bottom-right、bottom-left，默认为top-right。
+
+带有偏移:让 Notification 偏移一些位置 Notification 提供设置偏移量的功能，通过设置 offset 字段，可以使弹出的消息距屏幕边缘偏移一段距离。注意在同一时刻，所有的 Notification 实例应当具有一个相同的偏移量。`offset: 100`
+
+使用 HTML 片段:message 属性支持传入 HTML 片段 将dangerouslyUseHTMLString属性设置为 true，message 就会被当作 HTML 片段处理。
+
+隐藏关闭按钮:可以不显示关闭按钮 将showClose属性设置为false即可隐藏关闭按钮。`showClose: false`
+
+全局方法:Element 为 Vue.prototype 添加了全局方法 $notify。因此在 vue instance 中可以采用本页面中的方式调用 Notification。
+
+单独引用:单独引入 Notification：`import { Notification } from 'element-ui';`此时调用方法为 Notification(options)。我们也为每个 type 定义了各自的方法，如 Notification.success(options)。并且可以调用 Notification.closeAll() 手动关闭所有实例。
+
 ### 导航
 
 ### 其他
