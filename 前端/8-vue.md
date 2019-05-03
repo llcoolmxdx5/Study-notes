@@ -4548,7 +4548,127 @@ var checkAge = (rule, value, callback) => {
 
 >用于页面中展示重要的提示信息。
 
+基本用法:页面中的非浮层元素，不会自动消失。Alert 组件提供四种主题，由type属性指定，默认值为info。
 
+```html
+<template>
+  <el-alert
+    title="成功提示的文案"
+    type="success/info/warning/error">
+  </el-alert>
+</template>
+```
+
+主题:Alert 组件提供了两个不同的主题：light和dark。通过设置effect属性来改变主题，默认为light。`effect="dark"`
+
+自定义关闭按钮:自定义关闭按钮为文字或其他符号。在 Alert 组件中，你可以设置是否可关闭，关闭按钮的文本以及关闭时的回调函数。closable属性决定是否可关闭，接受boolean，默认为true。你可以设置close-text属性来代替右侧的关闭图标，注意：close-text必须为文本。设置close事件来设置关闭时的回调。`:closable="false"` `close-text="知道了"` `@close="hello"`
+
+带有 icon:表示某种状态时提升可读性。通过设置show-icon属性来显示 Alert 的 icon，这能更有效地向用户展示你的显示意图。`show-icon`
+
+文字居中:使用 center 属性让文字水平居中。 `center`
+
+带有辅助性文字介绍:包含标题和内容，解释更详细的警告。除了必填的title属性外，你可以设置description属性来帮助你更好地介绍，我们称之为辅助性文字。辅助性文字只能存放单行文本，会自动换行显示。
+
+#### Loading 加载
+
+> 加载数据时显示动效。
+
+区域加载:在表格等容器中加载数据时显示。Element 提供了两种调用 Loading 的方法：指令和服务。对于自定义指令v-loading，只需要绑定Boolean即可。默认状况下，Loading 遮罩会插入到绑定元素的子节点，通过添加body修饰符，可以使遮罩插入至 DOM 中的 body 上。
+
+```html
+<template>
+  <el-table
+    v-loading="loading"
+    :data="tableData"
+    style="width: 100%">
+    ...
+  </el-table>
+</template>
+```
+
+自定义:可自定义加载文案、图标和背景色。在绑定了v-loading指令的元素上添加element-loading-text属性，其值会被渲染为加载文案，并显示在加载图标的下方。类似地，element-loading-spinner和element-loading-background属性分别用来设定图标类名和背景色值。
+
+```html
+  <el-table
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)">
+  </el-table>
+```
+
+整页加载:页面数据加载时显示。当使用指令方式时，全屏遮罩需要添加fullscreen修饰符（遮罩会插入至 body 上），此时若需要锁定屏幕的滚动，可以使用lock修饰符；当使用服务方式时，遮罩默认即为全屏，无需额外设置。
+
+```html
+<template>
+  <el-button
+    type="primary"
+    @click="openFullScreen"
+    v-loading.fullscreen.lock="fullscreenLoading">
+    指令方式
+  </el-button>
+  <el-button
+    type="primary"
+    @click="openFullScreen">
+    服务方式
+  </el-button>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        fullscreenLoading: false
+      }
+    },
+    methods: {
+      openFullScreen() {
+        this.fullscreenLoading = true;
+        setTimeout(() => {
+          this.fullscreenLoading = false;
+        }, 2000);
+      },
+      openFullScreen() {
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+          loading.close();
+        }, 2000);
+      }
+    }
+  }
+</script>
+```
+
+服务Loading 还可以以服务的方式调用。引入 Loading 服务：`import { Loading } from 'element-ui';`在需要调用时：`Loading.service(options);`其中 options 参数为 Loading 的配置项，具体见下表。LoadingService 会返回一个 Loading 实例，可通过调用该实例的 close 方法来关闭它：
+
+```js
+let loadingInstance = Loading.service(options);
+this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
+  loadingInstance.close();
+});
+```
+
+需要注意的是，以服务的方式调用的全屏 Loading 是单例的：若在前一个全屏 Loading 关闭前再次调用全屏 Loading，并不会创建一个新的 Loading 实例，而是返回现有全屏 Loading 的实例：
+
+```js
+let loadingInstance1 = Loading.service({ fullscreen: true });
+let loadingInstance2 = Loading.service({ fullscreen: true });
+console.log(loadingInstance1 === loadingInstance2); // true
+```
+
+此时调用它们中任意一个的 close 方法都能关闭这个全屏 Loading。
+
+如果完整引入了 Element，那么 Vue.prototype 上会有一个全局方法 $loading，它的调用方式为：this.$loading(options)，同样会返回一个 Loading 实例。
+
+![option选项](./media/el-loading.png)
+
+#### Message 消息提示
+
+> 常用于主动操作后的反馈提示。与 Notification 的区别是后者更多用于系统级通知的被动提醒。
 
 ### 导航
 
