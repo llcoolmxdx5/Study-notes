@@ -4944,4 +4944,288 @@ $prompt(message, title, options) 或 $prompt(message, options)
 
 ### 导航
 
+#### NavMenu 导航菜单
+
+> 为网站提供导航功能的菜单。
+
+顶栏:适用广泛的基础用法。导航菜单默认为垂直模式，通过mode属性可以使导航菜单变更为水平模式。另外，在菜单中通过submenu组件可以生成二级菜单。Menu 还提供了background-color、text-color和active-text-color，分别用于设置菜单的背景色、菜单的文字颜色和当前激活菜单的文字颜色。
+
+```html
+<el-menu
+  :default-active="activeIndex"
+  class="el-menu-demo"
+  mode="horizontal"
+  @select="handleSelect"
+  background-color="#545c64"
+  text-color="#fff"
+  active-text-color="#ffd04b">
+  <el-menu-item index="1">处理中心</el-menu-item>
+  <el-submenu index="2">
+    <template slot="title">我的工作台</template>
+    <el-menu-item index="2-1">选项1</el-menu-item>
+    <el-submenu index="2-2">
+      <template slot="title">选项2</template>
+      <el-menu-item index="2-4-1">选项1</el-menu-item>
+      <el-menu-item index="2-4-2">选项2</el-menu-item>
+    </el-submenu>
+  </el-submenu>
+  <el-menu-item index="3" disabled>消息中心</el-menu-item>
+  <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+</el-menu>
+<script>
+  export default {
+    data() {
+      return {
+        activeIndex: '1',
+      };
+    },
+    methods: {
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      }
+    }
+  }
+</script>
+```
+
+侧栏:垂直菜单，可内嵌子菜单。通过el-menu-item-group组件可以实现菜单进行分组，分组名可以通过title属性直接设定，也可以通过具名 slot 来设定。
+
+```html
+<el-row class="tac">
+  <el-col :span="12">
+    <h5>自定义颜色</h5>
+    <el-menu
+      default-active="2"
+      class="el-menu-vertical-demo"
+      @open="handleOpen"
+      @close="handleClose"
+      background-color="#545c64"
+      text-color="#fff"
+      active-text-color="#ffd04b">
+      <el-submenu index="1">
+        <template slot="title">
+          <i class="el-icon-location"></i>
+          <span>导航一</span>
+        </template>
+        <el-menu-item-group>
+          <template slot="title">分组一</template>
+          <el-menu-item index="1-1">选项1</el-menu-item>
+          <el-menu-item index="1-2">选项2</el-menu-item>
+        </el-menu-item-group>
+        <el-menu-item-group title="分组2">
+          <el-menu-item index="1-3">选项3</el-menu-item>
+        </el-menu-item-group>
+        <el-submenu index="1-4">
+          <template slot="title">选项4</template>
+          <el-menu-item index="1-4-1">选项1</el-menu-item>
+        </el-submenu>
+      </el-submenu>
+      <el-menu-item index="2">
+        <i class="el-icon-menu"></i>
+        <span slot="title">导航二</span>
+      </el-menu-item>
+      <el-menu-item index="3" disabled>
+        <i class="el-icon-document"></i>
+        <span slot="title">导航三</span>
+      </el-menu-item>
+      <el-menu-item index="4">
+        <i class="el-icon-setting"></i>
+        <span slot="title">导航四</span>
+      </el-menu-item>
+    </el-menu>
+  </el-col>
+</el-row>
+<script>
+  export default {
+    methods: {
+      handleOpen(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      handleClose(key, keyPath) {
+        console.log(key, keyPath);
+      }
+    }
+  }
+</script>
+```
+
+折叠:
+
+```html
+<el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
+  <el-radio-button :label="false">展开</el-radio-button>
+  <el-radio-button :label="true">收起</el-radio-button>
+</el-radio-group>
+<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+  <!-- ... -->
+</el-menu>
+<script>
+  export default {
+    data() {
+      return {
+        isCollapse: true
+      };
+    },
+    methods: {
+      handleOpen(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      handleClose(key, keyPath) {
+        console.log(key, keyPath);
+      }
+    }
+  }
+</script>
+```
+
+Menu-Item Attribute:参数:route 说明:Vue Router 路径对象 类型:Object
+
+#### Tabs 标签页
+
+> 分隔内容上有关联但属于不同类别的数据集合。
+
+基础用法:基础的、简洁的标签页。Tabs 组件提供了选项卡功能，默认选中第一个标签页，你也可以通过 value 属性来指定当前选中的标签页。
+
+```html
+<template>
+  <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
+    <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+    <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
+    <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+  </el-tabs>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        activeName: 'second'
+      };
+    },
+    methods: {
+      handleClick(tab, event) {
+        console.log(tab, event);
+      }
+    }
+  };
+</script>
+```
+
+选项卡样式:选项卡样式的标签页。只需要设置 type 属性为 card 就可以使选项卡改变为标签风格。`<el-tabs v-model="activeName" type="card" @tab-click="handleClick">`
+
+卡片化:卡片化的标签页。将type设置为border-card。
+
+位置:可以通过 tab-position 设置标签的位置 标签一共有四个方向的设置 `tabPosition="left|right|top|bottom"`
+
+自定义标签页:可以通过具名 slot 来实现自定义标签页的内容
+
+```html
+<el-tab-pane>
+  <span slot="label"><i class="el-icon-date"></i> 我的行程</span>
+  我的行程
+</el-tab-pane>
+```
+
+动态增减标签页:增减标签页按钮只能在选项卡样式的标签页下使用
+
+自定义增加标签页触发器:
+
+#### Breadcrumb 面包屑
+
+> 显示当前页面的路径，快速返回之前的任意页面。
+
+基础用法:适用广泛的基础用法。在el-breadcrumb中使用el-breadcrumb-item标签表示从首页开始的每一级。Element 提供了一个separator属性，在el-breadcrumb标签中设置它来决定分隔符，它只能是字符串，默认为斜杠/。
+
+```html
+<el-breadcrumb separator="/">
+  <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+  <el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
+  <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+  <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+</el-breadcrumb>
+```
+
+图标分隔符:通过设置 separator-class 可使用相应的 iconfont 作为分隔符，注意这将使 separator 设置失效`separator-class="el-icon-arrow-right"`
+
+#### Dropdown 下拉菜单
+
+> 将动作或菜单折叠到下拉菜单中。
+
+基础用法:移动到下拉菜单上，展开更多操作。通过组件slot来设置下拉触发的元素以及需要通过具名slot为dropdown 来设置下拉菜单。默认情况下，下拉按钮只要hover即可，无需点击也会显示下拉菜单。
+
+```html
+<el-dropdown>
+  <span class="el-dropdown-link">
+    下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+  </span>
+  <el-dropdown-menu slot="dropdown">
+    <el-dropdown-item>螺蛳粉</el-dropdown-item>
+    <el-dropdown-item disabled>双皮奶</el-dropdown-item>
+    <el-dropdown-item divided>蚵仔煎</el-dropdown-item> <!-- 显示分割线 -->
+  </el-dropdown-menu>
+</el-dropdown>
+```
+
+触发对象:可使用按钮触发下拉菜单。设置split-button属性来让触发下拉元素呈现为按钮组，左边是功能按钮，右边是触发下拉菜单的按钮，设置为true即可。
+
+触发方式:可以配置 click 激活或者 hover 激活。在trigger属性设置为click即可。`trigger="click"`
+
+菜单隐藏方式:可以hide-on-click属性来配置。下拉菜单默认在点击菜单项后会被隐藏，将hide-on-click属性默认为false可以关闭此功能。`:hide-on-click="false"`
+
+指令事件:点击菜单项后会触发事件，用户可以通过相应的菜单项 key 进行不同的操作 `@command="handleCommand"` `handleCommand(command){//...}`
+
+不同尺寸:Dropdown 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的尺寸。额外的尺寸：medium、small、mini，通过设置size属性来配置它们。 `size="medium"`
+
+#### Steps 步骤条
+
+> 引导用户按照流程完成任务的分步导航条，可根据实际应用场景设定步骤，步骤不得少于 2 步。
+
+基础用法:简单的步骤条。设置active属性，接受一个Number，表明步骤的 index，从 0 开始。需要定宽的步骤条时，设置space属性即可，它接受Boolean，单位为px，如果不设置，则为自适应。设置finish-status属性可以改变已经完成的步骤的状态。
+
+```html
+<el-steps :active="active"
+  finish-status="wait / process / finish / error / success" 结束步骤的状态
+  process-status="wait / process / finish / error / success" 当前步骤的状态
+  >
+  <el-step title="步骤 1"></el-step>
+  <el-step title="步骤 2"></el-step>
+  <el-step title="步骤 3"></el-step>
+</el-steps>
+<el-button style="margin-top: 12px;" @click="next">下一步</el-button>
+<script>
+  export default {
+    data() {
+      return {
+        active: 0
+      };
+    },
+    methods: {
+      next() {
+        if (this.active++ > 2) this.active = 0;
+      }
+    }
+  }
+</script>
+```
+
+含状态步骤条:每一步骤显示出该步骤的状态。也可以使用title具名分发，可以用slot的方式来取代属性的设置，在本文档最后的列表中有所有的 slot name 可供参考。
+
+```html
+<el-steps :space="200" :active="1" finish-status="success">
+  <el-step title="已完成"></el-step>
+  <el-step title="进行中"></el-step>
+  <el-step title="步骤 3"></el-step>
+</el-steps>
+```
+
+有描述的步骤条:每个步骤有其对应的步骤状态描述。`<el-step title="步骤 1" description="这是一段很长很长很长的描述性文字"></el-step>`
+
+居中的步骤条:标题和描述都将居中。`<el-steps :active="2" align-center>`
+
+带图标的步骤条:步骤条内可以启用各种自定义的图标。通过icon属性来设置图标，图标的类型可以参考 Icon 组件的文档，除此以外，还能通过具名slot来使用自定义的图标。`<el-step title="步骤 1" icon="el-icon-edit"></el-step>`
+
+竖式步骤条:竖直方向的步骤条。只需要在el-steps元素中设置direction属性为vertical即可。`<el-steps direction="vertical" :active="1">`
+
+简洁风格的步骤条:设置 simple 可应用简洁风格，该条件下 align-center / description / direction / space 都将失效。`<el-steps :active="1" simple>`
+
 ### 其他
