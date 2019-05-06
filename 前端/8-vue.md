@@ -5229,3 +5229,468 @@ Menu-Item Attribute:参数:route 说明:Vue Router 路径对象 类型:Object
 简洁风格的步骤条:设置 simple 可应用简洁风格，该条件下 align-center / description / direction / space 都将失效。`<el-steps :active="1" simple>`
 
 ### 其他
+
+#### Dialog 对话框
+
+> 在保留当前页面状态的情况下，告知用户并承载相关操作。
+
+基本用法:Dialog 弹出一个对话框，适合需要定制性更大的场景。需要设置visible属性，它接收Boolean，当为true时显示 Dialog。Dialog 分为两个部分：body和footer，footer需要具名为footer的slot。title属性用于定义标题，它是可选的，默认值为空。最后，本例还展示了before-close的用法。 before-close 仅当用户通过点击关闭图标或遮罩关闭 Dialog 时起效。如果你在 footer 具名 slot 里添加了用于关闭 Dialog 的按钮，那么可以在按钮的点击回调函数里加入 before-close 的相关逻辑。
+
+```html
+<el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
+<el-dialog
+  title="提示"
+  :visible.sync="dialogVisible"
+  width="30%"
+  :before-close="handleClose">
+  <span>这是一段信息</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+</el-dialog>
+<script>
+  export default {
+    data() {
+      return {
+        dialogVisible: false
+      };
+    },
+    methods: {
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      }
+    }
+  };
+</script>
+```
+
+自定义内容:Dialog 组件的内容可以是任意的，甚至可以是表格或表单
+
+嵌套的 Dialog:如果需要在一个 Dialog 内部嵌套另一个 Dialog，需要使用 append-to-body 属性。正常情况下，我们不建议使用嵌套的 Dialog，如果需要在页面上同时显示多个 Dialog，可以将它们平级放置。对于确实需要嵌套 Dialog 的场景，我们提供了append-to-body属性。将内层 Dialog 的该属性设置为 true，它就会插入至 body 元素上，从而保证内外层 Dialog 和遮罩层级关系的正确。`append-to-body`
+
+居中布局:标题和底部可水平居中 将center设置为true即可使标题和底部居中。center仅影响标题和底部区域。Dialog 的内容是任意的，在一些情况下，内容并不适合居中布局。如果需要内容也水平居中，请自行为其添加 CSS。`center`
+
+Dialog 的内容是懒渲染的，即在第一次被打开之前，传入的默认 slot 不会被渲染到 DOM 上。因此，如果需要执行 DOM 操作，或通过 ref 获取相应组件，请在 open 事件回调中进行。
+
+如果 visible 属性绑定的变量位于 Vuex 的 store 内，那么 .sync 不会正常工作。此时需要去除 .sync 修饰符，同时监听 Dialog 的 open 和 close 事件，在事件回调中执行 Vuex 中对应的 mutation 更新 visible 属性绑定的变量的值。
+
+#### Tooltip 文字提示
+
+> 常用于展示鼠标 hover 时的提示信息。
+
+基础用法:在这里我们提供 9 种不同方向的展示方式，可以通过以下完整示例来理解，选择你要的效果。使用content属性来决定hover时的提示信息。由placement属性决定展示效果：placement属性值为：方向-对齐位置；四个方向：top、left、right、bottom；三种对齐位置：start, end，默认为空。如placement="left-end"，则提示信息出现在目标元素的左侧，且提示信息的底部与目标元素的底部对齐。
+
+```html
+<el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
+  <el-button>上左</el-button>
+</el-tooltip>
+```
+
+主题:Tooltip 组件提供了两个不同的主题：dark和light。通过设置effect属性来改变主题，默认为dark。
+
+更多 Content:展示多行文本或者是设置文本内容的格式 用具名 slot 分发content，替代tooltip中的content属性。
+
+```html
+<el-tooltip placement="top">
+  <div slot="content">多行信息<br/>第二行信息</div>
+  <el-button>Top center</el-button>
+</el-tooltip>
+```
+
+高级扩展:除了这些基本设置外，还有一些属性可以让使用者更好的定制自己的效果：transition 属性可以定制显隐的动画效果，默认为fade-in-linear。 如果需要关闭 tooltip 功能，disabled 属性可以满足这个需求，它接受一个Boolean，设置为true即可。
+
+tooltip 内不支持 router-link 组件，请使用 vm.$router.push 代替。
+
+tooltip 内不支持 disabled form 元素，参考MDN，请在 disabled form 元素外层添加一层包裹元素。
+
+#### Popover 弹出框
+
+基础用法:Popover 的属性与 Tooltip 很类似，它们都是基于Vue-popper开发的，因此对于重复属性，请参考 Tooltip 的文档，在此文档中不做详尽解释。trigger属性用于设置何时触发 Popover，支持四种触发方式：hover，click，focus 和 manual。对于触发 Popover 的元素，有两种写法：使用 slot="reference" 的具名插槽，或使用自定义指令v-popover指向 Popover 的索引ref。
+
+```html
+<template>
+  <el-popover
+    placement="top-start"
+    title="标题"
+    width="200"
+    trigger="hover"
+    content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+    <el-button slot="reference">hover 激活</el-button>
+  </el-popover>
+  <el-popover
+    ref="popover"
+    placement="right"
+    title="标题"
+    width="200"
+    trigger="focus"
+    content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+  </el-popover>
+  <el-button v-popover:popover>focus 激活</el-button>
+</template>
+```
+
+嵌套信息:可以在 Popover 中嵌套多种类型信息，利用分发取代content属性
+
+```html
+<el-popover
+  placement="right"
+  width="400"
+  trigger="click">
+  <el-table :data="gridData">
+    <!-- ... -->
+  </el-table>
+  <el-button slot="reference">click 激活</el-button>
+</el-popover>
+```
+
+嵌套操作:当然，你还可以嵌套操作，这相比 Dialog 更为轻量：
+
+```html
+<el-popover
+  placement="top"
+  width="160"
+  v-model="visible2">
+  <p>这是一段内容这是一段内容确定删除吗？</p>
+  <div style="text-align: right; margin: 0">
+    <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
+    <el-button type="primary" size="mini" @click="visible2 = false">确定</el-button>
+  </div>
+  <el-button slot="reference">删除</el-button>
+</el-popover>
+<script>
+  export default {
+    data() {
+      return {
+        visible2: false,
+      };
+    }
+  }
+</script>
+```
+
+#### Card 卡片
+
+> 将信息聚合在卡片容器中展示。
+
+基础用法:包含标题，内容和操作。Card 组件包括header和body部分，header部分需要有显式具名 slot 分发，同时也是可选的。
+
+```html
+<el-card class="box-card">
+  <div slot="header" class="clearfix">
+    <span>卡片名称</span>
+    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+  </div>
+  <div v-for="o in 4" :key="o" class="text item">
+    {{'列表内容 ' + o }}
+  </div>
+</el-card>
+```
+
+简单卡片:卡片可以只有内容区域
+
+带图片:可配置定义更丰富的内容展示。配置body-style属性来自定义body部分的style，我们还使用了布局组件。
+
+```html
+<el-row>
+  <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
+    <el-card :body-style="{ padding: '0px' }">
+      <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+      <div style="padding: 14px;">
+        <span>好吃的汉堡</span>
+        <div class="bottom clearfix">
+          <time class="time">{{ currentDate }}</time>
+          <el-button type="text" class="button">操作按钮</el-button>
+        </div>
+      </div>
+    </el-card>
+  </el-col>
+</el-row>
+<script>
+export default {
+  data() {
+    return {
+      currentDate: new Date()
+    };
+  }
+}
+</script>
+```
+
+卡片阴影:可对阴影的显示进行配置。通过shadow属性设置卡片阴影出现的时机：always、hover或never。`<el-card shadow="always">`
+
+#### Carousel 走马灯
+
+> 在有限空间内，循环播放同一类型的图片、文字等内容
+
+基础用法:适用广泛的基础用法 结合使用el-carousel和el-carousel-item标签就得到了一个走马灯。幻灯片的内容是任意的，需要放在el-carousel-item标签中。默认情况下，在鼠标 hover 底部的指示器时就会触发切换。通过设置trigger属性为click，可以达到点击触发的效果。
+
+```html
+<template>
+  <div class="block">
+    <span class="demonstration">Click 指示器触发</span>
+    <el-carousel trigger="click" height="150px">
+      <el-carousel-item v-for="item in 4" :key="item">
+        <h3 class="small">{{ item }}</h3>
+      </el-carousel-item>
+    </el-carousel>
+  </div>
+</template>
+<style>
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+  }
+  .el-carousel__item:nth-child(2n) {
+     background-color: #99a9bf;
+  }
+  .el-carousel__item:nth-child(2n+1) {
+     background-color: #d3dce6;
+  }
+</style>
+```
+
+指示器:可以将指示器的显示位置设置在容器外部 indicator-position属性定义了指示器的位置。默认情况下，它会显示在走马灯内部，设置为outside则会显示在外部；设置为none则不会显示指示器。 `<el-carousel indicator-position="outside">`
+
+切换箭头:可以设置切换箭头的显示时机 arrow属性定义了切换箭头的显示时机。默认情况下，切换箭头只有在鼠标 hover 到走马灯上时才会显示；若将arrow设置为always，则会一直显示；设置为never，则会一直隐藏。`<el-carousel :interval="5000" arrow="always">`
+
+卡片化:当页面宽度方向空间空余，但高度方向空间匮乏时，可使用卡片风格 将type属性设置为card即可启用卡片模式。从交互上来说，卡片模式和一般模式的最大区别在于，可以通过直接点击两侧的幻灯片进行切换。
+
+```html
+<template>
+  <el-carousel :interval="4000" type="card" height="200px">
+    <el-carousel-item v-for="item in 6" :key="item">
+      <h3 class="medium">{{ item }}</h3>
+    </el-carousel-item>
+  </el-carousel>
+</template>
+```
+
+方向:默认情况下，direction 为 horizontal。通过设置 direction 为 vertical 来让走马灯在垂直方向上显示 `<el-carousel height="200px" direction="vertical" :autoplay="false">` autoplay 自动切换
+
+#### Collapse 折叠面板
+
+> 通过折叠面板收纳内容区域
+
+基础用法:可同时展开多个面板，面板之间不影响
+
+```html
+<el-collapse v-model="activeNames" @change="handleChange">
+  <el-collapse-item title="一致性 Consistency" name="1">
+    <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
+    <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
+  </el-collapse-item>
+</el-collapse>
+<script>
+  export default {
+    data() {
+      return {
+        activeNames: ['1']
+      };
+    },
+    methods: {
+      handleChange(val) {
+        console.log(val);
+      }
+    }
+  }
+</script>
+```
+
+手风琴效果:每次只能展开一个面板 通过 accordion 属性来设置是否以手风琴模式显示。 `<el-collapse v-model="activeName" accordion>`
+
+自定义面板标题:除了可以通过 title 属性以外，还可以通过具名 slot 来实现自定义面板的标题内容，以实现增加图标等效果。
+
+```html
+<el-collapse accordion>
+  <el-collapse-item>
+    <template slot="title">
+      一致性 Consistency<i class="header-icon el-icon-info"></i>
+    </template>
+```
+
+#### Timeline 时间线
+
+> 可视化地呈现时间流信息。
+
+基础用法:Timeline 可拆分成多个按照时间戳正序或倒序排列的 activity，时间戳是其区分于其他控件的重要特征，使用时注意与 Steps 步骤条等区分。
+
+```html
+<div class="block">
+  <div class="radio">
+    排序：
+    <el-radio-group v-model="reverse">
+      <el-radio :label="true">倒序</el-radio>
+      <el-radio :label="false">正序</el-radio>
+    </el-radio-group>
+  </div>
+  <el-timeline :reverse="reverse">
+    <el-timeline-item
+      v-for="(activity, index) in activities"
+      :key="index"
+      :timestamp="activity.timestamp">
+      {{activity.content}}
+    </el-timeline-item>
+  </el-timeline>
+</div>
+<script>
+  export default {
+    data() {
+      return {
+        reverse: true,
+        activities: [{
+          content: '活动按期开始',
+          timestamp: '2018-04-15'
+        }, {
+          content: '通过审核',
+          timestamp: '2018-04-13'
+        }, {
+          content: '创建成功',
+          timestamp: '2018-04-11'
+        }]
+      };
+    }
+  };
+</script>
+```
+
+定义节点样式:可根据实际场景,定义节点尺寸,颜色,或直接使用图标。
+
+```html
+<el-timeline-item
+  v-for="(activity, index) in activities"
+  :key="index"
+  :icon="activity.icon"
+  :type="activity.type"
+  :color="activity.color"
+  :size="activity.size"
+  :timestamp="activity.timestamp">
+```
+
+定义时间戳:当内容在垂直向向上过长时，可将时间戳置于内容之上。`<el-timeline-item timestamp="2018/4/12" placement="top/bottom">`
+
+#### Divider 分割线
+
+> 区隔内容的分割线。
+
+基础用法:对不同章节的文本段落进行分割。
+
+```html
+<template>
+  <div>
+    <span>青春是一个短暂的美梦, 当你醒来时, 它早已消失无踪</span>
+    <el-divider></el-divider>
+    <span>少量的邪恶足以抵消全部高贵的品质, 害得人声名狼藉</span>
+  </div>
+</template>
+```
+
+设置文案:可以在分割线上自定义文案内容。`<el-divider><i class="el-icon-mobile-phone"></i></el-divider>`
+
+垂直分割:`<el-divider direction="vertical"></el-divider>`
+
+#### Calendar 日历
+
+> 显示日期
+
+基本:设置 value 来指定当前显示的月份。如果 value 未指定，则显示当月。value 支持 v-model 双向绑定。
+
+```html
+<el-calendar v-model="value"></el-calendar>
+<script>
+  export default {
+    data() {
+      return {
+        value: new Date()
+      }
+    }
+  }
+</script>
+```
+
+自定义内容:通过设置名为 dateCell 的 scoped-slot 来自定义日历单元格中显示的内容。在 scoped-slot 可以获取到 date（当前单元格的日期）, data（包括 type，isSelected，day 属性）。详情解释参考下方的 API 文档。
+
+```html
+<el-calendar>
+  <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
+  <template
+    slot="dateCell"
+    slot-scope="{date, data}">
+    <p :class="data.isSelected ? 'is-selected' : ''">
+      {{ data.day.split('-').slice(1).join('-') }} {{ data.isSelected ? '✔️' : ''}}
+    </p>
+  </template>
+</el-calendar>
+<style>
+  .is-selected {
+    color: #1989FA;
+  }
+</style>
+```
+
+自定义范围:设置 range 属性指定日历的显示范围。开始时间必须是周一，结束时间必须是周日，且时间跨度不能超过两个月。`<el-calendar :range="['2019-03-04', '2019-03-24']"></el-calendar>`
+
+#### Image 图片
+
+> 图片容器，在保留原生img的特性下，支持懒加载，自定义占位、加载失败等
+
+基础用法:可通过fit确定图片如何适应到容器框，同原生 object-fit。
+
+```html
+<div class="demo-image">
+  <div class="block" v-for="fit in fits" :key="fit">
+    <span class="demonstration">{{ fit }}</span>
+    <el-image
+      style="width: 100px; height: 100px"
+      :src="url"
+      :fit="fit"></el-image>
+  </div>
+</div>
+<script>
+  export default {
+    data() {
+      return {
+        fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
+        url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+      }
+    }
+  }
+</script>
+```
+
+占位内容:可通过slot = placeholder可自定义占位内容
+
+```html
+<el-image :src="src">
+  <div slot="placeholder" class="image-slot">
+    加载中<span class="dot">...</span>
+  </div>
+</el-image>
+```
+
+加载失败:可通过slot = error可自定义加载失败内容
+
+```html
+ <el-image>
+  <div slot="error" class="image-slot">
+    <i class="el-icon-picture-outline"></i>
+  </div>
+</el-image>
+```
+
+懒加载:可通过lazy开启懒加载功能，当图片滚动到可视范围内才会加载。可通过scroll-container来设置滚动容器，若未定义，则为最近一个overflow值为auto或scroll的父元素。
+
+```html
+<div class="demo-image__lazy">
+  <el-image v-for="url in urls" :key="url" :src="url" lazy></el-image>
+</div>
+```
+
+## webpack
