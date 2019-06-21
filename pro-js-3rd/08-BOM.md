@@ -18,3 +18,99 @@ var leftPos = (typeof window.screenLeft == "number") ?
 var topPos = (typeof window.screenTop == "number") ?
     window.screenTop : window.screenY;
 ```
+
+### 定时
+
+```js
+//设置超时调用
+var timeoutId = setTimeout(function() {
+    alert("Hello world!");
+}, 1000);
+//注意:把它取消 clearTimeout(timeoutId);
+clearTimeout(timeoutId);
+```
+
+### 系统对话框
+
+```js
+alert("Hello world!")
+if (confirm("Are you sure?")) {
+        alert("I'm so glad you're sure! ");
+    } else {
+        alert("I'm sorry to hear you're not sure. ");
+}
+var result = prompt("What is your name? ", "");
+    if (result !== null) {
+        alert("Welcome, " + result);
+    }
+```
+
+## location对象
+
+![location属性](./media/location属性.png)
+
+### 查询字符串参数
+
+```js
+function getQueryStringArgs(){
+    //取得查询字符串并去掉开头的问号
+    var qs = (location.search.length > 0 ? location.search.substring(1) : ""),
+    //保存数据的对象
+    args = {},
+    //取得每一项
+    items = qs.length ? qs.split("&") : [],
+    item = null,
+    name = null,
+    value = null,
+    //在 for 循环中使用
+    i = 0,
+    len = items.length;
+    //逐个将每一项添加到 args 对象中
+    for (i=0; i < len; i++){
+        item = items[i].split("=");
+        name = decodeURIComponent(item[0]);
+        value = decodeURIComponent(item[1]);
+        if (name.length) {
+            args[name] = value;
+        }
+    }
+    return args;
+}
+```
+
+### 位置操作
+
+```js
+// 以下代码完全一致
+location.assign("http://www.wrox.com");
+window.location = "http://www.wrox.com";
+location.href = "http://www.wrox.com";
+```
+
+## navigator对象
+
+`navigator.userAgent` 获得浏览器的用户代理字符串
+
+## screen对象
+
+```js
+screen.height // 屏幕的像素高度
+screen.width // 屏幕的像素宽度度
+screen.left // 当前屏幕距左边的像素距离
+screen.top // 当前屏幕距上边的像素距离
+```
+
+## history对象
+
+```js
+//后退一页
+history.go(-1);
+//前进一页
+history.go(1);
+//前进两页
+history.go(2);
+//后退一页
+history.back();
+//前进一页
+history.forward();
+```
