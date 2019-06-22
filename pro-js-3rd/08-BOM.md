@@ -19,30 +19,58 @@ var topPos = (typeof window.screenTop == "number") ?
     window.screenTop : window.screenY;
 ```
 
+### 滚动页面
+
+```js
+window.scrollTo(xpos, ypos)
+window.scrollTo(0, 0) // 返回顶部
+```
+
+### 窗口尺寸
+
+```js
+var wdith = window.innerWidth
+            || document.documentElement.clientWidth
+            || document.body.clientWidth;
+
+var height = window.innerHeight
+            || document.documentElement.clientHeight
+            || document.body.clientHeight;
+```
+
 ### 定时
 
 ```js
-//设置超时调用
+//设置延时调用
 var timeoutId = setTimeout(function() {
     alert("Hello world!");
 }, 1000);
-//注意:把它取消 clearTimeout(timeoutId);
+//注意:把它取消
 clearTimeout(timeoutId);
+```
+
+```js
+//设置重复调用
+var timeoutId = setInterval(function() {
+    alert("Hello world!");
+}, 1000);
+//注意:把它取消
+clearInterval(timeoutId);
 ```
 
 ### 系统对话框
 
 ```js
-alert("Hello world!")
+alert("Hello world!") // 警告
 if (confirm("Are you sure?")) {
         alert("I'm so glad you're sure! ");
     } else {
         alert("I'm sorry to hear you're not sure. ");
-}
+} // 确认
 var result = prompt("What is your name? ", "");
     if (result !== null) {
         alert("Welcome, " + result);
-    }
+    } // 输入
 ```
 
 ## location对象
