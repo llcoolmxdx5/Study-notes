@@ -88,36 +88,36 @@
 ```js
 // 定义检测数据类型的功能函数
 function checkedType (target) {
-    return Object.prototype.toString.call(target).slice(8, -1)
+  return Object.prototype.toString.call(target).slice(8, -1)
 }
 // 实现深度克隆---对象/数组
 function clone(target) {
-    // 判断拷贝的数据类型
-    // 初始化变量result 成为最终克隆的数据
-    let result,
-        targetType = checkedType(target)
-    if (targetType === "Object") {
-        result = {}
-    } else if (targetType === "Array") {
-        target = []
+  // 判断拷贝的数据类型
+  // 初始化变量result 成为最终克隆的数据
+  let result,
+    targetType = checkedType(target)
+  if (targetType === "Object") {
+    result = {}
+  } else if (targetType === "Array") {
+    target = []
+  } else {
+    return target
+  }
+  // 遍历目标数据
+  for (let i in target) {
+    // 获取遍历数据的每一项值
+    let value = target[i]
+    // 判断目标结构里的每一值是否存在对象/数组
+    if (checkedType(value) === "Object" || checkedType(value) === "Array") {
+      // 对象/数组里嵌套了对象/数组
+      // 继续遍历获取到value值
+      result[i] = clone(value)
     } else {
-        return target
+      // 获取到value值是基本的数据类型或函数
+      result[i] = value
     }
-    // 遍历目标数据
-    for (let i in target) {
-        // 获取遍历数据的每一项值
-        let value = target[i]
-        // 判断目标结构里的每一值是否存在对象/数组
-        if (checkedType(value) === "Object" || checkedType(value) === "Array") {
-            // 对象/数组里嵌套了对象/数组
-            // 继续遍历获取到value值
-            result[i] = clone(value)
-        } else {
-            // 获取到value值是基本的数据类型或函数
-            result[i] = value
-        }
-    }
-    return result
+  }
+  return result
 }
 ```
 
@@ -138,14 +138,14 @@ function clone(target) {
 
 ```js
 function test (arg) {
-    // 1.形参是"hi"
-    // 2.因为函数声明比变量声明优先级高,所以此时arg是function
-    console.log(arg)
-    var arg = "hello" // 3.变量声明被忽略,arg="hello"被执行
-    function arg () {
-        console.log("hello world")
-    }
-    console.log(arg)
+  // 1.形参是"hi"
+  // 2.因为函数声明比变量声明优先级高,所以此时arg是function
+  console.log(arg)
+  var arg = "hello" // 3.变量声明被忽略,arg="hello"被执行
+  function arg () {
+    console.log("hello world")
+  }
+  console.log(arg)
 }
 test("hi")
 /* 输出:
@@ -189,9 +189,9 @@ ES6 到来JavaScript 有全局作用域、函数作用域和块级作用域（ES
 ```js
 var a = 100
 function fn () {
-    var b = 200
-    console.log(a) // 这里的a在这里就是一个自由变量
-    console.log(b)
+  var b = 200
+  console.log(a) // 这里的a在这里就是一个自由变量
+  console.log(b)
 }
 ```
 
@@ -199,14 +199,14 @@ function fn () {
 
 ```js
 function F1 () {
-    var a = 100
-    return function () {
-        console.log(a)
-    }
+  var a = 100
+  return function () {
+    console.log(a)
+  }
 }
 function F2 (f1) {
-    var a = 200
-    console.log(f1())
+  var a = 200
+  console.log(f1())
 }
 var f1 = F1()
 F2(f1)
@@ -290,17 +290,17 @@ add.apply(o, [10, 20]) // 1 + 3 + 10 + 20 = 34
 <!-- 箭头函数this指向:箭头函数没有自己的this，看其外层的是否有函数，如果有，外层函数的this就是内部箭头函数的this，如果没有，则this是window。 -->
 <button id="btn1">剪头函数this</button>
 <script type="text/javascript">
-    let btn1 = document.getElementById("btn1")
-    let obj = {
-        name: "kobe",
-        age: 39,
-        getName: function () {
-            btn1.onclick = () => {
-                console.log(this) // obj
-            }
-        }
+  let btn1 = document.getElementById("btn1")
+  let obj = {
+    name: "kobe",
+    age: 39,
+    getName: function () {
+      btn1.onclick = () => {
+        console.log(this) // obj
+      }
     }
-    obj.getName();
+  }
+  obj.getName();
 </script>
 ```
 
@@ -386,3 +386,340 @@ setTimeout(() => {
 - 清空完微任务队列中的所有任务后，就又会去宏任务队列取一个，这回执行的是 setTimeout2
 
 ## 原型链与继承
+
+### 原型和原型链
+
+原型：在JavaScript中原型是一个prototype对象，用于表示类型之间的关系。
+
+原型链：JavaScript万物都是对象，对象和对象之间也有关系，并不是孤立存在的。对象之间的继承关系，在JavaScript中是通过prototype对象指向父类对象，直到指向Object对象为止，这样就形成了一个原型指向的链条，专业术语称之为原型链。
+
+```js
+var Person = function () {
+  this.age = 18
+  this.name = "匿名"
+}
+var Student = function () {}
+// 创建继承关系,父类实例作为子类原型
+Student.prototype = new Person()
+var s1 = new Student()
+console.log(s1)
+// Student {}
+// __proto__: Person
+//  age: 18
+//  name: "匿名"
+//  __proto__: Object
+```
+
+当试图得到一个对象的某个属性时，如果这个对象本身没有这个属性，那么会去它的 `__proto__`（即它的构造函数的prototype）中寻找。如果一直找到最上层都没有找到，那么就宣告失败，返回undefined。最上层是什么 —— `Object.prototype.__proto__===null`
+
+### 继承(共6种)
+
+#### 原型链+借用构造函数的组合继承
+
+使用最多的继承模式是组合继承，这种模式使用 原型链继承共享的属性和方法，而通过借用构造函数继承实例属性。
+
+这种继承方式优点在于构造函数可以传参，不会与父类引用属性共享，可以复用父类的函数，但是也存在一个缺点就是在继承父类函数的时候调用了父类构造函数，导致子类的原型上多了不需要的父类属性，存在内存上的浪费。
+
+```js
+function Parent3() {
+  this.name = ['super3']
+}
+Parent3.prototype.reName = function() {
+  this.name.push('super31')
+}
+function Child3() {
+  Parent3.call(this) // 生成子类的实例属性(但是不包括父对象的方法)
+}
+Child3.prototype = new Parent3() // 继承父类的属性和方法(副作用: 父类的构造函数被调用的多次，且属性也存在两份造成了内存浪费)
+var child31 = new Child3()
+var child32 = new Child3()
+child31.reName()
+console.log(child31.name, child32.name) // [ 'super3', 'super31' ] [ 'super3' ], 子类实例不会相互影响
+console.log(child31.reName === child32.reName) //true, 共享了父类的方法
+```
+
+#### 寄生组合继承
+
+这种继承方式对上一种组合继承进行了优化
+
+继承实现的核心就是将父类的原型赋值给了子类，并且将构造函数设置为子类，这样既解决了无用的父类属性问题，还能正确的找到子类的构造函数。
+
+```js
+function Parent (value) {
+  this.val = value
+}
+Parent.prototype.getValue = function () {
+  console.log(this.val)
+}
+function Child (value) {
+  Parent.call(this, value)
+}
+Child.prototype = Object.create(Parent.prototype, {
+  constructor: {
+    value: Child,
+    enumerable: false,
+    writable: true,
+    configurable: true
+  }
+})
+const child = new Child(1)
+child.getValue() // 1
+child instanceof Parent // true
+```
+
+#### ES6中class 的继承
+
+ES6中引入了class关键字，class可以通过extends关键字实现继承，还可以通过static关键字定义类的静态方法,这比 ES5 的通过修改原型链实现继承，要清晰和方便很多。需要注意的是，class关键字只是原型的语法糖，JavaScript继承仍然是基于原型实现的
+
+```js
+class Parent5 {
+  constructor() {
+    this.name = ['super5']
+  }
+  reName() {
+    this.name.push('new 5')
+  }
+}
+class Child5 extends Parent5 {
+  constructor() {
+    super()
+  }
+}
+var child51 = new Child5()
+var child52 = new Child5()
+child51.reName()
+console.log(child51.name, child52.name) // [[ 'super5', 'new 5' ] [ 'super5' ], 子类实例不会相互影响
+console.log(child51.reName === child52.reName) //true, 共享了父类的方法
+```
+
+## DOM操作与BOM操作
+
+### 1.DOM操作
+
+当网页被加载时，浏览器会创建页面的文档对象模型(DOM),我们可以认为 DOM 就是 JS 能识别的 HTML 结构，一个普通的 JS 对象或者数组。接下来我们介绍常见DOM操作:
+
+- 新增节点和移动节点
+
+  ```js
+  var div1 = document.getElementById("div1")
+  var p1 = document.createElement("p")
+  p1.innerHTML = "this is p1"
+  div1.appendChild(p1)
+  // 移动已有节点
+  var p2 = document.getElementById("p2")
+  div1.appendChild(p2)
+  ```
+
+- 获取父元素
+
+  ```js
+  var div1 = document.getElementById("div1")
+  var parent = document.parentElement
+  ```
+
+- 获取子元素
+
+  ```js
+  var div1 = document.getElementById("div1")
+  var child = div1.childNodes
+  ```
+
+- 删除节点
+
+  ```js
+  var div1 = document.getElementById("div1")
+  var child = div1.childNodes
+  div1.removeChild(child[0])
+  ```
+
+### 2.DOM事件模型和事件流
+
+**DOM事件模型分为捕获和冒泡。**一个事件发生后，会在子元素和父元素之间传播（propagation）。这种传播分成三个阶段。
+
+1. 捕获阶段：事件从window对象自上而下向目标节点传播的阶段
+
+2. 目标阶段：真正的目标节点正在处理事件的阶段
+
+3. 冒泡阶段：事件从目标节点自下而上向window对象传播的阶段
+
+捕获是从上到下，事件先从window对象，然后再到document（对象），然后是html标签（通过document.documentElement获取html标签），然后是body标签（通过document.body获取body标签），然后按照普通的html结构一层一层往下传，最后到达目标元素。
+
+接下来我们看个事件冒泡的例子：
+
+```html
+<div id="outer">
+    <div id="inner"></div>
+</div>
+<script>
+  window.onclick = function () {
+    console.log("window")
+  }
+  document.onclick = function () {
+    console.log("document")
+  }
+  document.documentElement.onclick = function () {
+    console.log("html")
+  }
+  document.body.onclick = function () {
+    console.log("body")
+  }
+  outer.onclick = function (ev) {
+    console.log("outer")
+  }
+  inner.onclick = function (ev) {
+    console.log("inner")
+  }
+</script>
+<!-- inner outer body html document window -->
+```
+
+**如何阻止冒泡？**通过 event.stopPropagation() 方法阻止事件冒泡到父元素，阻止任何父事件处理程序被执行。我们可以在上例中inner元素的click事件上，添加 event.stopPropagation()这句话后，就阻止了父事件的执行，最后只打印了'inner'。
+
+```js
+inner.onclick = function(ev) {
+  console.log('inner')
+  ev.stopPropagation()
+}
+```
+
+### 3.事件代理(事件委托)
+
+由于事件会在冒泡阶段向上传播到父节点，因此可以把子节点的监听函数定义在父节点上，由父节点的监听函数统一处理多个子元素的事件。这种方法叫做事件的代理。
+
+我们设定一种场景，如下代码，一个 `<div>`中包含了若干个 `<a>`，而且还能继续增加。那如何快捷方便地为所有 `<a>`绑定事件呢？
+
+```html
+<div id="div1">
+    <a href="#">a1</a>
+    <a href="#">a2</a>
+    <a href="#">a3</a>
+    <a href="#">a4</a>
+</div>
+<button>点击增加一个 a 标签</button>
+```
+
+如果给每个 `<a>`标签一一都绑定一个事件，那对于内存消耗是非常大的。借助事件代理，我们只需要给父容器div绑定方法即可，这样不管点击的是哪一个后代元素，都会根据冒泡传播的传递机制，把父容器的click行为触发，然后把对应的方法执行，根据事件源，我们可以知道点击的是谁，从而完成不同的事。
+
+```js
+var div1 = document.getElementById('div1')
+div1.addEventListener('click', function (e) {
+  // e.target 可以监听到触发点击事件的元素是哪一个
+  var target = e.target
+  if (e.nodeName === 'A') {
+    // 点击的是 <a> 元素
+    alert(target.innerHTML)
+  }
+})
+```
+
+最后，使用代理的优点如下：
+
+- 使代码简洁
+
+- 减少浏览器的内存占用
+
+### 4.BOM 操作
+
+BOM（浏览器对象模型）是浏览器本身的一些信息的设置和获取，例如获取浏览器的宽度、高度，设置让浏览器跳转到哪个地址。
+
+- window.screen对象：包含有关用户屏幕的信息
+
+- window.location对象：用于获得当前页面的地址(URL)，并把浏览器重定向到新的页面
+
+- window.history对象：浏览历史的前进后退等
+
+- window.navigator对象：常常用来获取浏览器信息、是否移动端访问等等
+
+获取屏幕的宽度和高度
+
+```js
+console.log(screen.width)
+console.log(screen.height)
+```
+
+获取网址、协议、path、参数、hash 等
+
+```js
+// 例如当前网址是 https://juejin.im/timeline/frontend?a=10&b=10#some
+console.log(location.href)  // https://juejin.im/timeline/frontend?a=10&b=10#some
+console.log(location.protocol) // https:
+console.log(location.pathname) // /timeline/frontend
+console.log(location.search) // ?a=10&b=10
+console.log(location.hash) // #some
+```
+
+另外，还有调用浏览器的前进、后退功能等
+
+```js
+history.back()
+history.forward()
+```
+
+获取浏览器特性（即俗称的UA）然后识别客户端，例如判断是不是 Chrome 浏览器
+
+```js
+var ua = navigator.userAgent
+var isChrome = ua.indexOf('Chrome')
+console.log(isChrome)
+```
+
+### 5.Ajax与跨域
+
+Ajax 是一种异步请求数据的一种技术，对于改善用户的体验和程序的性能很有帮助。
+简单地说，在不需要重新刷新页面的情况下，Ajax 通过异步请求加载后台数据，并在网页上呈现出来。常见运用场景有表单验证是否登入成功、百度搜索下拉框提示和快递单号查询等等。Ajax的目的是提高用户体验，较少网络数据的传输量。
+
+如何手写 XMLHttpRequest 不借助任何库
+
+```js
+var xhr = new XMLHttpRequest()
+xhr.onreadystatechange = function () {
+  // 这里的函数异步执行
+  if (xhr.readyState == 4 && xhr.status == 200) {
+    alert(xhr.responseText)
+  }
+}
+xhr.open("GET", "/api", false)
+xhr.send(null)
+```
+
+因为浏览器出于安全考虑，有同源策略。也就是说，如果协议、域名或者端口有一个不同就是跨域，Ajax 请求会失败。
+
+那么是出于什么安全考虑才会引入这种机制呢？ 其实主要是用来防止 CSRF 攻击的。简单点说，CSRF 攻击是利用用户的登录态发起恶意请求。
+
+然后我们来考虑一个问题，请求跨域了，那么请求到底发出去没有？ 请求必然是发出去了，但是浏览器拦截了响应。
+
+常见的几种跨域解决方案（`https://github.com/ljianshu/Blog/issues/55`）:
+
+- JSONP：利用同源策略对 `<script>`标签不受限制,不过只支持GET请求
+
+- CORS：实现 CORS 通信的关键是后端，服务端设置 Access-Control-Allow-Origin 就可以开启，备受推崇的跨域解决方案，比 JSONP 简单许多
+
+- Node中间件代理或nginx反向代理：主要是通过同源策略对服务器不加限制
+
+### 6.存储
+
+sessionStorage 、localStorage 和 cookie 之间的区别
+
+共同点：都是保存在浏览器端，且都遵循同源策略。
+
+不同点：在于生命周期与作用域的不同
+
+作用域：localStorage只要在相同的协议、相同的主机名、相同的端口下，就能读取/修改到同一份localStorage数据。sessionStorage比localStorage更严苛一点，除了协议、主机名、端口外，还要求在同一窗口（也就是浏览器的标签页）下
+
+生命周期：localStorage 是持久化的本地存储，存储在其中的数据是永远不会过期的，使其消失的唯一办法是手动删除；而 sessionStorage 是临时性的本地存储，它是会话级别的存储，当会话结束（页面被关闭）时，存储内容也随之被释放。
+
+![存储生命周期](./media/存储生命周期.png)
+
+## 模块化
+
+几种常见模块化规范的简介
+
+详情请点击`https://github.com/ljianshu/Blog/issues/48`
+
+CommonJS规范主要用于服务端编程，加载模块是同步的，这并不适合在浏览器环境，因为同步意味着阻塞加载，浏览器资源是异步加载的，因此有了AMD CMD解决方案
+
+AMD规范在浏览器环境中异步加载模块，而且可以并行加载多个模块。不过，AMD规范开发成本高，代码的阅读和书写比较困难，模块定义方式的语义不顺畅。
+
+CMD规范与AMD规范很相似，都用于浏览器编程，依赖就近，延迟执行，可以很容易在Node.js中运行。不过，依赖SPM 打包，模块的加载逻辑偏重
+
+ES6 在语言标准的层面上，实现了模块功能，而且实现得相当简单，完全可以取代 CommonJS 和 AMD 规范，成为浏览器和服务器通用的模块解决方案
