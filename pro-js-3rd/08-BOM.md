@@ -75,7 +75,7 @@ var result = prompt("What is your name? ", "");
 
 ## location对象
 
-![location属性](./media/location属性.png)
+![location属性](./media/10-location属性.png)
 
 ### 查询字符串参数
 
