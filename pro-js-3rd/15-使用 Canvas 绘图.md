@@ -309,3 +309,203 @@ context.fillRect(10, 10, 50, 50);
 context.fillStyle = "rgba(0,0,255,1)";
 context.fillRect(30, 30, 50, 50);
 ```
+
+### 渐变
+
+渐变由 CanvasGradient 实例表示，很容易通过 2D 上下文来创建和修改。要创建一个新的线性渐变，可以调用 createLinearGradient()方法。这个方法接收 4 个参数：起点的 x 坐标、起点的 y 坐标、终点的 x 坐标、终点的 y 坐标。调用这个方法后，它就会创建一个指定大小的渐变，并返回CanvasGradient 对象的实例。
+
+创建了渐变对象后，下一步就是使用 addColorStop()方法来指定色标。这个方法接收两个参数：色标位置和 CSS 颜色值。色标位置是一个 0（开始的颜色）到 1（结束的颜色）之间的数字。例如：
+
+```js
+var gradient = context.createLinearGradient(30, 30, 70, 70);
+gradient.addColorStop(0, "white");
+gradient.addColorStop(1, "black");
+```
+
+此时，gradient 对象表示的是一个从画布上点(30,30)到点(70,70)的渐变。起点的色标是白色，终点的色标是黑色。然后就可以把 fillStyle 或 strokeStyle 设置为这个对象，从而使用渐变来绘制形状或描边：
+
+```js
+// 绘制红色矩形
+context.fillStyle = "#ff0000";
+context.fillRect(10, 10, 50, 50);
+// 绘制渐变矩形
+context.fillStyle = gradient;
+context.fillRect(30, 30, 50, 50);
+```
+
+要创建径向渐变（或放射渐变），可以使用 createRadialGradient()方法。这个方法接收 6 个参数，对应着两个圆的圆心和半径。前三个参数指定的是起点圆的原心（x 和 y）及半径，后三个参数指定的是终点圆的原心（x 和 y）及半径。可以把径向渐变想象成一个长圆桶，而这 6 个参数定义的正是这个桶的两个圆形开口的位置。如果把一个圆形开口定义得比另一个小一些，那这个圆桶就变成了圆锥体，而通过移动每个圆形开口的位置，就可达到像旋转这个圆锥体一样的效果。
+
+如果想从某个形状的中心点开始创建一个向外扩散的径向渐变效果，就要将两个圆定义为同心圆。比如，就拿前面创建的矩形来说，径向渐变的两个圆的圆心都应该在(55,55)，因为矩形的区域是从(30,30)到(80,80)。请看代码：
+
+```js
+var gradient = context.createRadialGradient(55, 55, 10, 55, 55, 30);
+gradient.addColorStop(0, "white");
+gradient.addColorStop(1, "black");
+//绘制红色矩形
+context.fillStyle = "#ff0000";
+context.fillRect(10, 10, 50, 50);
+//绘制渐变矩形
+context.fillStyle = gradient;
+context.fillRect(30, 30, 50, 50);
+```
+
+因为创建比较麻烦，所以径向渐变并不那么容易控制。不过，一般来说，让起点圆和终点圆保持为同心圆的情况比较多，这时候只要考虑给两个圆设置不同的半径就好了
+
+### 模式
+
+模式其实就是重复的图像，可以用来填充或描边图形。要创建一个新模式，可以调用createPattern()方法并传入两个参数：一个 HTML `<img>`元素和一个表示如何重复图像的字符串。其中，第二个参数的值与 CSS 的 background-repeat 属性值相同，包括"repeat"、"repeat-x"、"repeat-y"和"no-repeat"。看一个例子
+
+```js
+var image = document.images[0],
+pattern = context.createPattern(image, "repeat");
+//绘制矩形
+context.fillStyle = pattern;
+context.fillRect(10, 10, 150, 150);
+```
+
+需要注意的是，模式与渐变一样，都是从画布的原点(0,0)开始的。将填充样式（fillStyle）设置为模式对象，只表示在某个特定的区域内显示重复的图像，而不是要从某个位置开始绘制重复的图像。
+
+createPattern()方法的第一个参数也可以是一个`<video>`元素，或者另一个`<canvas>`元素。
+
+### 使用图像数据
+
+2D 上下文的一个明显的长处就是，可以通过 getImageData()取得原始图像数据。这个方法接收4 个参数：要取得其数据的画面区域的 x 和 y 坐标以及该区域的像素宽度和高度。例如，要取得左上角坐标为(10,5)、大小为 50×50 像素的区域的图像数据，可以使用以下代码：
+
+```js
+var imageData = context.getImageData(10, 5, 50, 50);
+```
+
+这里返回的对象是 ImageData 的实例。每个 ImageData 对象都有三个属性：width、height 和data。其中 data 属性是一个数组，保存着图像中每一个像素的数据。在 data 数组中，每一个像素用4 个元素来保存，分别表示红、绿、蓝和透明度值。因此，第一个像素的数据就保存在数组的第 0 到第3 个元素中，例如：
+
+```js
+var data = imageData.data,
+    red = data[0],
+    green = data[1],
+    blue = data[2],
+    alpha = data[3];
+```
+
+数组中每个元素的值都介于 0 到 255 之间（包括 0 和 255）。能够直接访问到原始图像数据，就能够以各种方式来操作这些数据。例如，通过修改图像数据，可以像下面这样创建一个简单的灰阶过滤器。
+
+```js
+var drawing = document.getElementById("drawing");
+//确定浏览器支持<canvas>元素
+if (drawing.getContext) {
+  var context = drawing.getContext("2d"),
+      image = document.images[0],
+      imageData, data,
+      i, len, average,
+      red, green, blue, alpha;
+  // 绘制原始图像
+  context.drawImage(image, 0, 0);
+  // 取得图像数据
+  imageData = context.getImageData(0, 0, image.width, image.height);
+  data = imageData.data;
+  for (i=0, len=data.length; i < len; i += 4) {
+    red = data[i];
+    green = data[i + 1];
+    blue = data[i + 2];
+    alpha = data[i + 3];
+    //求得 rgb 平均值
+    average = Math.floor((red + green + blue) / 3);
+    //设置颜色值，透明度不变
+    data[i] = average;
+    data[i + 1] = average;
+    data[i + 2] = average;
+  }
+  // 回写图像数据并显示结果
+  imageData.data = data;
+  context.putImageData(imageData, 0, 0);
+}
+```
+
+只有在画布“干净”的情况下（即图像并非来自其他域），才可以取得图像数据。如果画布“不干净”，那么访问图像数据时会导致 JavaScript 错误。
+
+### 合成
+
+还有两个会应用到 2D 上下文中所有绘制操作的属性：globalAlpha 和 globalCompositionOperation。其中，globalAlpha 是一个介于 0 和1 之间的值（包括 0 和 1），用于指定所有绘制的透明度。默认值为 0。如果所有后续操作都要基于相同的透明度，就可以先把 globalAlpha 设置为适当值，然后绘制，最后再把它设置回默认值 0。下面来看一个例子。
+
+```js
+// 绘制红色矩形
+context.fillStyle = "#ff0000";
+context.fillRect(10, 10, 50, 50);
+// 修改全局透明度
+context.globalAlpha = 0.5;
+// 绘制蓝色矩形
+context.fillStyle = "rgba(0,0,255,1)";
+context.fillRect(30, 30, 50, 50);
+// 重置全局透明度
+context.globalAlpha = 0;
+```
+
+在这个例子中，我们把蓝色矩形绘制到了红色矩形上面。因为在绘制蓝色矩形前，globalAlpha已经被设置为 0.5，所以蓝色矩形会呈现半透明效果，透过它可以看到下面的红色矩形。第二个属性 globalCompositionOperation 表示后绘制的图形怎样与先绘制的图形结合。不同浏览器对这个属性的实现仍然存在较大的差别。这个属性的值是字符串，可能的值如下:
+
+- source-over（默认值）：后绘制的图形位于先绘制的图形上方。
+
+- source-in：后绘制的图形与先绘制的图形重叠的部分可见，两者其他部分完全透明。
+
+- source-out：后绘制的图形与先绘制的图形不重叠的部分可见，先绘制的图形完全透明。
+
+- source-atop：后绘制的图形与先绘制的图形重叠的部分可见，先绘制图形不受影响。
+
+- destination-over：后绘制的图形位于先绘制的图形下方，只有之前透明像素下的部分才可见。
+
+- destination-in：后绘制的图形位于先绘制的图形下方，两者不重叠的部分完全透明。
+
+- destination-out：后绘制的图形擦除与先绘制的图形重叠的部分。
+
+- destination-atop：后绘制的图形位于先绘制的图形下方，在两者不重叠的地方，先绘制的图形会变透明。
+
+- lighter：后绘制的图形与先绘制的图形重叠部分的值相加，使该部分变亮。
+
+- copy：后绘制的图形完全替代与之重叠的先绘制图形。
+
+- xor：后绘制的图形与先绘制的图形重叠的部分执行“异或”操作。
+
+```js
+// 绘制红色矩形
+context.fillStyle = "#ff0000";
+context.fillRect(10, 10, 50, 50);
+// 设置合成操作
+context.globalCompositeOperation = "destination-over";
+// 绘制蓝色矩形
+context.fillStyle = "rgba(0,0,255,1)";
+context.fillRect(30, 30, 50, 50);
+```
+
+## WebGL
+
+WebGL 是针对 Canvas 的 3D 上下文。与其他 Web 技术不同，WebGL 并不是 W3C 制定的标准，而是由 Khronos Group 制定的。
+
+### 类型化数组
+
+类型化数组也是数组，只不过其元素被设置为特定类型的值。类型化数组的核心就是一个名为 ArrayBuffer 的类型。每个 ArrayBuffer 对象表示的只是内存中指定的字节数，但不会指定这些字节用于保存什么类型的数据。通过 ArrayBuffer 所能做的，就是为了将来使用而分配一定数量的字节。例如，下面这行代码会在内存中分配 20B。
+
+```js
+var buffer = new ArrayBuffer(20);
+```
+
+创建了 ArrayBuffer 对象后，能够通过该对象获得的信息只有它包含的字节数，方法是访问其byteLength 属性：
+
+```js
+var bytes = buffer.byteLength;
+```
+
+虽然 ArrayBuffer 对象本身没有多少可说的，但对 WebGL 而言，使用它是极其重要的。而且，在涉及视图的时候，你才会发现它原来还是很有意思的。
+
+#### 视图
+
+#### 类型化视图
+
+### WebGL上下文
+
+```js
+var drawing = document.getElementById("drawing");
+// 确定浏览器支持<canvas>元素
+if (drawing.getContext){
+  var gl = drawing.getContext("experimental-webgl");
+  if (gl) {
+    //使用 WebGL
+  }
+}
+```
