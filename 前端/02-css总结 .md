@@ -3,15 +3,17 @@
 ## 1.文本
 
 ```css
-font:font-style font-weight  font-size/line-height  font-family; /*必有family*/
-Font-style: normal | italic;      /*normal 默认值  italic  斜体*/
-Font-weight: 700;   /*值从100-900，文字粗细，不推荐使用font-weight:bold;*/
-font-size:16px;  /*文字大小*/
-line-height: 行高 /*行高=文字大小+上下间距*/
-Font-family:微软雅黑 Microsoft Yahei; 宋体 SimSun  /*文本的字体 **必有*/
-文本修饰：text-decoration: none/underline/line-through
-vertical-align:middle; /*图片和文字垂直居中对齐*/
-text-indent: -999em /*隐藏文字*/
+div {
+   /* font:font-style font-weight  font-size/line-height  font-family; 必有family */
+   font-style: normal; /*normal 默认值  italic  斜体*/
+   font-weight: 700;  /*值从100-900，文字粗细，400正常 不推荐使用font-weight:bold;*/
+   font-size: 16px;  /*文字大小 1em=16px */
+   line-height: 30px; /*行高=文字大小+上下间距*/
+   font-family: '微软雅黑', 'Microsoft Yahei', '宋体', SimSun;  /*文本的字体 必有 超过一个字用引号,多个字体分隔用逗号*/
+   text-decoration: none; /* none/overline/underline/line-through 文本修饰： */
+   vertical-align: middle; /*图片和文字垂直居中对齐*/
+   text-indent: -999em; /*隐藏文字*/
+}
 ```
 
 ## 2.标签分类
@@ -37,35 +39,41 @@ text-indent: -999em /*隐藏文字*/
 
 ## 3.链接伪类
 
-`a:link{属性:值;}`      链接默认状态
-`a:visited{属性:值;}`     链接访问之后的状态
-`a:hover{属性:值;}`      鼠标放到链接上显示的状态
-`a:active{属性:值;}`      链接激活的状态
-`a:focus{属性:值；}`     获取焦点
+```css
+a:link{属性:值;}     /* 链接默认状态 */
+a:visited{属性:值;}     /* 链接访问之后的状态 */
+a:hover{属性:值;}     /* 鼠标放到链接上显示的状态 */
+a:active{属性:值;}     /* 链接激活的状态 */
+a:focus{属性:值;}     /* 获取焦点 */
+```
 
 ## 4.背景属性
 
 ```css
-background: color image repeat position attachment; /*无顺序要求,必有image*/
-background-color    red  /*背景颜色*/
-background-image    url()  /*背景图片*/
-background-repeat repeat(默认)/no-repeat/repeat-x/repeat-y    /*背景平铺*/
-background-position  left/right/enter/top/bottom/具体数值  /*背景定位(可写一个或2个,一个时另一个默认居中)*/
-background-attachment  scroll/fixed  /*背景是否滚动*/
+div {
+   /* background: color image repeat position attachment; 无顺序要求,必有image */
+   background-color: red;  /*背景颜色*/
+   background-image: url();  /*背景图片*/
+   background-repeat: repeat; /* repeat(默认)/no-repeat/repeat-x/repeat-y背景平铺*/
+   background-position: left; /* left/right/enter/top/bottom/具体数值背景定位(可写一个或2个,一个时另一个默认居中)*/
+   background-attachment: scroll;  /* scroll/fixed背景是否滚动*/
+}
 ```
 
 ## 5.盒子模型
 
 ```css
-boder/boder-top: style color width; 无顺序要求,style必有
-boder-style: solid  实线/dotted 点线/dashed  虚线/none 去掉边框
-border-color   边框颜色
-border-width   边框粗细
-border-collapse:collapse  边框合并
-outline-style: none; 去掉轮廓线
-padding-top/bottom/left/right: 20px; 内边距
-margin-top/bottom/left/right: 20px; 外边距
-   可有1 2 4个值,上,上 下,上 右 下 左
+div {
+   /* border: style color width; 无顺序要求,style必有 */
+   border-style: solid;  /* solid 实线/dotted 点线/dashed  虚线/none 去掉边框 */
+   border-color: blue;   /* 边框颜色 */
+   border-width: 400;   /* 边框粗细 */
+   border-collapse: collapse;  /* 边框合并 */
+   outline-style: none; /* * 去掉轮廓线 */
+   padding-top/bottom/left/right: 20px; /* 内边距 */
+   margin-top/bottom/left/right: 20px; /* 外边距 */
+      /* 可有1 2 4个值: 上/ 上 下/ 上 右 下 左 */
+}
 ```
 
 - 垂直方向外边距合并
@@ -133,18 +141,20 @@ margin-top/bottom/left/right: 20px; 外边距
 ## 7.Css可见性
 
 ```css
-overflow:hidden;   /* 溢出隐藏 */
-visibility:hidden;   /* 隐藏元素  隐藏之后还占据原来的位置。 */
-display:none;      /* 隐藏元素  隐藏之后不占据原来的位置。*/
-display:block;     /* 元素可见 */
-display:none  /* 和display:block  常配合js使用 */
+div {
+   overflow: hidden;   /* 溢出隐藏 */
+   visibility: hidden;   /* 隐藏元素  隐藏之后还占据原来的位置。 */
+   display: none;      /* 隐藏元素  隐藏之后不占据原来的位置。*/
+   display: block;     /* 元素可见 */
+   display: none;  /* 和display:block  常配合js使用 */
+}
 ```
 
 ## 8.内容移除(网页优化)
 
 ```css
 a{display:inline-block;text-indent:-5000em;}
-.box{height:0;padding-top:xpx;overflow:hidden}
+.box{height:0;padding-top:10px;overflow:hidden}
 ```
 
 ## x.淘宝css初始化
@@ -181,13 +191,14 @@ table { border-collapse:collapse; border-spacing:0; }
 
 ```css
 span{
-   width:50px; 或max-width: 160px;
-   display:inline-block;
+   width: 50px;
+   /* 或max-width: 160px; */
+   display: inline-block;
    overflow: hidden;
-   white-space: nowrap;
+   white-space: nowrap; /* 不换行 */
    text-overflow: ellipsis;
+   word-break: break-all; /* 表示文本长度超过就自动换行 */
 }
-word-break: break-all;表示文本长度超过就自动换行
 ```
 
 ### 清除img间默认间隙
@@ -204,8 +215,10 @@ img {
 ### 不让文字被选中
 
 ```css
--webkit-user-select:none;
--moz-user-select:none;
--ms-user-select:none;
-user-select:none;
+span {
+   -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
 ```
