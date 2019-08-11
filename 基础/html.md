@@ -53,45 +53,81 @@
 - 链接
 
   ```html
-  <a>
+  <a href="javascript:void(0)" target="_blank/_self" download="下载的目标资源">百度一下</a>
   ```
 
 - 列表
 
   ```html
-  <ul>
-  <li>
-  <ol>
+  <ul type="square/disc/cicle"><li></li><ul>
+  <ol type="1"><li></li><ol>
   <dl>
-  <dt>
-  <dd>
+    <dt></dt>
+    <dd></dd>
+  </dl>
   ```
 
 - 表单
 
   ```html
-  <form>
-  <input type="text/email/range/phone/number/password/submit/checkbox/date/color" value="" placehold="">
-  <textarea>
+  <form action="">
+  <input type="text/email/range/phone/number/password/submit/checkbox/date/color/file/radio" value="" placehold="">
+  <textarea rows="" cols=""></textarea>
   <select>
-  <option>
-  <label>
+    <option value=""></option>
+  </select>
+  <label></label>
   ```
 
 - 样式/节
 
   ```html
   <style></style>
-  <div>
-  <span>
+  <div></div>
+  <span></span>
   ```
 
-### meta
+- 其他
 
-  ```js
+  ```html
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  ```
+
+- 表格
+
+- html5新增标签
+
+  ```html
+  <header>
+  <aside>
+  <article>
+  <section>
+  <nav>
+  <footer>
+  <video width="320" height="240" controls="controls">
+    <source src="movie.mp4" type="video/mp4" />
+    <source src="movie.ogg" type="video/ogg" />
+    <source src="movie.webm" type="video/webm" />
+    <object data="movie.mp4" width="320" height="240">
+      <embed src="movie.swf" width="320" height="240" />
+    </object>
+  </video>
+  <audio controls="controls">
+    <source src="song.mp3" type="audio/mp3" />
+    <source src="song.ogg" type="audio/ogg" />
+    <embed height="100" width="100" src="song.mp3" />
+    Your browser does not support this audio format.
+  </audio>
+  <canvas>
+  ```
+
+- meta
+
+  ```html
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
-  <meta name="keywords" content=""></mata>
-  <meta name="description" content=""><meta>
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="renderer" content="webkit">
   ```

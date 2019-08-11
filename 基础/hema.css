@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+}
+header {
+    height: 80px;
+    background-color: yellow;
+}
+section:first-child {
+    height: 800px;
+    width: 100%;
+    background-color: red;
+}
+section:nth-child(2) {
+    height: 600px;
+    background-color: #fff;
+}
+footer {
+    height: 80px;
+    background-color: blue;
+}
