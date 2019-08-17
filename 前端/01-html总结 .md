@@ -39,7 +39,7 @@ edge：blink
 <marquee behavior="slide" direction="up">滚动的内容</marquee>
 <link style="stylesheet" href="1.css">连接外部样式表
 <link rel="icon" href="favicon.ico">设置icon图标
-<input image src=''>图片按钮，可以进行表单提交
+<input type="image" src=''>图片按钮，可以进行表单提交
 <fieldset><legend>分组名称</legend><input ></fieldset>对表单信息进行分组
 ```
 
