@@ -13,7 +13,6 @@ section:first-child {
 section:nth-child(2) {
     height: 600px;
     background-color: #fff;
-    /* 后面 */
 }
 footer {
     height: 80px;
