@@ -18,7 +18,7 @@ ECMA 欧洲电脑厂商协会制定的行为标准
 
 ### 1.1 前端开发所用到的技术(网页制作技术)
 
-             ＸHTML+CSS       标记语言
+ＸHTML+CSS       标记语言
 
 ### 1.1.2WEB标准的概念及组成
 
@@ -35,19 +35,17 @@ ECMA（欧洲电脑厂商联合会）制定的行为标准
 
 ### 1.2.1 HTML 、XHTML 、HTML5
 
-       HTML 指的是超文本标记语言 (Hyper Text Markup Language)
- 
+HTML 指的是超文本标记语言 (Hyper Text Markup Language)
 
-       XHTML指可扩展超文本标记语言（标识语言） （The EXtensible HyperText Markup Language）。 XHTML 是更严格更纯
-净的 HTML 版本
+XHTML指可扩展超文本标记语言（标识语言） （The EXtensible HyperText Markup Language）。 XHTML 是更严格更纯净的 HTML 版本
 
 SML， HTML1.0， HTML2.0 ，HTML3.0， HTML4.0 ，
 XHTML1.0
 HTML5
 
-      目前推荐遵循的是W3C于2000年1月26日发布的XHTML1.0
-       HTML5    指的是HTML的第五次重大修改
-      (HTML5 是 W3C 与 WHATWG 合作的结果，是最新的html规范）
+目前推荐遵循的是W3C于2000年1月26日发布的XHTML1.0
+HTML5    指的是HTML的第五次重大修改
+(HTML5 是 W3C 与 WHATWG 合作的结果，是最新的html规范）
   
 WHATWG网页超文本应用技术工作小组是一个以推动网络HTML 5 标准为目的而成立的组织。在2004年，由Opera、Mozilla基金会和苹果这些浏览器厂商组成。
 
@@ -55,15 +53,16 @@ WHATWG网页超文本应用技术工作小组是一个以推动网络HTML 5 标�
 
 ## 1.3.1 编辑器的使用 -Dreamweaver
 
-      Fireworks是Macromedia公司发布的一款专为网络图形设计的图形编辑软件，2005年，Adobe用34亿美元收购macromedia公司，fireworks随之跟随至adobe。
-     1、新建，打开，保存        2， 预览页面      3，建立站点
+Fireworks是Macromedia公司发布的一款专为网络图形设计的图形编辑软件，2005年，Adobe用34亿美元收购macromedia公司，fireworks随之跟随至adobe。
+1、新建，打开，保存        2， 预览页面      3，建立站点
 
 ### 1.3.2 PC端调试工具的使用的浏览器
 
 测试浏览器(chrome,ie,firefox)
 
 ### 1.3.3 移动端调试工具的使用
-        chrome可以测试移动端页面（有很多模拟器）
+
+chrome可以测试移动端页面（有很多模拟器）
 
 ## 1.4 HTML5 基本结构
 
