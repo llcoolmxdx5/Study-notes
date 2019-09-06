@@ -1,0 +1,967 @@
+# 03-1-js基础函数数组字符串
+
+## js基础
+
+### 1.数据类型的转换
+
+#### 0.数据类型分类
+
+分为基本数据类型和引用数据类型。其中基本数据类型包括undefined、null、Boolean、Number、String、Symbol (ES6新增，表示独一无二的值)，而引用数据类型统称为Object对象，主要包括对象、数组和函数
+
+#### 1. 转为str
+
+```js
+num.toString() // 不能转换undefied 和 null
+String()
+字符串与其他数据类型直接拼接
+```
+
+#### 2. 转为num
+
+```js
+Number() // 要转换的有一个不是数字,返回NaN true->1
+parseInt() // 解析到非数字结束,第一个为非数字则返回NaN true -> NaN
+parseFloat() // 解析到非数字结束,第一个为非数字则返回NaN
+  // 会解析第一个. 遇到第二个.或者非数字结束如果解析的内容里只有整数，解析成整数
+a.toFixed(2) // 保留2位小数
+```
+
+#### 3. 转换成布尔类型
+
+`Boolean()` 0  ''(空字符串) null undefined NaN false 会转换成false  其它都会转换成true
+
+### 2.类型判断
+
+#### 1. typeof
+
+typeof返回一个表示数据类型的字符串，返回结果包括：number、boolean、string、symbol、object、undefined、function等7种数据类型，但不能判断null、array等
+
+```js
+typeof Symbol ();// symbol 有效
+typeof ''; // string 有效
+typeof 1; // number 有效
+typeof true; // boolean 有效
+typeof undefined; //undefined 有效
+typeof newFunction (); // function 有效
+typeof null; // object 无效
+typeof []; // object 无效
+typeof newDate (); // object 无效
+typeof new RegExp(); //object 无效
+```
+
+#### 2. instanceof
+
+instanceof 是用来判断A是否为B的实例，表达式为：A instanceof B，如果A是B的实例，则返回true,否则返回false。instanceof 运算符用来测试一个对象在其原型链中是否存在一个构造函数的 prototype 属性，但它不能检测null 和 undefined
+
+```js
+[] instanceof Array; //true
+{} instanceof Object; //报错
+new Date() instanceof Date; //true
+new RegExp() instanceof RegExp; //true
+null instanceof null; //报错
+undefined instanceof undefined; //报错
+```
+
+#### 3. constructor
+
+constructor作用和instanceof非常相似。但constructor检测 Object与instanceof不一样，还可以处理基本数据类型的检测。不过函数的 constructor 是不稳定的，这个主要体现在把类的原型进行重写，在重写的过程中很有可能出现把之前的constructor给覆盖了，这样检测出来的结果就是不准确的。
+
+#### 4. Object.prototype.toString.call()
+
+Object.prototype.toString.call() 是最准确最常用的方式 返回一个字符串
+
+```js
+Object.prototype.toString.call('').slice(7, -1); // String
+Object.prototype.toString.call(1).slice(7, -1); // Number
+Object.prototype.toString.call(true).slice(7, -1); // Boolean
+Object.prototype.toString.call(undefined).slice(7, -1); // Undefined
+Object.prototype.toString.call(null).slice(7, -1); // Null
+Object.prototype.toString.call(new Function()).slice(7, -1); // Function
+Object.prototype.toString.call(new Date()).slice(7, -1); // Date
+Object.prototype.toString.call([]).slice(7, -1); // Array
+Object.prototype.toString.call(new RegExp()).slice(7, -1); // RegExp
+Object.prototype.toString.call(new Error()).slice(7, -1); // Error
+```
+
+#### 5.NaN的判断
+
+没有任何内容与NaN相同，包括他自己NaN==NaN
+
+```js
+var a = NaN
+isNaN(a)
+```
+
+#### 6.null=undefined
+
+### 3.运算符
+
+#### 1.与或非
+
+```js
+// (只有 false 、0、NaN、null、undefined、空字符串为假, 其余都是真)
+a && b // 看左边的值是真还是假,如果是真,返回的是右边的值,如果是假返回的是左边的值
+a || b // 看左边的值是真还是假,如果是真,返回的是左边的值,如果是假返回的是右边的值
+value = value || 'default value' // 给函数的参数填充默认值
+value = value !== undefined ? value : 'defaule value' // 传入undefined才会转为默认值
+a && b || c // a为true返回b a为false返回c 类似三元运算符
+```
+
+#### 2.位元算符
+
+```js
+~20 == -21 // 按位非 结果是这个数+1取负值
+~arr.indexOf("asd") // 找到为真
+& // 按位与
+| // 按位或
+a ^ b ^ b == a // 按位异或 相同为0，不同为1
+1 << 5// 左移 2的5次幂
+>> // 右移
+>>> // 无符号右移
+```
+
+#### 3.条件运算符
+
+```js
+a ? b : c // a为真取b a为假取c
+```
+
+### 4.switch
+
+```js
+var a = 90;
+switch(true) {
+  case a > 100:
+  case a < 0:
+    console.log("成绩错误");
+    break;
+  case a >= 90:
+    console.log("A");
+}
+```
+
+### 5.for循环
+
+1. 最原始的for循环
+
+    ```js
+    var arr = [1,2,3,4]
+    for(var i = 0 ; i< arr.length ; i++){
+        console.log(arr[i])
+    }
+    ```
+
+2. forEach
+
+    从ES5开始 Javascript内置了forEach方法 用来遍历数组
+
+    ```js
+    let arr = ['a', 'b', 'c', 'd']
+    arr.forEach(function (val, idx, arr) {
+        console.log(val + ', index = ' + idx) // val是当前元素，index当前元素索引，arr数组
+        console.log(arr)
+    })
+    ```
+
+    存在一个局限 就是你不能中断循环(使用break语句或使用return语句）
+
+3. for…in
+
+    for-in循环实际是为循环”enumerable“对象而设计的
+
+    ```js
+    let obj = {a: '1', b: '2', c: '3', d: '4'}
+    for (let o in obj) {
+        console.log(o)    //遍历的实际上是对象的属性名称 a,b,c,d
+        console.log(obj[o])  //这个才是属性对应的值1，2，3，4
+    }
+    ```
+
+4. for…of
+
+    它是ES6中新增加的语法
+
+    ```js
+    // 循环一个数组
+    let arr = ['China', 'America', 'Korea']
+    for (let o of arr) {
+        console.log(o) //China, America, Korea
+    }
+    ```
+
+    ```js
+    // 但是它并不能循环一个普通对象
+    let obj = {a: '1', b: '2', c: '3', d: '4'}
+    for (let o of obj) {
+        console.log(o)   //Uncaught TypeError: obj[Symbol.iterator] is not a function
+    }
+    ```
+
+    ```js
+    // 但是可以循环一个拥有enumerable属性的对象。
+    // 如果我们按对象所拥有的属性进行循环，可使用内置的Object.keys()方法
+    let obj = {a: '1', b: '2', c: '3', d: '4'}
+    for (let o of Object.keys(obj)) {
+        console.log(o) // a,b,c,d
+    }
+    ```
+
+    ```js
+    // 如果我们按对象所拥有的属性值进行循环，可使用内置的Object.values()方法
+    let obj = {a: '1', b: '2', c: '3', d: '4'}
+    for (let o of Object.values(obj)) {
+        console.log(o) // 1,2,3,4
+    }
+    ```
+
+    ```js
+    // 循环一个字符串
+    let str = 'love'
+    for (let o of str) {
+        console.log(o) // l,o,v,e
+    }
+    ```
+
+    ```js
+    // 循环一个Map
+    let iterable = new Map([["a", 1], ["b", 2], ["c", 3]]);
+    for (let [key, value] of iterable) {
+      console.log(value);
+    }
+    // 1
+    // 2
+    // 3
+    for (let entry of iterable) {
+      console.log(entry);
+    }
+    // [a, 1]
+    // [b, 2]
+    // [c, 3]
+    ```
+
+    ```js
+    // 循环一个Set
+    let iterable = new Set([1, 1, 2, 2, 3, 3]);
+    for (let value of iterable) {
+      console.log(value);
+    }
+    // 1
+    // 2
+    // 3
+    ```
+
+   ```js
+    // 循环一个类型化数组
+    let iterable = new Uint8Array([0x00, 0xff]);
+    for (let value of iterable) {
+      console.log(value);
+    }
+    // 0
+    // 255
+   ```
+
+## 函数
+
+### 函数内 `this` 指向的不同场景
+
+| 调用方式   | 非严格模式   | 备注                |
+| ------ | ------- | ----------------- |
+| 普通函数调用 | window  | 严格模式下是 undefined  |
+| 构造函数调用 | 实例对象    | 原型方法中 this 也是实例对象 |
+| 对象方法调用 | 该方法所属对象 | 紧挨着的对象            |
+| 事件绑定方法 | 绑定事件对象  |                   |
+| 定时器函数  | window  |                   |
+
+### call、apply、bind
+
+#### call
+
+`call()` 方法调用一个函数, 其具有一个指定的 `this` 值和分别地提供的参数(参数的列表)。
+
+注意：该方法的作用和 `apply()` 方法类似，只有一个区别，就是 `call()` 方法接受的是若干个参数的列表，而 `apply()` 方法接受的是一个包含多个参数的数组。
+
+语法：
+
+```javascript
+fun.call(thisArg[, arg1[, arg2[, ...]]])
+```
+
+参数：
+
+- `thisArg`
+  - 在 fun 函数运行时指定的 this 值
+  - 如果指定了 null 或者 undefined 则内部 this 指向 window
+- `arg1, arg2, ...`
+  - 指定的参数列表
+
+#### apply
+
+`apply()` 方法调用一个函数, 其具有一个指定的 `this` 值，以及作为一个数组（或类似数组的对象）提供的参数。
+
+注意：该方法的作用和 `call()` 方法类似，只有一个区别，就是 `call()` 方法接受的是若干个参数的列表，而 `apply()` 方法接受的是一个包含多个参数的数组。
+
+语法：
+
+```javascript
+fun.apply(thisArg, [argsArray])
+```
+
+参数：
+
+- `thisArg`
+- `argsArray`
+
+`apply()` 与 `call()` 非常相似，不同之处在于提供参数的方式。
+`apply()` 使用参数数组而不是一组参数列表。例如：
+
+```javascript
+fun.apply(this, ['eat', 'bananas'])
+```
+
+#### bind
+
+bind() 函数会创建一个新函数（称为绑定函数），新函数与被调函数（绑定函数的目标函数）具有相同的函数体（在 ECMAScript 5 规范中内置的call属性）。
+当目标函数被调用时 this 值绑定到 bind() 的第一个参数，该参数不能被重写。绑定函数被调用时，bind() 也接受预设的参数提供给原函数。
+一个绑定函数也能使用new操作符创建对象：这种行为就像把原函数当成构造器。提供的 this 值被忽略，同时调用时的参数被提供给模拟函数。
+
+语法：
+
+```javascript
+fun.bind(thisArg[, arg1[, arg2[, ...]]])
+```
+
+参数：
+
+- thisArg
+  当绑定函数被调用时，该参数会作为原函数运行时的 this 指向。当使用new 操作符调用绑定函数时，该参数无效。
+
+- arg1, arg2, ...
+  当绑定函数被调用时，这些参数将置于实参之前传递给被绑定的方法。
+
+返回值:返回由指定的this值和初始化参数改造的原函数拷贝。
+
+示例1：
+
+```javascript
+this.x = 9;
+var module = {
+  x: 81,
+  getX: function() { return this.x; }
+};
+module.getX(); // 返回 81
+var retrieveX = module.getX;
+retrieveX(); // 返回 9, 在这种情况下，"this"指向全局作用域
+// 创建一个新函数，将"this"绑定到module对象
+// 新手可能会被全局的x变量和module里的属性x所迷惑
+var boundGetX = retrieveX.bind(module);
+boundGetX(); // 返回 81
+```
+
+示例2：
+
+```javascript
+function LateBloomer() {
+  this.petalCount = Math.ceil(Math.random() * 12) + 1;
+}
+// Declare bloom after a delay of 1 second
+LateBloomer.prototype.bloom = function() {
+  window.setTimeout(this.declare.bind(this), 1000);
+};
+LateBloomer.prototype.declare = function() {
+  console.log('I am a beautiful flower with ' +
+    this.petalCount + ' petals!');
+};
+var flower = new LateBloomer();
+flower.bloom();  // 一秒钟后, 调用'declare'方法
+```
+
+#### 小结
+
+- call 和 apply 特性一样
+  - 都是用来调用函数，而且是立即调用
+  - 但是可以在调用函数的同时，通过第一个参数指定函数内部 `this` 的指向
+  - call 调用的时候，参数必须以参数列表的形式进行传递，也就是以逗号分隔的方式依次传递即可
+  - apply 调用的时候，参数必须是一个数组，然后在执行的时候，会将数组内部的元素一个一个拿出来，与形参一一对应进行传递
+  - 如果第一个参数指定了 `null` 或者 `undefined` 则内部 this 指向 window
+- bind
+  - 可以用来指定内部 this 的指向，然后生成一个改变了 this 指向的新的函数
+  - 它和 call、apply 最大的区别是：bind 不会调用
+  - bind 支持传递参数，它的传参方式比较特殊，一共有两个位置可以传递
+    - 1.在 bind 的同时，以参数列表的形式进行传递
+    - 2.在调用的时候，以参数列表的形式进行传递
+  - 那到底以谁 bind 的时候传递的参数为准呢还是以调用的时候传递的参数为准
+  - 两者合并：bind 的时候传递的参数和调用的时候传递的参数会合并到一起，传递到函数内部
+
+### 函数的其他成员
+
+- arguments
+  - 实参集合
+- caller
+  - 函数的调用者
+- length
+  - 形参的个数
+- name
+  - 函数的名称
+
+```js
+function fn(x, y, z) {
+  console.log(fn.length) // => 形参的个数
+  console.log(arguments) // 伪数组实参参数集合
+  console.log(arguments.callee === fn) // 函数本身
+  console.log(fn.caller) // 函数的调用者
+  console.log(fn.name) // => 函数的名字
+}
+function f() {
+  fn(10, 20, 30)
+}
+f()
+```
+
+### 高阶函数
+
+- 函数可以作为参数
+- 函数可以作为返回值
+
+#### 作为参数
+
+```js
+function eat (callback) {
+  setTimeout(function () {
+    console.log('吃完了')
+    callback()
+  }, 1000)
+}
+eat(function () {
+  console.log('去唱歌')
+})
+```
+
+#### 作为返回值
+
+```js
+function genFun (type) {
+  return function (obj) {
+    return Object.prototype.toString.call(obj) === type
+  }
+}
+var isArray = genFun('[object Array]')
+var isObject = genFun('[object Object]')
+console.log(isArray([])) // => true
+console.log(isArray({})) // => true
+```
+
+### 闭包
+
+```js
+function fn () {
+  var count = 0
+  return {
+    getCount: function () {
+      console.log(count)
+    },
+    setCount: function () {
+      count++
+    }
+  }
+}
+var fns = fn()
+fns.getCount() // => 0
+fns.setCount()
+fns.getCount() // => 1
+```
+
+#### 作用域、作用域链、预解析
+
+- 全局作用域
+- 函数作用域
+- **没有块级作用域**
+
+```javascript
+{
+  var foo = 'bar'
+}
+console.log(foo)
+if (true) {
+  var a = 123
+}
+console.log(a)
+```
+
+作用域链示例代码：
+
+```javascript
+var a = 10
+function fn () {
+  var b = 20
+  function fn1 () {
+    var c = 30
+    console.log(a + b + c)
+  }
+  function fn2 () {
+    var d = 40
+    console.log(c + d)
+  }
+  fn1()
+  fn2()
+}
+```
+
+- 内层作用域可以访问外层作用域，反之不行
+
+#### 什么是闭包
+
+闭包就是能够读取其他函数内部变量的函数，
+由于在 Javascript 语言中，只有函数内部的子函数才能读取局部变量，
+因此可以把闭包简单理解成 “定义在一个函数内部的函数”。
+所以，在本质上，闭包就是将函数内部和函数外部连接起来的一座桥梁。
+
+闭包的用途：
+
+- 可以在函数外部读取函数内部成员
+- 让函数内成员始终存活在内存中
+
+#### 一些关于闭包的例子
+
+示例1：
+
+```javascript
+var arr = [10, 20, 30]
+for(var i = 0; i < arr.length; i++) {
+  arr[i] = function () {
+    console.log(i)
+  }
+}
+```
+
+示例2：
+
+```javascript
+console.log(111)
+for(var i = 0; i < 3; i++) {
+  setTimeout(function () {
+    console.log(i)
+  }, 0)
+}
+console.log(222)
+```
+
+### 递归
+
+#### 举个栗子：计算阶乘的递归函数
+
+```javascript
+function factorial (num) {
+  if (num <= 1) {
+    return 1
+  } else {
+    return num * factorial(num - 1)
+  }
+}
+```
+
+#### 递归应用场景
+
+- 深拷贝
+- 菜单树
+- 遍历 DOM 树
+
+## 数组
+
+[数组](http://www.runoob.com/jsref/jsref-obj-array.html)
+
+### 1.遍历数组
+
+#### 1.索引数组
+
+```js
+for(var i = 0; i < arr.length; i++) {
+  // 数组遍历的固定结构
+}
+```
+
+#### 2. 关联数组
+
+```js
+var hash=[]
+hash["下标名(key)"]=值(value)
+for(var key in hash){
+    key //仅获取当前下标名称
+    hash[key] //获取当前元素值
+}
+var keys=[];
+var i=0;
+for(keys[i++] in hash);
+//结束后: keys中保存了hash的所有key
+```
+
+### 2. 方法
+
+#### 1.栈操作(先进后出)
+
+> 队尾插入元素，在队尾删除元素
+
+```js
+push()    //在数组的最后添加元素
+pop() //取出数组中的最后一项，修改length属性
+```
+
+#### 2.队列操作(先进先出)
+
+> 队尾插入元素，在队首删除元素
+
+```js
+push()
+shift()  //取出数组中的第一个元素，修改length属性
+unshift() //在数组最前面插入项，返回数组的长度
+```
+
+#### 3.排序方法
+
+```js
+reverse() //翻转数组
+sort(); //即使是数组sort也是根据字符，从小到大排序
+  带参数的sort是如何实现的？
+```
+
+#### 4.操作方法
+
+```js
+concat() //把参数拼接到当前数组
+slice(starti,endi+1) //从当前数组中截取一个新的数组，不影响原来的数组，参数start从0开始,end从1开始
+splice(starti,n,options //删除或替换当前数组的某些项目，参数start, deleteCount, options(要替换的项目)
+imgs=imgs.concat(imgs.splice(0,n))  // 移除开头的n个元素拼到结尾
+imgs=imgs.splice(-n).concat(imgs)  //移除结尾的n个元素拼到开头
+```
+
+#### 5.位置方法
+
+```js
+indexOf()
+lastIndexOf()   //如果没找到返回-1
+```
+
+#### 6.迭代方法
+
+> 不会修改原数组(可选)
+
+```js
+every()
+filter()
+forEach()
+map()
+some()
+```
+
+#### 7.join方法
+
+```js
+join("连接符")//将数组的所有元素连接到一个字符串中。
+```
+
+## String
+
+### 1.字符方法
+
+```js
+charAt()    //获取指定位置处字符
+charCodeAt()  //获取指定位置处字符的ASCII码
+str[0]   //HTML5，IE8+支持 和charAt()等效
+```
+
+### 2.字符串操作方法
+
+```js
+concat() //拼接字符串，等效于+，+更常用
+slice()  //从start位置开始，截取到end位置，end取不到
+substring() //从start位置开始，截取到end位置，end取不到 不支持负数参数 可用 str.length-n替代
+substr() //从start位置开始，截取length个字符
+```
+
+### 3.位置方法
+
+```js
+indexOf()   // 返回指定内容在元字符串中的位置
+lastIndexOf() // 从后往前找，只找第一个匹配的
+```
+
+### 4.去除空白
+
+```js
+trim()  // 只能去除字符串前后的空白
+```
+
+### 5.大小写转换方法
+
+```js
+to(Locale)UpperCase() // 转换大写
+to(Locale)LowerCase() // 转换小写
+```
+
+### 6.其它 参数可以为正则
+
+```js
+match()  //查找找到一个或多个正则表达式的匹配。
+search()  //查找与正则表达式相匹配的值。
+replace()  //在字符串中查找匹配的子串， 并替换与正则表达式匹配的子串。
+split()  //把字符串分割为字符串数组。
+fromCharCode() //把ASCII码转换成字符串
+```
+
+## AJAX
+
+### 1.创建对象
+
+```js
+var xmlHttp
+if (window.XMLHttpRequest) {
+    xmlHttp = new XMLHttpRequest(); # 支持IE7.0以上及其他浏览器
+} else {
+    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP") # 支持IE5 IE6
+}
+```
+
+### 2.请求
+
+- xmlHttp.open(method,url,async);
+  规定请求的类型、URL 以及是否异步处理请求。
+  method：请求的类型；GET 或 POST
+  url：文件在服务器上的位置
+  async：true（异步）或 false（同步）
+
+- xmlHttp.send(string);
+  将请求发送到服务器。
+  string：仅用于 POST 请求
+
+- xmlHttp.setRequestHeader(header,value)
+  向请求添加 HTTP 头。
+  header: 规定头的名称
+  value: 规定头的值
+
+```js
+xmlHttp.onreadystatechange=function() {
+    if (xmlHttp.readyState==4 && xmlHttp.status==200){
+        document.getElementById("myDiv").innerHTML=xmlHttp.responseText;
+    }
+}
+xmlHttp.open("GET","/try/ajax/ajax_info.txt",true);
+xmlHttp.send();
+```
+
+### 3.响应
+
+responseText 属性
+  获得字符串形式的响应数据。
+responseXML 属性
+  获得 XML 形式的响应数据。
+
+### 4.对ajax的封装
+
+```js
+function ajax(url,type,param,dataType,callback){
+    var xhr = null;
+    if(window.XMLHttpRequest){
+        xhr = new XMLHttpRequest();
+    }else{
+        xhr = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    if(type == 'get'){
+        url += "?" + param;
+    }
+    xhr.open(type,url,true);
+
+    var data = null;
+    if(type == 'post'){
+        data = param;
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    }
+    xhr.send(data);
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4){
+            if(xhr.status == 200){
+                var data = xhr.responseText;
+                if(dataType == 'json'){
+                    data = JSON.parse(data);
+                }
+                callback(data);
+            }
+        }
+    }
+}
+```
+
+### 5.对ajax的另一种封装
+
+```js
+function ajax(obj){
+    var defaults = {
+        type : 'get',
+        data : {},
+        url : '#',
+        dataType : 'text',
+        async : true,
+        success : function(data){console.log(data)}
+    }
+    for(var key in obj){
+        defaults[key] = obj[key];
+    }
+    var xhr = null;
+    if(window.XMLHttpRequest){
+        xhr = new XMLHttpRequest();
+    }else{
+        xhr = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    // 把对象形式的参数转化为字符串形式的参数
+    var param = '';
+    for(var attr in obj.data){
+        param += attr + '=' + obj.data[attr] + '&';
+    }
+    if(param){
+        param = param.substring(0,param.length - 1);
+    }
+    // 处理get请求参数并且处理中文乱码问题
+    if(defaults.type == 'get'){
+        defaults.url += '?' + encodeURI(param);
+    }
+    xhr.open(defaults.type,defaults.url,defaults.async); // 准备发送（设置发送的参数）
+    // 处理post请求参数并且设置请求头信息（必须设置）
+    var data = null;
+    if(defaults.type == 'post'){
+        data = param;
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    }
+    xhr.send(data); // 执行发送动作
+    // 处理同步请求，不会调用回调函数
+    if(!defaults.async){
+        if(defaults.dataType == 'json'){
+            return JSON.parse(xhr.responseText);
+        }else{
+            return xhr.responseText;
+        }
+    }
+    // 指定回调函数（处理服务器响应数据）
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4){
+            if(xhr.status == 200){
+                var data = xhr.responseText;
+                if(defaults.dataType == 'json'){
+                    // data = eval("("+ data +")");
+                    data = JSON.parse(data);
+                }
+                defaults.success(data);
+            }
+        }
+    }
+}
+```
+
+## 正则表达式
+
+### 元字符
+
+#### 常用元字符串
+
+| 元字符  | 说明              |
+| ---- | --------------- |
+| \d   | 匹配数字            |
+| \D   | 匹配任意非数字的字符      |
+| \w   | 匹配字母或数字或下划线     |
+| \W   | 匹配任意不是字母，数字，下划线 |
+| \s   | 匹配任意的空白符        |
+| \S   | 匹配任意不是空白符的字符    |
+| .    | 匹配除换行符以外的任意单个字符 |
+| ^    | 表示匹配行首的文本(以谁开始) |
+| $    | 表示匹配行尾的文本(以谁结束) |
+
+#### 限定符
+
+| 限定符   | 说明       |
+| ----- | -------- |
+| *     | 重复零次或更多次 |
+| +     | 重复一次或更多次 |
+| ?     | 重复零次或一次  |
+| {n}   | 重复n次     |
+| {n,}  | 重复n次或更多次 |
+| {n,m} | 重复n到m次   |
+
+#### 前瞻后顾
+
+| 方法   | 语法       | 备注 |
+| ----- | -------- | ------ |
+| 前瞻 | exp1(?=exp2) | 查找exp2前面的exp1 |
+| 后顾 | (?<=exp2)exp1 | 查找exp2后面的exp1 |
+| 负前瞻 | exp1(?=exp2) | 查找后面不是exp2的exp1 |
+| 负后顾 | (?<=exp2)exp1 | 查找前面不是exp2的exp1 |
+
+> js不支持后顾
+
+#### 其它
+
+[] 字符串用中括号括起来，表示匹配其中的任一字符，相当于或的意思
+
+[^]  匹配除中括号以内的内容
+
+\ 转义符
+
+| 或者，选择两者中的一个。注意|将左右两边分为两部分，而不管左右两边有多长多乱
+
+() 从两个直接量中选择一个，分组
+   eg：gr(a|e)y匹配gray和grey
+
+[\u4e00-\u9fa5]  匹配汉字
+
+### JavaScript 中使用正则表达式
+
+#### 正则匹配
+
+```javascript
+// 匹配日期
+var dateStr = '2015-10-10';
+var reg = /^\d{4}-\d{1,2}-\d{1,2}$/
+console.log(reg.test(dateStr));
+```
+
+#### 正则提取
+
+```javascript
+// 1. 提取工资
+var str = "张三：1000，李四：5000，王五：8000。";
+var array = str.match(/\d+/g);
+console.log(array);
+
+// 2. 提取email地址
+var str = "123123@xx.com,fangfang@valuedopinions.cn 286669312@qq.com 2、emailenglish@emailenglish.englishtown.com 286669312@qq.com...";
+var array = str.match(/\w+@\w+\.\w+(\.\w+)?/g);
+console.log(array);
+
+// 3. 分组提取  
+// 3. 提取日期中的年部分  2015-5-10
+var dateStr = '2016-1-5';
+// 正则表达式中的()作为分组来使用，获取分组匹配到的结果用Regex.$1 $2 $3....来获取
+var reg = /(\d{4})-\d{1,2}-\d{1,2}/;
+if (reg.test(dateStr)) {
+  console.log(RegExp.$1);
+}
+
+// 4. 提取邮件中的每一部分
+var reg = /(\w+)@(\w+)\.(\w+)(\.\w+)?/;
+var str = "123123@xx.com";
+if (reg.test(str)) {
+  console.log(RegExp.$1);
+  console.log(RegExp.$2);
+  console.log(RegExp.$3);
+}
+```
+
+#### 正则替换
+
+```javascript
+// 1. 替换所有空白
+var str = "   123AD  asadf   asadfasf  adf ";
+str = str.replace(/\s/g,"xx");
+console.log(str);
+
+// 2. 替换所有,|，
+var str = "abc,efg,123，abc,123，a";
+str = str.replace(/,|，/g, ".");
+console.log(str);
+```
