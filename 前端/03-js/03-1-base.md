@@ -625,7 +625,11 @@ unshift() //在数组最前面插入项，返回数组的长度
 
 ```js
 arr.reverse() // 翻转数组
-arr.sort(); // 即使是数组sort也是根据字符，从小到大排序
+arr.sort(function(a, b) {
+  return a - b // 从小到大
+  return b - a // 从大到小
+  return Math.random() - 0.5 // 随机乱序
+}); // 即使是数组sort也是根据字符，从小到大排序
 ```
 
 #### 4.操作方法
@@ -656,8 +660,15 @@ arr.lastIndexOf()   //如果没找到返回-1
 ```js
 every()
 filter()
-forEach()
-map()
+arr.forEach(function(item, index, arr){
+  // 侨接模式 这里的this会指向window
+})
+var arr1 = arr.map(function(item, index, arr){
+  // 这里的this会指向window
+  // 可以使用return forEach不行
+  // 可以使用map返回一个新数组 原数组的长度与新数组长度相同
+  return item+'1'
+})
 some()
 ```
 
@@ -742,6 +753,111 @@ function unique(arr) {
   return arr1;
 }
 console.log(unique(array));
+```
+
+### 4.数组排序
+
+#### 1.冒泡排序
+
+1、比较相邻的两个元素，如果前一个比后一个大，则交换位置。
+2、比较完第一轮的时候，最后一个元素是最大的元素。
+3、这时候最后一个元素是最大的，所以最后一个元素就不需要参与比较大小。
+
+```js
+function bSort(arr) {
+  var len = arr.length;
+  for (var i = 0; i < len-1; i++) {
+    for (var j = 0; j < len - 1 - i; j++) {
+      // 相邻元素两两对比，元素交换，大的元素交换到后面
+      if (arr[j] > arr[j + 1]) {
+        var temp = arr[j];
+        arr[j] = arr[j+1];
+        arr[j+1] = temp;
+      }
+    }
+  }
+  return arr;
+}
+//举个数组
+myArr = [20,18,27,19,35];
+//使用函数
+bSort(myArr)
+```
+
+#### 2.选择排序
+
+1. 算法简介
+
+    选择排序是一个简单直观的排序方法，它的工作原理很简单，首先从未排序序列中找到最大的元素，放到已排序序列的末尾，重复上述步骤，直到所有元素排序完毕。
+
+2. 算法描述
+
+    1）假设未排序序列的第一个是最大值，记下该元素的位置，从前往后比较
+
+    2）若某个元素比该元素大，覆盖之前的位置
+
+    3）重复第二个步骤，直到找到未排序的末尾
+
+    4）将未排序元素的第一个元素和最大元素交换位置
+
+    5）重复前面几个步骤，直到所有元素都已经排序。
+
+3. 算法分析
+
+    选择排序的交换操作次数最好情况已经有序为0次，最坏情况逆序n-1次，因此交换操作次数位于0~(n-1)次之间；比较操作次数（n-1+…+2+1+0）为n(n-1)/2次；交换元素赋值操作为3次，逆序需要n-1趟交换，因此，赋值操作位于0~3(n-1)次之间。由于需要交换位置，所以肯定是不稳定的。
+
+时间复杂度均为o(n^2)    空间复杂度为o(1)  不稳定
+
+```js
+function selsetSort(arr){
+  var len = arr.length;
+  var index;
+  for(var i = 0; i < len - 1; i++) {
+    index = i;
+    for(var j=i+1; j < len; j++) {
+      if(arr[index] > arr[j]) {//寻找最小值
+        index=j;//保存最小值的索引
+      }
+    }
+    if(index != i) {
+      var temp =arr[i];
+      arr[i]=arr[index];
+      arr[index]=temp;
+    }
+  }
+  return arr;
+}
+```
+
+#### 3.快速排序
+
+1、找基准（一般是以中间项为基准）
+
+2、遍历数组，小于基准的放在left，大于基准的放在right
+
+3、递归
+
+```js
+function quickSort(arr){
+  //如果数组<=1,则直接返回
+  if(arr.length <= 1){return arr;}
+  var pivotIndex = Math.floor(arr.length/2);
+  //找基准，并把基准从原数组删除
+  var pivot = arr.splice(pivotIndex, 1)[0];
+  //定义左右数组
+  var left = [];
+  var right = [];
+  //比基准小的放在left，比基准大的放在right
+  for(var i = 0; i < arr.length; i++) {
+    if(arr[i] <= pivot) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
+    }
+  }
+  //递归
+  return quickSort(left).concat([pivot],quickSort(right));
+}
 ```
 
 ## String
