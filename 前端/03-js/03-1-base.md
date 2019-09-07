@@ -658,8 +658,15 @@ arr.lastIndexOf()   //如果没找到返回-1
 > 不会修改原数组(可选)
 
 ```js
-every()
-filter()
+arr.every(function(item, index, arr) {
+  // 检测数组所有元素是否都符合指定条件（通过函数提供）
+  // 如果数组中检测到有一个元素不满足，则整个表达式返回 false ，且剩余的元素不会再进行检测。
+  // 如果所有元素都满足条件，则返回 true。
+})
+arr.filter(function(item, index, arr) {
+  return item > 100
+  // 返回满足条件的元素组成的数组
+})
 arr.forEach(function(item, index, arr){
   // 侨接模式 这里的this会指向window
 })
@@ -669,7 +676,17 @@ var arr1 = arr.map(function(item, index, arr){
   // 可以使用map返回一个新数组 原数组的长度与新数组长度相同
   return item+'1'
 })
-some()
+var bool = arr.some(function(item, index, arr) {
+  // 判断数组中是否有满足条件的，如有返回true，并且不再继续判断
+})
+var sum = array.reduce(function(value, currentValue, currentIndex, arr) {
+  // reduce() 方法用于归并
+  /* @value 必需。初始值, 或者计算结束后的返回值 未指定初始值时为数组第0项
+   * @currentValue 必需。当前元素
+   * @currentIndex 可选。当前元素的索引
+  */
+}, initialValue)
+arr.flatMap()
 ```
 
 #### 7.join方法
