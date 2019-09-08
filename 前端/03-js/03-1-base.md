@@ -673,7 +673,7 @@ arr.forEach(function(item, index, arr){
 var arr1 = arr.map(function(item, index, arr){
   // 这里的this会指向window
   // 可以使用return forEach不行
-  // 可以使用map返回一个新数组 原数组的长度与新数组长度相同
+  // map可以返回一个新数组 原数组的长度与新数组长度相同
   return item+'1'
 })
 var bool = arr.some(function(item, index, arr) {
@@ -686,7 +686,13 @@ var sum = array.reduce(function(value, currentValue, currentIndex, arr) {
    * @currentIndex 可选。当前元素的索引
   */
 }, initialValue)
-arr.flatMap()
+var newArray = arr.flat([depth])
+// 会按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回。
+// 会移除数组中的空项
+//使用 Infinity 作为深度，展开任意深度的嵌套数组
+var new_array = arr.flatMap(function callback(currentValue[, index[, array]]) {
+  // 递归获取arr里的元素，并返回，递归深度只有一层
+}[, thisArg])
 ```
 
 #### 7.join方法
