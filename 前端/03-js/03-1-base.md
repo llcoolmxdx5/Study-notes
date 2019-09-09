@@ -583,6 +583,12 @@ function factorial (num) {
 for(var i = 0; i < arr.length; i++) {
   // 数组遍历的固定结构
 }
+for (var index in arr) {
+  console.log(index, arr[index])
+  // 使用for in遍历时，索引值会当成对象的属性来遍历，会变成一个字符串
+  // 数组元素有属性时，for in会遍历到，正常的不会
+  // for in不会遍历到数组中的空元素
+}
 ```
 
 #### 2. 关联数组
@@ -689,7 +695,8 @@ var sum = array.reduce(function(value, currentValue, currentIndex, arr) {
 var newArray = arr.flat([depth])
 // 会按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回。
 // 会移除数组中的空项
-//使用 Infinity 作为深度，展开任意深度的嵌套数组
+// 使用 Infinity 作为深度，展开任意深度的嵌套数组
+// 支持性很差 处于草案阶段 chrome69+
 var new_array = arr.flatMap(function callback(currentValue[, index[, array]]) {
   // 递归获取arr里的元素，并返回，递归深度只有一层
 }[, thisArg])
@@ -888,48 +895,48 @@ function quickSort(arr){
 ### 1.字符方法
 
 ```js
-charAt()    //获取指定位置处字符
-charCodeAt()  //获取指定位置处字符的ASCII码
+str.charAt(0)    //获取指定位置处字符
+str.charCodeAt(0)  //获取指定位置处字符的ASCII码
+var str = String.fromCharCode() //把ASCII码转换成字符串
 str[0]   //HTML5，IE8+支持 和charAt()等效
 ```
 
 ### 2.字符串操作方法
 
 ```js
-concat() //拼接字符串，等效于+，+更常用
-slice()  //从start位置开始，截取到end位置，end取不到
-substring() //从start位置开始，截取到end位置，end取不到 不支持负数参数 可用 str.length-n替代
-substr() //从start位置开始，截取length个字符
+str.concat() //拼接字符串，等效于+，+更常用
+str.slice()  //从start位置开始，截取到end位置，end取不到
+str.substring() //从start位置开始，截取到end位置，end取不到 不支持负数参数 可用 str.length-n替代
+str.substr() //从start位置开始，截取length个字符
 ```
 
 ### 3.位置方法
 
 ```js
-indexOf()   // 返回指定内容在元字符串中的位置
-lastIndexOf() // 从后往前找，只找第一个匹配的
+str.indexOf()   // 返回指定内容在元字符串中的位置
+str.lastIndexOf() // 从后往前找，只找第一个匹配的
 ```
 
 ### 4.去除空白
 
 ```js
-trim()  // 只能去除字符串前后的空白
+str.trim()  // 只能去除字符串前后的空白
 ```
 
 ### 5.大小写转换方法
 
 ```js
-to(Locale)UpperCase() // 转换大写
-to(Locale)LowerCase() // 转换小写
+str.to(Locale)UpperCase() // 转换大写
+str.to(Locale)LowerCase() // 转换小写
 ```
 
 ### 6.其它 参数可以为正则
 
 ```js
-match()  //查找找到一个或多个正则表达式的匹配。
-search()  //查找与正则表达式相匹配的值。
-replace()  //在字符串中查找匹配的子串， 并替换与正则表达式匹配的子串。
-split()  //把字符串分割为字符串数组。
-fromCharCode() //把ASCII码转换成字符串
+str.match()  //查找找到一个或多个正则表达式的匹配。
+str.search()  //查找与正则表达式相匹配的值。
+str.replace()  //在字符串中查找匹配的子串， 并替换与正则表达式匹配的子串。
+str.split()  //把字符串分割为字符串数组。
 ```
 
 ## AJAX
