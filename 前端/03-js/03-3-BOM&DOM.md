@@ -233,19 +233,37 @@ clearInterval(timerId);// 取消定时器的执行
 
 location可以获取或者设置浏览器地址栏的URL 使用的时候可以省略window对象
 scheme://host:port/path?query#fragment
-`location.href = "https://www.baidu.com"`
-`location.assign("https://www.baidu.com")`
+
+```js
+location.href = "https://www.baidu.com" // 交互后执行无历史记录
+location.assign("https://www.baidu.com") // 交互后执行无历史记录
+location.replace("https://www.baidu.com") // 无历史记录
+location.reload() // 重载页面，不会在http请求头中携带缓存标记 和ctrl+r类似
+location.hash // 获取地址栏中#标志后的内容包括#
+location.search // 获取地址栏中？后的内容包括？
+```
 
 ### 5. history对象
 
-back()
-forward()
-go()
+```js
+history.back()
+history.forward()
+history.go()
+```
 
 ### 6. navigator对象
 
-userAgent  通过userAgent可以判断用户浏览器的类型
-platform  通过platform可以判断浏览器所在的系统平台类型.
+```js
+navigator.userAgent  // 通过userAgent可以判断用户浏览器的类型
+navigator.platform  // 通过platform可以判断浏览器所在的系统平台类型.
+```
+
+### 7. window对象 使用时可以省去window
+
+```js
+window.innerWidth // 文档宽度
+window.innerHeight // 文档高度
+```
 
 ## offset client scroll
 
