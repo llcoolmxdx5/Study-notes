@@ -313,7 +313,7 @@ rowspan=“所要合并单元格的行数”    纵向合并;
 2)密码框
 `<input type="password" />`
 `<input type="password" placeholder="密码" />`
- 
+
 placeholder：提示信息属性
 
 3)提交按钮
@@ -329,9 +329,9 @@ placeholder：提示信息属性
 
 1. get是从服务器上获取数据，post是向服务器传送数据。
 
-2. get是把参数数据队列加到提交表单的action属性所指的URL中，在URL中可以看到。post是通过HTTP post机制，用户看不到这个过程 。
+2. get是把参数数据队列加到提交表单的action属性所指的URL中，在URL中可以看到。post是通过HTTP post机制，用户看不到这个过程。
 
-3. get传送的数据量较小，不能大于2KB。post传送的数据量较大，一般被默认为不受限制。
+3. get传送的数据量较小，不能大于2KB。post传送的数据量较大，一般被默认为不受限制。
 
 4. get安全性非常低，post安全性较高。但是执行效率却比Post方法好。
 
@@ -513,7 +513,7 @@ div{width:100px; font-weight:bolder; color:#ff0000;}
 1、文字大小{font-size：value；}
 说明：
 a、属性值为数值型时，必须给属性值加单位 (px)，属性值为0时除外；
-b、单位还可以是pt;  9pt=12px; 
+b、单位还可以是pt;  9pt=12px;
 c、为了减小系统的字体显示差异，IE、Netscape Mozilla的浏览器制作商于1999年召开会议，共同确定16px/ppi为标准字体大小，默认值即1em,默认情况下，1em=16px,    0.75em=12px;
 d、使用绝对大小关键字
 xx-small         =9px
@@ -530,14 +530,17 @@ xx-large       =27px
 八进制：0,1,2,3,4,5,6,7
 十六进制：0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f
 
-         R    G     B
- `#         00      00     00`
- `#        Fa      FF   FF    #faffff`
- `#        CC      CC   CC`
- `#        F0      F0   F0`
- `#        0F      0F   0F     #0f0f0f`
- `#         ff      00     00`
-` #         ff     ff    00   #ff0`
+  R    G     B
+
+```css
+#       00      00     00
+#       Fa      FF   FF    #faffff
+#        CC      CC   CC
+#        F0      F0   F0
+#        0F      0F   0F     #0f0f0f
+#        ff      00     00
+#        ff     ff    00   #ff0
+```
 
 说明：用十六进制表示颜色值时前面要加#号；
 每表示三原色的三组数字同时相同时，可以缩写为3位。
@@ -879,7 +882,7 @@ number
 语法：<标记 id="命名锚记名"> </标记>
 
 2.命名锚记连接
-语法：<a href="#命名锚记名称"></a>
+语法：`<a href="#命名锚记名称"></a>`
 
 ### 五、透明属性
 
@@ -995,7 +998,7 @@ Cursor:url(mouse.cur); /*自定义个性鼠标*/
 
 Internet Explorer、 Safari、Mozilla Firefox、 Google  Chrome、Opera、360 苹果浏览器
 
-### 2、最早的图形浏览器 : Mosaic 
+### 2、最早的图形浏览器 : Mosaic
 
 NCSA Mosaic，或简称Mosaic，是互联网历史上第一个获普遍使用和能够显示图片的网页浏览器。它是由伊利诺伊大学厄巴纳-香槟分校的NCSA组织在1993年所发表，并于1997年1月7日正式终止开发和支持。在当时人气爆发，大受欢迎。Mosaic的出现，算是点燃了后期互联网热潮的火种之一。
 
@@ -1423,7 +1426,7 @@ th 表格列标题（放在tr里）
 html里table的重要属性：
 1） colspan="value"    合并列   横向合并
 2） rowspan="value"   和并行  纵向合并
-3） valign="top/bottom/middle" 垂直对齐方式 
+3） valign="top/bottom/middle" 垂直对齐方式
 align="left /center /right"
 ４） rules="rows/cols/all/none/groups"    添加分隔线
 说明：
@@ -1460,10 +1463,13 @@ odd     奇数
 even   偶数
 
 例：
-<style> 
+
+```css
+<style>
 tr:nth-child(odd){background:#00ff00;}  奇数
 p:nth-child(even){background:#0000ff;} 偶数
 </style>
+```
 
 min-content/max-content
   

@@ -7,10 +7,10 @@
 ```js
 document.getElementById()
 document.getElementsByTagName()
-document.getElementsByName()
 document.getElementsByClassName()
 document.querySelector()
-document.querySelectorAll()
+document.getElementsByName() // 用于表单元素查找，返回NodeList列表可以用forEach遍历
+document.querySelectorAll() // 返回NodeList列表可以用forEach遍历
 ```
 
 ### 2. 事件
@@ -150,6 +150,8 @@ element.className = "box"
 document.write()
 obj.innerHTML
 document.createElement()
+document.createDocumentFragment() // 创建碎片容器 需要插入多个节点时，插入该碎片容器
+document.createTextNode(文本内容) // 创建文本节点
 ```
 
 innerHTML属性由于会对字符串进行解析，需要避免在循环内多次使用。
@@ -164,7 +166,9 @@ innerHTML属性由于会对字符串进行解析，需要避免在循环内多�
 element.appendChild()
 element.insertBefore(child1,child2) // 将child1插入到child2之前
 element.removeChild()
-element.replaceChild()
+element.remove()
+element.replaceChild(newclild, oldchild) // 替换元素
+element.cloneNode(false/true) // 复制元素，为true时为深复制 浅复制时不会复制节点的子节点
 ```
 
 #### 2. 节点层次，属性
@@ -235,8 +239,8 @@ location可以获取或者设置浏览器地址栏的URL 使用的时候可以�
 scheme://host:port/path?query#fragment
 
 ```js
-location.href = "https://www.baidu.com" // 交互后执行无历史记录
-location.assign("https://www.baidu.com") // 交互后执行无历史记录
+location.href = "https://www.baidu.com" // 交互后执行有历史记录
+location.assign("https://www.baidu.com") // 交互后执行有历史记录
 location.replace("https://www.baidu.com") // 无历史记录
 location.reload() // 重载页面，不会在http请求头中携带缓存标记 和ctrl+r类似
 location.hash // 获取地址栏中#标志后的内容包括#
@@ -246,9 +250,10 @@ location.search // 获取地址栏中？后的内容包括？
 ### 5. history对象
 
 ```js
-history.back()
-history.forward()
-history.go()
+history.back() // 后退
+history.forward() // 前进
+history.go(0) // 刷新当前页面
+history.go(1) // 前进一个页面
 ```
 
 ### 6. navigator对象
