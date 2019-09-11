@@ -109,33 +109,36 @@ console.log(pic.src);
 ```js
 innerText兼容处理
 function getInnerText(element) {
-    return (typeof element.textContent == "string") ? element.textContent : element.innerText;
+    return (typeof element.textContent === "string") ? element.textContent : element.innerText;
 }
 ```
 
 #### 3. 表单元素属性
 
 ```js
-value 用于大部分表单元素的内容获取(option除外)
-type 可以获取input标签的类型(输入框或复选框等)
-disabled 禁用属性
-checked 复选框选中属性
-selected 下拉菜单选中属性
+ele.value // 用于大部分表单元素的内容获取(option除外)
+ele.type // 可以获取input标签的类型(输入框或复选框等)
+ele.disabled // 禁用属性
+ele.checked // 复选框选中属性
+ele.selected // 下拉菜单选中属性
 ```
 
 #### 4. 自定义属性操作
 
 ```js
-element.getAttribute("属性名") 获取标签行内属性
-element.setAttribute("属性名","值") 设置标签行内属性
-element.removeAttribute("属性名") 移除标签行内属性
-与element.属性的区别: 上述三个方法用于获取任意的行内属性。
+element.getAttribute("属性名") // 获取标签行内属性
+element.setAttribute("属性名","值") // 设置标签行内属性
+element.removeAttribute("属性名") // 移除标签行内属性
+// 与element.属性的区别: 上述三个方法用于获取任意的行内属性。
 ```
 
 #### 5. 样式操作
 
 ```js
+// ele.style是行内样式
 element.style.width = "123px"
+getComputedStyle(ele).width // 获取计算后样式 IE不支持
+ele.currentStyle.width // 获取计算后样式 仅支持IE
 ```
 
 #### 6. 类名操作
@@ -143,6 +146,10 @@ element.style.width = "123px"
 ```js
 element.className = "box"
 ```
+
+#### 7. 自定义标签属性
+
+单词全部小写，单词之间用-连接
 
 ### 4. 创建元素
 
@@ -291,7 +298,7 @@ var box = document.getElementById('box');
 console.log(box.offsetParent); //获取距离当前元素最近的定位父元素
 console.log(box.offsetLeft); //获取box的坐标
 console.log(box.offsetTop);
-console.log(box.offsetWidth); //获取box的大小
+console.log(box.offsetWidth); //获取box的大小 包括padding 边框 不包括滚动条
 console.log(box.offsetHeight); //包括padding和边框
 ```
 
@@ -301,6 +308,6 @@ console.log(box.offsetHeight); //包括padding和边框
 var box = document.getElementById('box');
 console.log(box.clientLeft); //border-left的宽度
 console.log(box.clientTop); //border-top的宽度
-console.log(box.clientWidth); //包括padding  但是不包括边框
+console.log(box.clientWidth); //包括padding  但是不包括边框 不包括滚动条
 console.log(box.clientHeight);
 ```
