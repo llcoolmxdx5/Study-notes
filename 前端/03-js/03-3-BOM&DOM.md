@@ -19,18 +19,23 @@ document.querySelectorAll() // 返回NodeList列表可以用forEach遍历
 
 ```js
 var box = document.getElementById('box');
-box.onclick = function() {
-    console.log('代码会在box被点击后执行');  
+box.onclick = function(e) {
+    console.log('代码会在box被点击后执行');
+    // IE6时没有e
 };
-box.onclick=null;
+box.onclick = null;
+// 不能使用捕获阶段
 ```
 
 ```js
+// IE9及以上
 box.addEventListener('click', eventCode, false);
 box.removeEventListener('click', eventCode, false);
+// 第三个参数为true时是捕获阶段触发，为false时为冒泡阶段触发，默认是false
 ```
 
 ```js
+// IE8及以下
 box.attachEvent('onclick', eventCode);
 box.detachEvent('onclick', eventCode);
 ```
@@ -61,19 +66,31 @@ function removeEventListener(element, type, fn) {
 
 #### 3. 事件的三个阶段
 
+> `事件对象.eventPhase`属性可以查看事件触发时所处的阶段
+
 1. 捕获阶段
+
 2. 当前目标阶段
+
 3. 冒泡阶段
-`事件对象.eventPhase`属性可以查看事件触发时所处的阶段
 
 #### 4. 事件对象的属性和方法
 
 ```js
+e || window.event  // 兼容IE6
 event.type //获取事件类型
 clientX/clientY     //所有浏览器都支持，窗口位置
 pageX/pageY       //IE8以前不支持，页面位置
 event.target || event.srcElement //用于获取触发事件的元素
 event.preventDefault() //取消默认行为
+event.returnValue=false  // 返回值=false 阻止默认时间 IE兼容  
+e.stopPropagation() // 阻止冒泡/捕获
+e.cacelBubble = true // IE8阻止冒泡
+function clickHandler (e) {
+    e.currentTarget // 就是默认的this，被监听的对象
+    e.target // chrome支持 目标对象，实际监听到的对象
+    e.srcElement // ie支持 chrome支持等同于e.target
+}
 ```
 
 #### 5. 阻止事件传播的方式
@@ -283,31 +300,37 @@ window.innerHeight // 文档高度
 
 ```js
 var box = document.getElementById('box');
-console.log(box.scrollLeft) // box滚动出去的距离
-console.log(box.scrollTop)
-console.log(box.scrollWidth) // 内容的大小，包括padding 和未显示的内容，不包括滚动条
-console.log(box.scrollHeight)
+// 兼容问题 高版本浏览器获取/设置scrollLeft/Top 使用HTML document.documentElement
+// 低版本浏览器获取/设置scrollLeft/Top 使用body document.body
+console.log(box.scrollLeft) //
+console.log(box.scrollTop) // 获取位于元素顶部边界与元素中当前可见内容的最顶端之间的距离
+                           // scrollTop=scrollHeight-clientHeight
+                           // 包含内容的完全高度-自身高度+滚动条（不会在上方出现，为0）
+console.log(box.scrollWidth) // 内容宽度+2内容border+1padding
+console.log(box.scrollHeight) // 内容高度+2内容border+1padding
 ```
 
 ### 2.偏移量即外边距
 
-offsetParent用于获取定位的父级元素
+offsetParent用于获取定位的父级元素 不能设置
 
 ```js
 var box = document.getElementById('box');
-console.log(box.offsetParent); //获取距离当前元素最近的定位父元素
-console.log(box.offsetLeft); //获取box的坐标
+console.log(box.offsetParent); // 获取距离当前元素最近的定位父元素
+console.log(box.offsetLeft); // 获取box的坐标 到最近一个定位的父元素的距离
 console.log(box.offsetTop);
-console.log(box.offsetWidth); //获取box的大小 包括padding 边框 不包括滚动条
-console.log(box.offsetHeight); //包括padding和边框
+console.log(box.offsetWidth); // 宽度+2padding+2border
+console.log(box.offsetHeight); // 高度+2padding+2border
 ```
 
 ### 3. 客户区大小 去掉边框的大小
 
+不能设置
+
 ```js
 var box = document.getElementById('box');
-console.log(box.clientLeft); //border-left的宽度
-console.log(box.clientTop); //border-top的宽度
-console.log(box.clientWidth); //包括padding  但是不包括边框 不包括滚动条
-console.log(box.clientHeight);
+console.log(box.clientLeft); // border-left的宽度
+console.log(box.clientTop); // border-top的宽度
+console.log(box.clientWidth); // 宽度+2padding-滚动条宽度
+console.log(box.clientHeight); // 高度+2padding-滚动条高度
 ```
