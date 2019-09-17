@@ -104,34 +104,90 @@ event.returnValue=false  // 返回值=false 阻止默认时间 IE兼容  return 
 // 用途：1、表单提交与重置 2、图片拖拽阻止 3、文字选中取消 4、右键菜单显示阻止
 ```
 
-#### 6. 常用的事件
+#### 6. 事件类型
+
+#### Event事件
 
 ```js
-// 事件函数不能带参数，也不能return返回
-this如果是在事件函数中，就是被侦听的对象
-var evt = new Event();//事件基类
+var e = new Event() //事件基类
 change // 修改,一般用于表单元素改变
 // 如果用于文本框,如果输入的内容在失焦后判断改变了,则会触发事件,如果没有改变不会触发事件
 error // 错误 如果加载错误时触发error事件
 load // 加载 图片,script,css,视频,音频,通信都是加载
-reset // 重置
-resize // 更改大小 一般应用于window对象
-select // input文本框内容选择 selectionStart selectionEnd 选择的内容开始/结束下标
-submit // 提交表单
+reset // 针对表单的事件
+submit // 针对表单的事件
+resize // 更改大小,一般应用于window对象
+select // 针对input文本框内容的选择事件 selectionStart selectionEnd 选择的内容开始/结束下标
 scroll // 滚动条事件
-focus // 表单子元素和超链接 获得焦点 e.relatedTarget 上一次当前事件的目标对象
-blur // 表单子元素和超链接 失去焦点
-var me = new MouseEvent()
-mouseup // 鼠标按键放开时触发
-mousedown // 鼠标按键按下触发
-mousemove // 鼠标移动触发
-mouseenter // 鼠标进入触发 不会冒泡
-mouseleave // 鼠标离开触发 不会冒泡
-mouseover // 鼠标进入触发 会冒泡
-mouseout // 鼠标离开触发 会冒泡
+```
+
+#### focus事件
+
+```js
+var e = new FocusEvent()
+// focus  blur   针对表单的子元素和超链接使用
+focus // 汇聚焦距时 e.relatedTarget 上一次当前事件的目标对象
+blur // 失去焦距时
+```
+
+#### 鼠标事件
+
+```js
+var e = new MouseEvent() // 鼠标事件对象
+click // 点击
+dblclick // 双击
+mousedown // 鼠标按下键
+mouseup // 鼠标释放键
+mousemove // 鼠标移动
+mouseover //鼠标滑过
+mouseout // 鼠标滑出
+mouseenter //鼠标进入 不会冒泡
+mouseleave // 鼠标离开 不会冒泡
 contextmenu // 右键菜单
+e.altKey: false   // 是否按住alt点击
+e.ctrlKey: false   // 是否按住ctrl点击
+e.shiftKey: false   // 是否按住shift点击
+e.metaKey: false   // 是否按住meta点击
+// 移动距离坐标  主要用户mousemove事件,早期版本不兼容
+// 这里的值是每次移动相对上次移动的距离
+e.movementX: 0     // 正 是向右 负 是向左
+e.movementY: 0     // 正 是向下 负 是向上
+// 鼠标坐标,这两对是完全一样的含义
+// clientX和clientY兼容早期IE浏览器
+// 鼠标点击所在位置相对视口距离
+e.clientX: 68
+e.clientY: 53
+e.x: 51
+e.y: 27
+```
+
+#### input事件
+
+```js
+var e = new InputEvent()
+input // input事件 针对input文本框输入做事件侦听，输入内容时触发事件
+```
+
+#### 键盘事件
+
+```js
+// 按键事件一般针对window或者document的,一般使用针对window
+var e = new KeyboardEvent()
 keyup // 键盘按键按下触发
 keydown // 键盘按键抬起触发
+e.code: "KeyA"  //按键名   正式区分按下键
+e.key: "a"  //键名
+e.isComposing: false  //是否启用输入法
+e.keyCode: 83  //键码值    ->用这个
+e.which: 83   //键码
+// 左上右下键码值    37,38,39,40
+// 回车键码值    13
+```
+
+#### 滚轮事件
+
+```js
+var e = new WheelEvent()
 ```
 
 ### 3. 属性操作
