@@ -1121,10 +1121,16 @@ function ajax(obj){
 | ----- | -------- | ------ |
 | 前瞻 | exp1(?=exp2) | 查找exp2前面的exp1 |
 | 后顾 | (?<=exp2)exp1 | 查找exp2后面的exp1 |
-| 负前瞻 | exp1(?=exp2) | 查找后面不是exp2的exp1 |
-| 负后顾 | (?<=exp2)exp1 | 查找前面不是exp2的exp1 |
+| 负前瞻 | exp1(?!exp2) | 查找后面不是exp2的exp1 |
+| 负后顾 | (?<!exp2)exp1 | 查找前面不是exp2的exp1 |
 
 > js不支持后顾
+
+#### 修饰符
+
+i 不区分大小写
+g 全局
+m 多行匹配
 
 #### 其它
 
@@ -1141,16 +1147,12 @@ function ajax(obj){
 
 [\u4e00-\u9fa5]  匹配汉字
 
+### 贪婪与非贪婪
+
+贪婪： 即最后有一个* 会尽量多的匹配
+非贪婪：.*？需要有前后限制符 即在有重复的符号后再添加一个？
+
 ### JavaScript 中使用正则表达式
-
-#### 正则匹配
-
-```javascript
-// 匹配日期
-var dateStr = '2015-10-10';
-var reg = /^\d{4}-\d{1,2}-\d{1,2}$/
-console.log(reg.test(dateStr));
-```
 
 #### 正则提取
 
@@ -1158,7 +1160,7 @@ console.log(reg.test(dateStr));
 // 1. 提取工资
 var str = "张三：1000，李四：5000，王五：8000。";
 var array = str.match(/\d+/g);
-console.log(array);
+console.log(array); // ["1000", "5000", "8000"]
 
 // 2. 提取email地址
 var str = "123123@xx.com,fangfang@valuedopinions.cn 286669312@qq.com 2、emailenglish@emailenglish.englishtown.com 286669312@qq.com...";
@@ -1171,17 +1173,60 @@ var dateStr = '2016-1-5';
 // 正则表达式中的()作为分组来使用，获取分组匹配到的结果用Regex.$1 $2 $3....来获取
 var reg = /(\d{4})-\d{1,2}-\d{1,2}/;
 if (reg.test(dateStr)) {
-  console.log(RegExp.$1);
+  console.log(RegExp.$1); // 2016
 }
 
 // 4. 提取邮件中的每一部分
 var reg = /(\w+)@(\w+)\.(\w+)(\.\w+)?/;
 var str = "123123@xx.com";
 if (reg.test(str)) {
-  console.log(RegExp.$1);
-  console.log(RegExp.$2);
-  console.log(RegExp.$3);
+  console.log(RegExp.$1); // 123123
+  console.log(RegExp.$2); // xx
+  console.log(RegExp.$3); // com
 }
+```
+
+#### 正则查找
+
+```js
+// exec方法检索字符串中的指定值。返回一个数组，其中存放匹配的结果。如果未找到匹配，则返回值为 null
+
+// exec() 方法的功能非常强大，它是一个通用的方法，而且使用起来也比 test() 方法以及支持正则表达式的 String 对象的方法更为复杂。
+
+// 如果 exec() 找到了匹配的文本，则返回一个结果数组。否则，返回 null。此数组的第 0 个元素是与正则表达式相匹配的文本，第 1 个元素是与 RegExpObject 的第 1 个子表达式相匹配的文本（如果有的话），第 2 个元素是与 RegExpObject 的第 2 个子表达式相匹配的文本（如果有的话），以此类推。除了数组元素和 length 属性之外，exec() 方法还返回两个属性。index 属性声明的是匹配文本的第一个字符的位置。input 属性则存放的是被检索的字符串 string。我们可以看得出，在调用非全局的 RegExp 对象的 exec() 方法时，返回的数组与调用方法 String.match() 返回的数组是相同的。
+
+// 但是，当 RegExpObject 是一个全局正则表达式时，exec() 的行为就稍微复杂一些。它会在 RegExpObject 的 lastIndex 属性指定的字符处开始检索字符串 string。当 exec() 找到了与表达式相匹配的文本时，在匹配后，它将把 RegExpObject 的 lastIndex 属性设置为匹配文本的最后一个字符的下一个位置。这就是说，您可以通过反复调用 exec() 方法来遍历字符串中的所有匹配文本。当 exec() 再也找不到匹配的文本时，它将返回 null，并把 lastIndex 属性重置为 0。
+
+// 注意：如果在一个字符串中完成了一次模式匹配之后要开始检索新的字符串，就必须手动地把 lastIndex 属性重置为 0。
+
+// 提示：请注意，无论 RegExpObject 是否是全局模式，exec() 都会把完整的细节添加到它返回的数组中。这就是 exec() 与 String.match() 的不同之处，后者在全局模式下返回的信息要少得多。因此我们可以这么说，在循环中反复地调用 exec() 方法是唯一一种获得全局模式的完整模式匹配信息的方法。
+
+var str = "Visit W3School, W3School is a place to study web technology."
+var reg = new RegExp("W3School","g")
+var result
+while ((result = reg.exec(str)) != null)  {
+  console.log(result);
+  console.log(reg.lastIndex);
+}
+// W3School
+// 14
+// W3School
+// 24
+
+var str = 'abcda'
+str.search(/a/ig) // 0
+// 返回搜索到的下标只能找到符合条件的第一个
+
+var dateStr = '2015-10-10';
+var reg = /^\d{4}-\d{1,2}-\d{1,2}$/
+console.log(reg.test(dateStr)); // true
+```
+
+#### 正则切割
+
+```js
+var str = 'a&s-b-d&c-a-&'
+str.split(/[&-]/g) // ["a", "s", "b", "d", "c", "a", "", ""]
 ```
 
 #### 正则替换
