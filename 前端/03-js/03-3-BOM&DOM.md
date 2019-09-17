@@ -83,7 +83,7 @@ clientX/clientY     //所有浏览器都支持，窗口位置
 pageX/pageY       //IE8以前不支持，页面位置
 event.target || event.srcElement //用于获取触发事件的元素
 event.preventDefault() //取消默认行为
-event.returnValue=false  // 返回值=false 阻止默认时间 IE兼容  
+event.returnValue=false  // 返回值=false 阻止默认时间 IE兼容  return false
 e.stopPropagation() // 阻止冒泡/捕获
 e.cacelBubble = true // IE8阻止冒泡
 function clickHandler (e) {
@@ -98,16 +98,40 @@ function clickHandler (e) {
 ```js
 标准方式 event.stopPropagation();
 IE低版本 event.cancelBubble = true; //标准中已废弃
+// 阻止默认事件
+event.preventDefault() //取消默认行为
+event.returnValue=false  // 返回值=false 阻止默认时间 IE兼容  return false
+// 用途：1、表单提交与重置 2、图片拖拽阻止 3、文字选中取消 4、右键菜单显示阻止
 ```
 
-#### 6. 常用的鼠标和键盘事件
+#### 6. 常用的事件
 
 ```js
-mouseup //鼠标按键放开时触发
-mousedown //鼠标按键按下触发
-mousemove //鼠标移动触发
-keyup //键盘按键按下触发
-keydown //键盘按键抬起触发
+// 事件函数不能带参数，也不能return返回
+this如果是在事件函数中，就是被侦听的对象
+var evt = new Event();//事件基类
+change // 修改,一般用于表单元素改变
+// 如果用于文本框,如果输入的内容在失焦后判断改变了,则会触发事件,如果没有改变不会触发事件
+error // 错误 如果加载错误时触发error事件
+load // 加载 图片,script,css,视频,音频,通信都是加载
+reset // 重置
+resize // 更改大小 一般应用于window对象
+select // input文本框内容选择 selectionStart selectionEnd 选择的内容开始/结束下标
+submit // 提交表单
+scroll // 滚动条事件
+focus // 表单子元素和超链接 获得焦点 e.relatedTarget 上一次当前事件的目标对象
+blur // 表单子元素和超链接 失去焦点
+var me = new MouseEvent()
+mouseup // 鼠标按键放开时触发
+mousedown // 鼠标按键按下触发
+mousemove // 鼠标移动触发
+mouseenter // 鼠标进入触发 不会冒泡
+mouseleave // 鼠标离开触发 不会冒泡
+mouseover // 鼠标进入触发 会冒泡
+mouseout // 鼠标离开触发 会冒泡
+contextmenu // 右键菜单
+keyup // 键盘按键按下触发
+keydown // 键盘按键抬起触发
 ```
 
 ### 3. 属性操作
