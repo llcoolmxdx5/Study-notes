@@ -800,9 +800,7 @@ function bSort(arr) {
     for (var j = 0; j < len - 1 - i; j++) {
       // 相邻元素两两对比，元素交换，大的元素交换到后面
       if (arr[j] > arr[j + 1]) {
-        var temp = arr[j];
-        arr[j] = arr[j+1];
-        arr[j+1] = temp;
+        [arr[j], arr[j+1]] = [arr[j+1], arr[j]]
       }
     }
   }
@@ -850,9 +848,7 @@ function selsetSort(arr){
       }
     }
     if(index != i) {
-      var temp =arr[i];
-      arr[i]=arr[index];
-      arr[index]=temp;
+      [arr[i], arr[index]] = [arr[index], arr[i]]
     }
   }
   return arr;
