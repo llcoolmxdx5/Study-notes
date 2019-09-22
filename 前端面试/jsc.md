@@ -21,7 +21,7 @@
     typeof newFunction (); // function 有效
     typeof null; // object 无效
     typeof []; // object 无效
-    typeof newDate (); // object 无效
+    typeof new Date (); // object 无效
     typeof new RegExp(); //object 无效
     ```
 
