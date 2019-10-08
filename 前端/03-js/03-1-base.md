@@ -942,9 +942,9 @@ str.split()  //把字符串分割为字符串数组。
 ```js
 var xmlHttp
 if (window.XMLHttpRequest) {
-    xmlHttp = new XMLHttpRequest(); # 支持IE7.0以上及其他浏览器
+    xmlHttp = new XMLHttpRequest(); // 支持IE7.0以上及其他浏览器
 } else {
-    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP") # 支持IE5 IE6
+    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP") // 支持IE5 IE6
 }
 ```
 
@@ -966,12 +966,12 @@ if (window.XMLHttpRequest) {
   value: 规定头的值
 
 ```js
-xmlHttp.onreadystatechange=function() {
-    if (xmlHttp.readyState==4 && xmlHttp.status==200){
-        document.getElementById("myDiv").innerHTML=xmlHttp.responseText;
+xmlHttp.onreadystatechange = function() {
+    if (xmlHttp.readyState === 4 && xmlHttp.status === 200){
+        document.getElementById("myDiv").innerHTML = xmlHttp.responseText;
     }
 }
-xmlHttp.open("GET","/try/ajax/ajax_info.txt",true);
+xmlHttp.open("GET", "/try/ajax/ajax_info.txt", true);
 xmlHttp.send();
 ```
 
@@ -996,7 +996,6 @@ function ajax(url,type,param,dataType,callback){
         url += "?" + param;
     }
     xhr.open(type,url,true);
-
     var data = null;
     if(type == 'post'){
         data = param;
@@ -1080,6 +1079,15 @@ function ajax(obj){
         }
     }
 }
+```
+
+## 跨域
+
+### CORS
+
+```js
+// 后端响应头携带
+'Access-Control-Allow-Origin':'*'
 ```
 
 ## 正则表达式
