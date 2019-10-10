@@ -19,7 +19,7 @@
 ### 1.DOM对象 和 jQuery对象之间的转换
 
 1.将DOM对象转换为jQuery对象
-  var $变量 = $(DOM对象);
+  `var $变量 = $(DOM对象)`;
 2.将jQuery对象转换成DOM对象
   1.var dom对象 = jQuery对象.get(0);
   2.var dom对象 = jQuery对象[0];
@@ -81,9 +81,9 @@
 
 ### 1.页面加载后的执行
 
-$(document).ready(function(){});
-$().ready(function(){});
-$(function(){});
+`$(document).ready(function(){})`;
+`$().ready(function(){})`;
+`$(function(){})`;
 
 ### 2.jQuery的事件绑定/解绑
 
@@ -117,32 +117,32 @@ $("#dv3").click(function () {
 
 ### 1.基本显示 / 隐藏
 
-显示：$obj.show(speed,callback)
-隐藏：$obj.hide(speed,callback)
-切换: $obj.toggle(speed,callback)
+显示：`$obj.show(speed,callback)`
+隐藏：`$obj.hide(speed,callback)`
+切换: `$obj.toggle(speed,callback)`
 可选的 speed 参数规定隐藏/显示的速度，可以取以下值："slow"、"fast" 或毫秒。
 可选的 callback 参数是隐藏或显示完成后所执行的函数名称。
 
 ### 2.滑动式 显示/隐藏
 
-显示：$obj.slideDown(speed,callback)
-隐藏：$obj.slideUp(speed,callback)
-切换: $obj.slideToggle(speed,callback)
+显示：`$obj.slideDown(speed,callback)`
+隐藏：`$obj.slideUp(speed,callback)`
+切换: `$obj.slideToggle(speed,callback)`
 可选的 speed 参数规定隐藏/显示的速度，可以取以下值："slow"、"fast" 或毫秒。
 可选的 callback 参数是隐藏或显示完成后所执行的函数名称。
 
 ### 3.淡入淡出式显示/隐藏
 
-淡入已隐藏的元素: $obj.fadeIn(speed,callback)
-淡出可见元素: $obj.fadeOut(speed,callback)
-切换: $obj.fadeToggle(speed,callback)
-$obj.fadeTo(speed,opacity,callback)渐变为给定的不透明度（值介于 0 与 1 之间）
+淡入已隐藏的元素: `$obj.fadeIn(speed,callback)`
+淡出可见元素: `$obj.fadeOut(speed,callback)`
+切换: `$obj.fadeToggle(speed,callback)`
+`$obj.fadeTo(speed,opacity,callback)`渐变为给定的不透明度（值介于 0 与 1 之间）
 可选的 speed 参数规定隐藏/显示的速度，可以取以下值："slow"、"fast" 或毫秒。
 可选的 callback 参数是隐藏或显示完成后所执行的函数名称。
 
 ### 4.停止动画
 
-$obj.stop(stopAll,goToEnd);
+`$obj.stop(stopAll,goToEnd)`;
 可选的 stopAll 参数规定是否应该清除动画队列。默认是 false，即仅停止活动的动画，允许任何排入队列的动画向后执行。
 可选的 goToEnd 参数规定是否立即完成当前动画。默认是 false。
 因此，默认地，stop() 会清除在被选元素上指定的当前动画。
@@ -151,22 +151,60 @@ $obj.stop(stopAll,goToEnd);
 
 ### 1.创建对象
 
-$("创建的内容")
+`$("创建的内容")`
 
 ### 2.插入元素
 
-$obj.append($new)插入obj的最后一个子元素处
-$obj.prepend($new)插入obj的第一个子元素处
-$obj.after($new)将$new作为$obj的下一个兄弟元素插入进来
-$obj.before($new)将$new作为$obj的上一个兄弟元素插入进来
+`$obj.append($new)`插入obj的最后一个子元素处
+`$obj.prepend($new)`插入obj的第一个子元素处
+`$obj.after($new)`将`$new`作为`$obj`的下一个兄弟元素插入进来
+`$obj.before($new)`将`$new`作为`$obj`的上一个兄弟元素插入进来
+`$obj.appendTo(document.body)`将`$obj`插入到body里
+`$obj.warp($new)`在`$obj`外包裹一个`$new`
+`$obj.warpAll($new)`在所有`$obj`外包裹一个`$new`
+`$obj.warpInner($new)` `$obj`内的子元素包裹一个`$new`
+`$obj.unwarp()` 取消包裹 删除父容器
 
 ### 3.基本操作
 
-1.html()设置或返回所选元素的内容（包括 HTML 标记）
-2.text()设置或返回所选元素的文本内容
-3.val()设置或返回表单字段的值
-4.attr()设置/改变属性值 单个/多个
-5.removeAttr("attrName")
+1. html()设置或返回所选元素的内容（包括 HTML 标记）
+
+    ```js
+    $('div').html(function(index, item){
+      return `<a>${index}<a>`
+    })
+    ```
+
+2. text()设置或返回所选元素的文本内容
+
+3. val()设置或返回表单字段的值
+
+4. attr()设置/改变属性值 单个/多个
+
+    ```js
+    $('div').attr(key, value)
+    $('div').attr(key, function (index, value) {
+        return index
+    })
+    $('div').attr({
+        name: 1,
+        age: 1
+    })
+    $('div').attr({
+        name: function (index, item) {
+            return index
+        },
+        age: 1
+    })
+    ```
+
+5. removeAttr("attrName")
+
+6. data()
+
+7. prop()
+
+8. clone(true/false) 复制元素 为false时不复制事件 为深复制
 
 ### 4.样式操作
 
@@ -174,27 +212,50 @@ $obj.before($new)将$new作为$obj的上一个兄弟元素插入进来
 2.addClass("className")
 3.removeClass("className")
 4.removeClass()
-5.toggleClass("className")有则添加,没有则删除
+5.toggleClass("className")切换className
 6.css("属性","值")设置或返回被选元素的一个或多个样式属性。
 7.css({"propertyname":"value","propertyname":"value",...})设置多个 CSS 属性
+8.css(['width', 'height']) 以对象的形式返回多个css样式
+
+### width/height/偏移
+
+`$('div').width()` 内容宽度
+`$('div').innerWidth()` 内容宽度+padding
+`$('div').outerWidth()` 内容宽度+padding+border
+`$('div').outerWidth(true)` 内容宽度+padding+border+margin-滚动条宽度
+`$(".div1").offset())` 元素相对页面左部顶端的位置
+`$(".div1").offset({left:100,top:100})` 可以设置可以获取
+`$(".div1").position())` 相对父容器的位置,offsetLeft和offsetTop 不可以设置
+`$(".div0").scrollTop(100)`
 
 ### 5.删除节点
 
-1.$obj.remove()
-  删除$obj元素
-2.$obj.remove("selector")
-  将满足selector选择器的元素删除出去
-3.$obj.empty()
-  删除$obj的子元素
+1. `$obj.remove()` 删除`$obj`元素 并删除事件
+
+2. `$obj.detach()` 删除`$obj`元素 不删除事件
+
+3. `$obj.remove("selector")` 将满足selector选择器的元素删除出去
+
+4. `$obj.empty()` 删除`$obj`的子元素
+
+5. `$obj.repalceWith($new)` 将`$obj`替换为`$new`
+
+6. `$obj.repalceAll($new)` 将`$obj`全部替换为`$new`
 
 ### 6.each()方法
 
-$obj.each(function([index,[element]]))
-  element当前元素也可用this选择器
+```js
+$obj.each(function(index, element){
+  // element当前元素也可用this选择器
+})
+$.each(obj, function(index, item){
+
+})
+```
 
 ## 5.jQueryAJAX
 
->AJAX 是与服务器交换数据的技术，它在不重载全部页面的情况下，实现了对部分网页的更新。
+> AJAX 是与服务器交换数据的技术，它在不重载全部页面的情况下，实现了对部分网页的更新。
 
 ### load() 方法
 
@@ -224,10 +285,10 @@ $("button").click(function(){
 
 ### get() 和 post() 方法
 
->jQuery get() 和 post() 方法用于通过 HTTP GET 或 POST 请求从服务器请求数据
+> jQuery get() 和 post() 方法用于通过 HTTP GET 或 POST 请求从服务器请求数据
 
-$.get(URL,callback);
-$.post(URL,data,callback);
+`$.get(URL,callback)`;
+`$.post(URL,data,callback)`;
 
 ### ajax
 
@@ -257,14 +318,14 @@ function queryData(obj,callback){
 
 ### noConflict() 方法
 
-var jq = $.noConflict();
+`var jq = $.noConflict()`;
 noConflict()可返回对 jQuery 的引用，您可以把它存入变量，以供稍后使用。
 
 ### JSONP
 
->Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从别的域名（网站）那获取资料，即跨域读取数据。
+> Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从别的域名（网站）那获取资料，即跨域读取数据。
 
-```js
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -294,7 +355,7 @@ $.getJSON("http://www.runoob.com/try/ajax/jsonp.php?jsoncallback=?", function(da
 
 >animate不支持颜色的渐变，但是使用了jquery.color.js后，就可以支持颜色的渐变了
 
-```js
+```html
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -337,14 +398,14 @@ backgroundColor, borderBottomColor, borderLeftColor, borderRightColor, borderTop
 2.给lazyload的图片增加一个名为lazy的class
 3.选择所有要lazyload的图片（img.lazy），执行lazyload();
 
-```js
+```html
 <img class="lazy" data-original="img/example.jpg" style="margin-top:1000px" height="200">
 <script>
     $(function(){
         $("img.lazy").lazyload();
-    })
+    });
 </script>
-// 必须设置图片的高度或者宽度，否则插件可能无法正常工作
+<!-- 必须设置图片的高度或者宽度，否则插件可能无法正常工作 -->
 ```
 
 lazyload默认是当滚动到该图片位置时，加载该图片。但是可以通过设置Threshold参数来实现滚到距离其xx px时就加载。
@@ -361,7 +422,7 @@ $(function(){
 
 >jQueryUI专指由jQuery官方维护的UI方向的插件。
 
-http://www.runoob.com/jqueryui/jqueryui-tutorial.html
+`http://www.runoob.com/jqueryui/jqueryui-tutorial.html`
 
 ### jquery.qrcode.js
 
