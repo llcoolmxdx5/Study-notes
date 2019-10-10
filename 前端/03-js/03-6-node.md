@@ -19,7 +19,7 @@ connection.query('',function(error,results,fields){
 })
 const server = http.createServer(function (req, res) {
     req.on('data', function (_data) {
-        console.log(_data)
+        console.log(_data) // post时携带的数据
     })
     req.on('end', function () {
         if (req.url.indexOf('favicon.ico') > -1) return
@@ -28,6 +28,8 @@ const server = http.createServer(function (req, res) {
         console.log(obj)
         res.writeHead(200, {
             'content-type': 'text/html; charset=UTF-8',
+            "Access-Control-Allow-Origin":"*", // cors跨域
+            "Access-Control-Allow-Headers":"*"
         })
         res.write('你好!')
         res.end()
