@@ -94,23 +94,47 @@ $obj.on(events[,selector][,data],handler);//事件名称不用加on
 // 第三个参数：data，传递给处理函数的数据，事件触发的时候通过event.data来使用（不常使用）
 // 第四个参数：handler，事件处理函数
 $(selector).on( "click","span", function() {});
+$('#box').on('click','.button',function(){
+    // 事件委托
+    $(this).clone().appendTo('#box')
+});
 $obj.off() // 解绑元素所有事件
 $obj.off("click") // 解绑元素点击事件
+$('#box').off('click','.button'); // 取消事件委托
+
 ```
 
 ### 3.event 参数
 
 >在绑定事件的时候，允许传递 event 参数来表示事件对象
 
+```js
+e.type
+e.target
+e.currentTarget
+e.pageX/Y // 获取相对于页面原点的坐标
+e.data // 绑定事件时传入的额外参数
+e.timeStamp
+```
+
 ### 4.事件冒泡
 
 >元素中有元素,这些元素都有相同的事件,一旦最里面的元素的事件触发了,外面的所有的元素的相同的事件都会被触发
 
 ```js
+e.stopPropagation()
+e.preventDefault()
 $("#dv3").click(function () {
     alert("dv3被点了"+$(this).attr("id"));
     return false;//取消事件冒泡 也可用于取消浏览器默认事件
 });
+```
+
+### 5.模拟用户点击
+
+```js
+$('input').trigger('click') // 返回当前包含事件触发元素的 jQuery 对象(方便链式连缀调用) 会冒泡
+$('input').triggerHandler('click') // 不会触发事件的默认行为 只会影响第一个匹配到的元素 返回当前事件执行的返回值
 ```
 
 ## 3.jQuery动画
@@ -146,6 +170,41 @@ $("#dv3").click(function () {
 可选的 stopAll 参数规定是否应该清除动画队列。默认是 false，即仅停止活动的动画，允许任何排入队列的动画向后执行。
 可选的 goToEnd 参数规定是否立即完成当前动画。默认是 false。
 因此，默认地，stop() 会清除在被选元素上指定的当前动画。
+
+### 5.animation
+
+```js
+$('.animate').click(function(){
+    $('#box').animate({
+        'width':'300px',
+        'height':'200px'
+    },1000,function(){
+        alert('动画执行完毕执行我！')
+    })
+})
+
+// 必须设置绝对定位
+$('.animate').click(function(){
+    $('#box').animate({
+        'left':'+=100px',
+    });
+})
+
+$('.animate').click(function(){
+    $('#box').animate({'left':'100px'})
+    $('#box').animate({'top':'100px'})
+    $('#box').animate({'width':'300px'})
+})
+$('.animate').click(function(){
+    $('#box').animate({
+        'left':'100px'
+    }).animate({
+        'top':'100px'
+    }).animate({
+        'width':'300px'
+    })
+})
+```
 
 ## 4.jQueryHTML
 
@@ -353,7 +412,7 @@ $.getJSON("http://www.runoob.com/try/ajax/jsonp.php?jsoncallback=?", function(da
 
 ### jquery.color.js
 
->animate不支持颜色的渐变，但是使用了jquery.color.js后，就可以支持颜色的渐变了
+> animate不支持颜色的渐变，但是使用了jquery.color.js后，就可以支持颜色的渐变了
 
 ```html
 <!DOCTYPE html>
@@ -392,7 +451,7 @@ backgroundColor, borderBottomColor, borderLeftColor, borderRightColor, borderTop
 
 ### jquery.lazyload.js
 
->用于长页面图片的延迟加载，视口外的图片会在窗口滚动到它的位置时再进行加载，这是与预加载相反的。
+> 用于长页面图片的延迟加载，视口外的图片会在窗口滚动到它的位置时再进行加载，这是与预加载相反的。
 
 1.将图片路径写入data-original属性
 2.给lazyload的图片增加一个名为lazy的class
@@ -420,7 +479,7 @@ $(function(){
 
 ### jquery.ui.js
 
->jQueryUI专指由jQuery官方维护的UI方向的插件。
+> jQueryUI专指由jQuery官方维护的UI方向的插件。
 
 `http://www.runoob.com/jqueryui/jqueryui-tutorial.html`
 

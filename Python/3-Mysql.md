@@ -118,7 +118,7 @@ show index from 表名\G;
 10.show create table 表名;  ## engine=...
 11.create table 表名(...)engine=myisam;
 12.mysql> show engines;
-13.innodb  myisam
+13.INNODB  Myisam
 14.cd /etc/mysql/mysql.conf.d/
   vi mysqld.cnf
   [mysqld]
