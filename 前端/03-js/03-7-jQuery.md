@@ -357,7 +357,8 @@ function queryData(obj,callback){
         type:'get',
         url:'http://localhost/summary/select.php',
         data:obj,
-        dataType:'json/jsonp/html',
+        timeout:200, // ms
+        dataType:'json/jsonp/html', // 返回的数据类型
         jsonp:'cb',//jsonp属性的作用就是自定义参数名字（callback=abc 这里的名字指的是等号前面的键，
                   //后端根据这个键获取方法名，jquery的默认参数名称是callback）
         jsonpCallback:'abc',//这个属性的作用就是自定义回调函数的名字
@@ -371,6 +372,25 @@ function queryData(obj,callback){
         }
     });
 }
+```
+
+### $.getJSON()
+
+```js
+$('input').click(function(){
+    $.getJSON('test.json',function(response,status, xhr){
+        alert(response[0].url)
+    })
+})
+```
+
+### $.getScript()方法
+
+```js
+//点击按钮后再加载 JS 文件
+$('input').click(function(){
+    $.getScript('test.js') // 也可以做jsonp通信
+})
 ```
 
 ## 6.其他
