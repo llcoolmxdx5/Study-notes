@@ -1,29 +1,33 @@
-## 一. 原以为升级vue-cli3的路线是这样的：
+# 「Vue实践」项目升级vue-cli3的正确姿势
+
+## 一. 原以为升级vue-cli3的路线是这样的
 
 * 创建vue-cli3项目，按原有项目的配置选好各项配置
 ![选好各项配置](https://user-gold-cdn.xitu.io/2019/1/25/168832663fef4c33?w=1492&h=818&f=png&s=150555)
 * 迁移目录
- ```
+
+ ```bash
 src->src
 static->public
  ```
+
 * 对比新旧 `package.json`，然后`yarn install`，完毕。
-![](https://user-gold-cdn.xitu.io/2019/1/25/16883c1f3454502a?w=440&h=440&f=png&s=108845)
+![alt](https://user-gold-cdn.xitu.io/2019/1/25/16883c1f3454502a?w=440&h=440&f=png&s=108845)
 
-
-### 然鹅... 运行项目，报错`You are using the runtime-only build of Vue......`：
+### 然鹅... 运行项目，报错`You are using the runtime-only build of Vue......`
 
 ![报错](https://user-gold-cdn.xitu.io/2019/1/25/16883346f5f31786?w=1384&h=898&f=png&s=775662)
-![](https://user-gold-cdn.xitu.io/2019/1/25/1688332b6f378f85?w=86&h=76&f=png&s=5808)
+![alt](https://user-gold-cdn.xitu.io/2019/1/25/1688332b6f378f85?w=86&h=76&f=png&s=5808)
 
 然后去查了下旧项目的相关字眼文件：
 
-![](https://user-gold-cdn.xitu.io/2019/1/25/1688333b9883f139?w=4500&h=2552&f=png&s=2894971)
+![alt](https://user-gold-cdn.xitu.io/2019/1/25/1688333b9883f139?w=4500&h=2552&f=png&s=2894971)
 
 噢，原来是vue-cli3的webpack相关文件都得自己写。于是乎根据官网的指引，在根目录创建了`vue.config.js`
 
 此时粗略配置：
-```
+
+```js
   chainWebpack: config => {
     config.module
       .rule('vue')
@@ -38,24 +42,28 @@ static->public
       .set('@', resolve('src'))
   }
 ```
-## 二. 此时勉强能跑起来，但后续遇到了这些坑：
+
+## 二. 此时勉强能跑起来，但后续遇到了这些坑
 
 ### `#1` public 静态资源不加载
-    ```
-     const CopyWebpackPlugin = require('copy-webpack-plugin')
-     // ....
-     // 确保静态资源
-     config.resolve.extensions = ['.js', '.vue', '.json', '.css']
-     config.plugins.push(
-      new CopyWebpackPlugin([{ from: 'public/', to: 'public' }]),
-    )
-    ```
+
+```js
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+// ....
+// 确保静态资源
+config.resolve.extensions = ['.js', '.vue', '.json', '.css']
+config.plugins.push(
+new CopyWebpackPlugin([{ from: 'public/', to: 'public' }]),
+)
+```
 
 ### `#2` Chrome 查看样式时无法找到源文件
-![](https://user-gold-cdn.xitu.io/2019/1/25/16883671ac2a98aa?w=796&h=882&f=png&s=421128)
+
+![alt](https://user-gold-cdn.xitu.io/2019/1/25/16883671ac2a98aa?w=796&h=882&f=png&s=421128)
  原因：`vue-cli3` 里默认关闭 `sourceMap`，样式都会被打包到首页。
  解决: 需要自己配置打开
-```
+
+```js
   // 让样式找到源
   css: {
     sourceMap: true
@@ -68,25 +76,25 @@ static->public
 
 解决：插件[terser](https://github.com/terser-js/terser#output-options)
 
-    ```
-    const TerserPlugin = require('terser-webpack-plugin')
-    if (process.env.NODE_ENV === 'production') {
-      // 为生产环境修改配置...
-      new TerserPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true, // Must be set to true if using source-maps in production
-        terserOptions: {
-          compress: {
-            drop_console: true,
-            drop_debugger: true
-          }
-        }
-      })
-    } else {
-      // 为开发环境修改配置...
+```js
+const TerserPlugin = require('terser-webpack-plugin')
+if (process.env.NODE_ENV === 'production') {
+  // 为生产环境修改配置...
+  new TerserPlugin({
+    cache: true,
+    parallel: true,
+    sourceMap: true, // Must be set to true if using source-maps in production
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
     }
-    ```
+  })
+} else {
+  // 为开发环境修改配置...
+}
+```
 
 ### `#4` 无法在`config`目录下配置不同环境的`API_URL`，用于跨域请求
 
@@ -96,11 +104,12 @@ static->public
 
 解决：于是你需要创建如下几个文件：
 
-![](https://user-gold-cdn.xitu.io/2019/1/25/16883a6f636e0b42?w=1244&h=968&f=png&s=178193)
+![alt](https://user-gold-cdn.xitu.io/2019/1/25/16883a6f636e0b42?w=1244&h=968&f=png&s=178193)
 > `.local`也可以加在指定模式的环境文件上，比如 `.env.development.local`将会在 `development` 模式下被载入，且被 git 忽略。
 
 文件内容：
-```
+
+```bash
 // env.development.local
 NODE_ENV = development
 VUE_APP_URL = http://xxx.x.xxx/
@@ -108,14 +117,15 @@ VUE_APP_URL = http://xxx.x.xxx/
 
 ### `#5` vue-cli代理转发控制台反复打印`"WebSocket connection to'ws://localhost..."`
 
-![](https://user-gold-cdn.xitu.io/2019/1/25/16883b1a471e21c4?w=1374&h=746&f=png&s=795181)
+![alt](https://user-gold-cdn.xitu.io/2019/1/25/16883b1a471e21c4?w=1374&h=746&f=png&s=795181)
 
 解决方法：
 
 `vue.config.js`中配置`devServer.proxy`的`ws`为`false`
 
 结合上述两步，相对应的`vue.config.js`，需要这么写：
-```
+
+```js
 const env = process.env.NODE_ENV
 let target = process.env.VUE_APP_URL
 
@@ -142,8 +152,9 @@ devServer: {
   }
 ```
 
-### 最后贴上我的`vue.config.js`：
-```
+### 最后贴上我的`vue.config.js`
+
+```js
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
@@ -225,8 +236,9 @@ module.exports = {
 
 ## 三. Eslint相关报错及配置
 
-![](https://user-gold-cdn.xitu.io/2019/1/25/16883d48702ec988?w=1176&h=477&f=png&s=61425)
-```
+![alt](https://user-gold-cdn.xitu.io/2019/1/25/16883d48702ec988?w=1176&h=477&f=png&s=61425)
+
+```js
 module.exports = {
   root: true,
   env: {
@@ -256,17 +268,8 @@ module.exports = {
 
 ### 最后的最后，跑个项目
 
-
 `yarn serve`
-![](https://user-gold-cdn.xitu.io/2019/1/25/16883c41699c2b80?w=3592&h=1124&f=png&s=1112582)
+![alt](https://user-gold-cdn.xitu.io/2019/1/25/16883c41699c2b80?w=3592&h=1124&f=png&s=1112582)
 `yarn build`
-![](https://user-gold-cdn.xitu.io/2019/1/25/16883c445508a579?w=3324&h=548&f=png&s=954824)
-![](https://user-gold-cdn.xitu.io/2019/1/25/16883c6a7e1418eb?w=459&h=448&f=png&s=362850)
-
-
-### 作者文章总集
-
-* [「从源码中学习」彻底理解Vue选项Props](https://juejin.im/post/5c88e669f265da2d8f47792a)
-* [「Vue实践」项目升级vue-cli3的正确姿势](https://juejin.im/post/5c4a83e36fb9a049b13e91ba)
-* [「从源码中学习」Vue源码中的JS骚操作](https://juejin.im/post/5c73554cf265da2de33f2a32)
-* [为何你始终理解不了JavaScript作用域链？](https://juejin.im/editor/posts/5c8efeb1e51d45614372addd)
+![alt](https://user-gold-cdn.xitu.io/2019/1/25/16883c445508a579?w=3324&h=548&f=png&s=954824)
+![alt](https://user-gold-cdn.xitu.io/2019/1/25/16883c6a7e1418eb?w=459&h=448&f=png&s=362850)

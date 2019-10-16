@@ -571,6 +571,47 @@ function factorial (num) {
 - 菜单树
 - 遍历 DOM 树
 
+### 柯里化
+
+> 在计算机科学中，柯里化（Currying）是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数且返回结果的新函数的技术。
+
+**函数柯里化的主要作用和特点就是参数复用、提前返回和延迟执行。**
+
+```js
+function curry(fn, args) {
+    var length = fn.length;
+    var args = args || [];
+    return function () {
+        var newArgs = args.concat(Array.prototype.slice.call(arguments));
+        if (newArgs.length < length) {
+            return curry.call(this, fn, newArgs);
+        } else {
+            return fn.apply(this, newArgs);
+        }
+    }
+}
+function multiFn(a, b, c) {
+    return a * b * c;
+}
+var multi = curry(multiFn);
+multi(2)(3)(4);
+multi(2, 3, 4);
+multi(2)(3, 4);
+multi(2, 3)(4);
+```
+
+```js
+const curry = (fn, arr = []) => (...args) => (
+    arg => arg.length === fn.length
+        ? fn(...arg)
+        : curry(fn, arg)
+)([...arr, ...args])
+let curryTest = curry((a, b, c, d) => a + b + c + d)
+curryTest(1, 2, 3)(4) //返回10
+curryTest(1, 2)(4)(3) //返回10
+curryTest(1, 2)(3, 4) //返回10
+```
+
 ## 数组
 
 [数组](http://www.runoob.com/jsref/jsref-obj-array.html)

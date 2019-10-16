@@ -51,12 +51,12 @@ Vue CLI工具现在将安装所有依赖项并设置项目。
 
 ![image-20190611163812421](http://ww2.sinaimg.cn/large/006tNc79ly1g3xqt8m05dj30vo0p4dia.jpg)
 
-这里主要关注`shims-tsx.d.ts`和 `shims-vue.d.ts `两个文件
+这里主要关注`shims-tsx.d.ts`和 `shims-vue.d.ts`两个文件
 
 两句话概括：
 
 * `shims-tsx.d.ts`，允许你以`.tsx`结尾的文件，在`Vue`项目中编写`jsx`代码
-* `shims-vue.d.ts`  主要用于 `TypeScript` 识别`.vue` 文件，`Ts `默认并不支持导入 `vue` 文件，这个文件告诉` ts` 导入`.vue` 文件都按`VueConstructor<Vue>`处理。
+* `shims-vue.d.ts`  主要用于 `TypeScript` 识别`.vue` 文件，`Ts`默认并不支持导入 `vue` 文件，这个文件告诉`ts` 导入`.vue` 文件都按`VueConstructor<Vue>`处理。
 
 此时我们打开亲切的`src/components/HelloWorld.vue`，将会发现写法已大有不同
 
@@ -202,7 +202,7 @@ person = true
 * `return error("Something failed")`
 * `while (true) {} // 存在无法达到的终点`
 
-![image-20190611181410052](http://ww4.sinaimg.cn/large/006tNc79ly1g3xqt35emrj30rs09s3zf.jpg) 
+![image-20190611181410052](http://ww4.sinaimg.cn/large/006tNc79ly1g3xqt35emrj30rs09s3zf.jpg)
 
 #### 3. 类型断言
 
@@ -347,7 +347,7 @@ type SetUser = (name: string, age: number): void;
 
 **都允许拓展（extends）：**
 
-`interface` 和 `type` 都可以拓展，并且两者并不是相互独立的，也就是说` interface `可以 `extends type`, `type` 也可以 `extends interface` 。 **虽然效果差不多，但是两者语法不同**。
+`interface` 和 `type` 都可以拓展，并且两者并不是相互独立的，也就是说`interface`可以 `extends type`, `type` 也可以 `extends interface` 。 **虽然效果差不多，但是两者语法不同**。
 
 interface extends interface
 
@@ -416,7 +416,7 @@ type Pet = Dog | Cat
 type PetList = [Dog, Pet]
 ```
 
-* `type` 语句中还可以使用 `typeof `获取实例的 类型进行赋值
+* `type` 语句中还可以使用 `typeof`获取实例的 类型进行赋值
 
 ```ts
 // 当你想获取一个变量的类型时，使用 typeof
@@ -454,7 +454,7 @@ interface User {
 User 接口为 {
   name: string
   age: number
-  sex: string 
+  sex: string
 }
 */
 
@@ -649,7 +649,7 @@ buildName("firstName", "lastName")
 
 能确定变量值一定不为空时使用。
 
-与可选参数 不同的是，非空断言操作符不会防止出现 null 或 undefined。 
+与可选参数 不同的是，非空断言操作符不会防止出现 null 或 undefined。
 
 ```ts
 let s = e!.name;  // 断言e是非空并访问name属性
@@ -743,7 +743,7 @@ func(){
 
 直接运行，输出结果：
 
-```html
+```bash
 before ...
 func was called
 after ...
@@ -751,16 +751,16 @@ after ...
 
 上面代码可以看出来:
 
-* 只定义了两个函数：` test`和`func`，没有调用它们。
+* 只定义了两个函数：`test`和`func`，没有调用它们。
 * 如果没有[“@test](mailto:"@test)”，运行应该是没有任何输出的。
 
 但是，解释器读到函数修饰符“@”的时候，后面步骤会是这样：
 
-1. 去调用` test`函数，`test`函数的入口参数就是那个叫“`func`”的函数；
+1. 去调用`test`函数，`test`函数的入口参数就是那个叫“`func`”的函数；
 
 2. `test`函数被执行，入口参数的（也就是`func`函数）会被调用（执行）；
 
-换言之，修饰符带的那个函数的入口参数，就是下面的那个整个的函数。有点儿类似`JavaScrip`t里面的 
+换言之，修饰符带的那个函数的入口参数，就是下面的那个整个的函数。有点儿类似`JavaScrip`t里面的
 `function a (function () { ... });`
 
 ![ççç¥ç¥ï¼é¬¼é¬¼ç¥ç¥è¡¨æåï¼ä¸çå¹¶ç¥ï¼ä¸ä¸ªçç©¿çå°è£å­ï¼é¬¼é¬¼ç¥ç¥è¡¨æå.jpg](http://image.bee-ji.com/188903)
@@ -769,16 +769,16 @@ after ...
 
 `vue-property-decorator`的装饰器：
 
-- [`@Prop`](https://github.com/kaorun343/vue-property-decorator#Prop)
-- [`@PropSync`](https://github.com/kaorun343/vue-property-decorator#PropSync)
-- [`@Provide`](https://github.com/kaorun343/vue-property-decorator#Provide)
-- [`@Model`](https://github.com/kaorun343/vue-property-decorator#Model)
-- [`@Watch`](https://github.com/kaorun343/vue-property-decorator#Watch)
-- [`@Inject`](https://github.com/kaorun343/vue-property-decorator#Provide)
-- [`@Provide`](https://github.com/kaorun343/vue-property-decorator#Provide)
-- [`@Emit`](https://github.com/kaorun343/vue-property-decorator#Emit)
-- `@Component` (**provided by** [vue-class-component](https://github.com/vuejs/vue-class-component))
-- `Mixins` (the helper function named `mixins` **provided by** [vue-class-component](https://github.com/vuejs/vue-class-component))
+* [`@Prop`](https://github.com/kaorun343/vue-property-decorator#Prop)
+* [`@PropSync`](https://github.com/kaorun343/vue-property-decorator#PropSync)
+* [`@Provide`](https://github.com/kaorun343/vue-property-decorator#Provide)
+* [`@Model`](https://github.com/kaorun343/vue-property-decorator#Model)
+* [`@Watch`](https://github.com/kaorun343/vue-property-decorator#Watch)
+* [`@Inject`](https://github.com/kaorun343/vue-property-decorator#Provide)
+* [`@Provide`](https://github.com/kaorun343/vue-property-decorator#Provide)
+* [`@Emit`](https://github.com/kaorun343/vue-property-decorator#Emit)
+* `@Component` (**provided by** [vue-class-component](https://github.com/vuejs/vue-class-component))
+* `Mixins` (the helper function named `mixins` **provided by** [vue-class-component](https://github.com/vuejs/vue-class-component))
 
 `vuex-class`的装饰器：
 
@@ -789,12 +789,12 @@ after ...
 
 我们拿原始Vue组件模版来看：
 
-```
+```js
 import {componentA,componentB} from '@/components';
 
 export default {
-	components: { componentA, componentB},
-	props: {
+  components: { componentA, componentB},
+  props: {
     propA: { type: Number },
     propB: { default: 'default value' },
     propC: { type: [String, Boolean] },
@@ -812,7 +812,7 @@ export default {
     }
     // Vuex数据
     step() {
-    	return this.$store.state.count
+      return this.$store.state.count
     }
   },
   methods: {
@@ -820,8 +820,8 @@ export default {
       this.message = "Good bye"
     },
     getName() {
-    	let name = this.$store.getters['person/name']
-    	return name
+      let name = this.$store.getters['person/name']
+      return name
     }
   },
   // 生命周期
@@ -834,7 +834,7 @@ export default {
 
 以上模版替换成修饰符写法则是：
 
-```
+```js
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { State, Getter } from 'vuex-class';
 import { count, name } from '@/person'
@@ -844,7 +844,7 @@ import { componentA, componentB } from '@/components';
     components:{ componentA, componentB},
 })
 export default class HelloWorld extends Vue{
-	@Prop(Number) readonly propA!: number | undefined
+  @Prop(Number) readonly propA!: number | undefined
   @Prop({ default: 'default value' }) readonly propB!: string
   @Prop([String, Boolean]) readonly propC!: string | boolean | undefined
   
@@ -852,12 +852,12 @@ export default class HelloWorld extends Vue{
   message = 'Hello'
   
   // 计算属性
-	private get reversedMessage (): string[] {
-  	return this.message.split('').reverse().join('')
+  private get reversedMessage (): string[] {
+    return this.message.split('').reverse().join('')
   }
   // Vuex 数据
   @State((state: IRootState) => state . booking. currentStep) step!: number
-	@Getter( 'person/name') name!: name
+  @Getter( 'person/name') name!: name
   
   // method
   public changeMessage (): void {
@@ -867,7 +867,7 @@ export default class HelloWorld extends Vue{
     let storeName = name
     return storeName
   }
-	// 生命周期
+  // 生命周期
   private created ()：void { },
   private mounted ()：void { },
   private updated ()：void { },
@@ -879,13 +879,11 @@ export default class HelloWorld extends Vue{
 
 而不对`method`做私有约束的原因是，可能会用到`@Emit`来向父组件传递信息。
 
-
-
 ### 4.2 添加全局工具
 
 引入全局模块，需要改`main.ts`:
 
-```
+```js
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
@@ -902,7 +900,7 @@ new Vue({
 
 `npm i VueI18n`
 
-```
+```js
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
@@ -913,8 +911,8 @@ import i18n from './i18n';
 Vue.config.productionTip = false;
 
 new Vue({
-    router, 
-    store, 
+    router,
+    store,
     i18n, // 新模块
     render: (h) => h(App),
 }).$mount('#app');
@@ -922,7 +920,7 @@ new Vue({
 
 但仅仅这样，还不够。你需要动`src/vue-shim.d.ts`：
 
-```
+```js
 // 声明全局方法
 declare module 'vue/types/vue' {
   interface Vue {
@@ -934,26 +932,30 @@ declare module 'vue/types/vue' {
 
 之后使用`this.$i18n()`的话就不会报错了。
 
-
-
 ### 4.3 Axios 使用与封装
+
 `Axios`的封装千人千面
 
 如果只是想简单在Ts里体验使用`Axios`，可以安装`vue-axios`
 **简单使用`Axios`**
+
+```bash
+npm i axios vue-axios
 ```
-$ npm i axios vue-axios
-```
+
 `main.ts`添加：
-```
+
+```ts
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios, axios)
 ```
+
 然后在组件内使用：
-```
+
+```js
 Vue.axios.get(api).then((response) => {
   console.log(response.data)
 })
@@ -966,10 +968,12 @@ this.$http.get(api).then((response) => {
   console.log(response.data)
 })
 ```
+
 #### 1. 新建文件`request.ts`
+
 文件目录:
 
-```
+```bash
 -api
     - main.ts   // 实际调用
 -utils
@@ -978,13 +982,13 @@ this.$http.get(api).then((response) => {
 
 #### 2. `request.ts`文件解析
 
-```
+```ts
 import * as axios from 'axios';
 import store from '@/store';
 // 这里可根据具体使用的UI组件库进行替换
 import { Toast } from 'vant';
 import { AxiosResponse, AxiosRequestConfig } from 'axios';
- 
+
  /* baseURL 按实际项目来定义 */
 const baseURL = process.env.VUE_APP_URL;
 
@@ -1012,13 +1016,13 @@ service.interceptors.response.use(
     (error: any) => {
         return Promise.reject(error);
     });
-    
+
 export default service;
 ```
 
 为了方便，我们还需要定义一套固定的 axios 返回的格式，新建`ajax.ts`：
 
-```
+```ts
 export interface AjaxResponse {
     code: number;
     data: any;
@@ -1026,11 +1030,9 @@ export interface AjaxResponse {
 }
 ```
 
+#### 3. `main.ts`接口调用
 
-
-#### 3. `main.ts`接口调用：
-
-```
+```ts
 // api/main.ts
 import request from '../utils/request';
 
@@ -1055,13 +1057,13 @@ export function postSomeThings(params:any) {
 
 为了减少时间，我们来替换掉`src/components/HelloWorld.vue`，做一个博客帖子组件：
 
-```
+```html
 <template>
-	<div class="blogpost">
-		<h2>{{ post.title }}</h2>
-		<p>{{ post.body }}</p>
-		<p class="meta">Written by {{ post.author }} on {{ date }}</p>
-	</div>
+  <div class="blogpost">
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.body }}</p>
+    <p class="meta">Written by {{ post.author }} on {{ date }}</p>
+  </div>
 </template>
 
 <script lang="ts">
@@ -1069,19 +1071,19 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 // 在这里对数据进行类型约束
 export interface Post {
-	title: string;
-	body: string;
-	author: string;
-	datePosted: Date;
+  title: string;
+  body: string;
+  author: string;
+  datePosted: Date;
 }
 
 @Component
 export default class HelloWorld extends Vue {
-	@Prop() private post!: Post;
+  @Prop() private post!: Post;
 
-	get date() {
-		return `${this.post.datePosted.getDate()}/${this.post.datePosted.getMonth()}/${this.post.datePosted.getFullYear()}`;
-	}
+  get date() {
+    return `${this.post.datePosted.getDate()}/${this.post.datePosted.getMonth()}/${this.post.datePosted.getFullYear()}`;
+  }
 }
 </script>
 
@@ -1097,11 +1099,11 @@ p.meta {
 
 然后在`Home.vue`中使用:
 
-```
+```html
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-   	<HelloWorld v-for="blogPost in blogPosts" :post="blogPost" :key="blogPost.title" />
+    <HelloWorld v-for="blogPost in blogPosts" :post="blogPost" :key="blogPost.title" />
   </div>
 </template>
 
@@ -1160,29 +1162,10 @@ export default class Home extends Vue {
 
 [Typescript 中的 interface 和 type到底有什么区别](https://juejin.im/post/5c2723635188252d1d34dc7d#heading-11)
 
-
-
 ## 7. 总结
 
-![](https://user-gold-cdn.xitu.io/2019/6/14/16b53e37a96b8d86?w=1125&h=491&f=png&s=231570)
+![alt](https://user-gold-cdn.xitu.io/2019/6/14/16b53e37a96b8d86?w=1125&h=491&f=png&s=231570)
 而关于`Class API`撤销，其实还是挺舒服的。
 用`class` 来编写 `Vue`组件确实太奇怪了。
 (所以我这篇`Ts`入门压根没写`Class API`)
-![](https://user-gold-cdn.xitu.io/2019/6/14/16b53e5d5fd4daa2?w=296&h=215&f=png&s=94671)
-
-## 作者掘金文章总集
-
-**需要转载到公众号的喊我加下白名单就行了。**
-* [「真®全栈之路」Web前端开发的后端指南](https://juejin.im/post/5cc02aacf265da039e1ff3fa)
-* [「Vue实践」5分钟撸一个Vue CLI 插件](https://juejin.im/post/5cb59c4bf265da03a743e979)
-* [「Vue实践」武装你的前端项目](https://juejin.im/post/5cab64ce5188251b19486041)
-* [「中高级前端面试」JavaScript手写代码无敌秘籍](https://juejin.im/post/5c9c3989e51d454e3a3902b6)
-* [「从源码中学习」面试官都不知道的Vue题目答案](https://juejin.im/post/5c959f74f265da610c068fa8)
-* [「从源码中学习」Vue源码中的JS骚操作](https://juejin.im/post/5c73554cf265da2de33f2a32)
-* [「从源码中学习」彻底理解Vue选项Props](https://juejin.im/post/5c88e669f265da2d8f47792a)
-* [「Vue实践」项目升级vue-cli3的正确姿势](https://juejin.im/post/5c4a83e36fb9a049b13e91ba)
-* [为何你始终理解不了JavaScript作用域链？](https://juejin.im/editor/posts/5c8efeb1e51d45614372addd)
-### 公众号
-![](https://user-gold-cdn.xitu.io/2019/3/29/169c519daed09b39?w=370&h=124&f=png&s=31328)
-
-![](https://user-gold-cdn.xitu.io/2019/3/29/169c818165484bb8?w=258&h=258&f=jpeg&s=27123)
+![alt](https://user-gold-cdn.xitu.io/2019/6/14/16b53e5d5fd4daa2?w=296&h=215&f=png&s=94671)
