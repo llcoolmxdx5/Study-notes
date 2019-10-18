@@ -669,3 +669,15 @@ function instanceOf(left,right) {
     }
 }
 ```
+
+## 12.实现一个Object.create
+
+```js
+if (typeof Object.create !== "function") {
+    Object.create = function (proto, propertiesObject) {
+        function F() {}
+        F.prototype = proto;
+        return new F();
+    };
+}
+```

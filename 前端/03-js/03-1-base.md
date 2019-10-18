@@ -71,16 +71,16 @@ constructor作用和instanceof非常相似。但constructor检测 Object与insta
 Object.prototype.toString.call() 是最准确最常用的方式 返回一个字符串
 
 ```js
-Object.prototype.toString.call('').slice(7, -1); // String
-Object.prototype.toString.call(1).slice(7, -1); // Number
-Object.prototype.toString.call(true).slice(7, -1); // Boolean
-Object.prototype.toString.call(undefined).slice(7, -1); // Undefined
-Object.prototype.toString.call(null).slice(7, -1); // Null
-Object.prototype.toString.call(new Function()).slice(7, -1); // Function
-Object.prototype.toString.call(new Date()).slice(7, -1); // Date
-Object.prototype.toString.call([]).slice(7, -1); // Array
-Object.prototype.toString.call(new RegExp()).slice(7, -1); // RegExp
-Object.prototype.toString.call(new Error()).slice(7, -1); // Error
+Object.prototype.toString.call('').slice(8, -1); // String
+Object.prototype.toString.call(1).slice(8, -1); // Number
+Object.prototype.toString.call(true).slice(8, -1); // Boolean
+Object.prototype.toString.call(undefined).slice(8, -1); // Undefined
+Object.prototype.toString.call(null).slice(8, -1); // Null
+Object.prototype.toString.call(new Function()).slice(8, -1); // Function
+Object.prototype.toString.call(new Date()).slice(8, -1); // Date
+Object.prototype.toString.call([]).slice(8, -1); // Array
+Object.prototype.toString.call(new RegExp()).slice(8, -1); // RegExp
+Object.prototype.toString.call(new Error()).slice(8, -1); // Error
 ```
 
 #### 5.NaN的判断
