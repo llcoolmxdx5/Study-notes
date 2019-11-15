@@ -310,8 +310,8 @@ const fs = require('fs');
 // 带sync的方法为同步
 
 // 创建文件并写入内容
-fs.writeFile('log.txt', 'hello world', () => { }); // 异步
-fs.writeFileSync('log1.txt', 'hello world');
+fs.writeFile('log.txt', 'hello world', 'utf8',() => { }); // 异步
+fs.writeFileSync('log1.txt', 'hello world', 'utf8');
 
 fs.appendFile('log1.txt', 'gp', function () { })//内容的追加
 fs.unlink('log.txt', () => { })// 删除文件
