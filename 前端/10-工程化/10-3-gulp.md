@@ -1,5 +1,232 @@
 # gulp
 
+## 初始化
+
+```bash
+npm init -y # 初始化工程，生成Package.json
+yarn add gulp -D # 启动server ,打开浏览器
+yarn add gulp-webserver -D
+yarn add node-sass gulp-sass -D # 编译scss文件
+yarn add gulp-concat -D # 文件合并
+yarn add webpack-stream -D # 编译js文件
+yarn add babel-loader @babel/core @babel/preset-env webpack -D # 转译e6 es7 代码转成es5
+yarn add @babel/plugin-transform-runtime @babel/runtime -D
+yarn add string-loader -D # 把html转成字符串
+yarn add gulp-rev -D # 基于文件内容，生成带hash值得文件名字
+yarn add gulp-rev-collector -D # 把带hash值的文件名，替换到模板里面（1：生成映射关系的json文件，2：依据json文件替换模板里面的引用）
+```
+
+## npm脚本
+
+yarn add json-server -g
+json-server --watch ./mock/db.json
+json-server ./mock/mock.js --routes ./mock/routes.json --port 9090
+
+"build": "gulp -f gulpfile.prod.js",
+"dev": "gulp -f gulpfile.dev.js",
+"mock": "json-server ./mock/mock.js --routes ./mock/routes.json --port 9099"
+
+## dev配置
+
+```js
+// gulpfile.dev.js
+const { series, parallel, src, dest, watch } = require('gulp')
+// const gulp = require('gulp')
+const gulpServer = require('gulp-webserver')
+const sass = require('gulp-sass');
+const concat = require('gulp-concat');
+const webpackStream = require('webpack-stream')
+const path = require('path');
+const proxy = require('http-proxy-middleware');
+const del = require('del'); // yarn add del -D
+
+function copyHtml() {
+  return src('./src/views/*.html')
+    .pipe(dest('./dev/'))
+}
+function copyImages() {
+  return src('./src/images/*.*')
+    .pipe(dest('./dev/images/'))
+}
+function compileCSS() {
+  return src(['./src/style/*.scss', '!./src/style/detail.scss'])
+    .pipe(sass().on('error', sass.logError))
+    .pipe(concat('all.css'))
+    .pipe(dest('./dev/style/'))
+}
+function detailCompileCss() {
+  return src(['./src/style/detail.scss', './src/style/reset.scss'])
+    .pipe(sass().on('error', sass.logError))
+    .pipe(concat('detail.css'))
+    .pipe(dest('./dev/style/'))
+}
+function compileJS() {
+  return src('./src/js/index.js')
+    .pipe(webpackStream({
+      mode: 'development',
+      devtool: 'inline-source-map',
+      entry: {
+        index: './src/js/index.js',
+        detail: './src/js/detail.js'
+      },
+      output: {
+        path: path.resolve(__dirname, './dev/js/'),//目录
+        filename: '[name].min.js'//文件名,
+      },
+      module: {
+        rules: [
+          {
+            test: /\.js$/,//匹配js文件
+            exclude: /(node_modules)/,//排除文件
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env'],
+                plugins: ['@babel/plugin-transform-runtime']
+              }
+            }
+          },
+          { test: /\.html$/, loader: "string-loader" }
+        ]
+      }
+    }))
+    .pipe(dest('./dev/js/'))
+}
+function startServer() { // 生产模式不需要
+  return src('./dev/')
+    .pipe(gulpServer({
+      port: 9090,
+      host: '0.0.0.0',
+      livereload: true, // 是否支持热更新
+      //directoryListing: true, // 是否展示文件夹列表
+      open: true, // 打开浏览器
+      middleware: [
+        proxy('/fetch', {
+          // target: 'http://localhost:9099/',
+          target: 'https://m.lagou.com/',
+          changeOrigin: true,// 是否支持跨域
+          pathRewrite: {// 路径重写
+            '^/fetch': ''
+          }
+        }
+        )]
+    }))
+}
+//监控文件的变化，当文件有变化时，同步到dev目录
+function watchFile() { // 生产模式不需要
+  watch('./src/**/*.js', (cb) => {
+    compileJS();
+    cb();
+  })
+  watch('./src/style/*.scss', (cb) => {
+    compileCSS();
+    cb();
+  })
+  watch('./src/views/**/*.html', (cb) => {
+    copyHtml();
+    compileJS();
+    cb();
+  })
+}
+function copyLibs() {
+  return src('./src/libs/*.*')
+    .pipe(dest('./dev/libs/'));
+}
+function remove() {
+  return del(['./dev/'])
+}
+exports.default = series(remove, parallel(copyHtml, copyImages, copyLibs, compileJS, compileCSS, detailCompileCss), startServer, watchFile);
+```
+
+## prod配置
+
+```js
+const { series, parallel, src, dest, watch } = require('gulp')
+const gulpServer = require('gulp-webserver')
+const sass = require('gulp-sass');
+const concat = require('gulp-concat');
+const webpackStream = require('webpack-stream')
+const path = require('path');
+const del = require('del');
+const rev = require('gulp-rev');
+const revCol = require('gulp-rev-collector');
+
+function copyHtml() {
+  return src('./src/views/*.html')
+    .pipe(dest('./dist/'))
+}
+function copyImages() {
+  return src('./src/images/*.*')
+    .pipe(dest('./dist/images/'))
+}
+function compileCSS() {
+  return src(['./src/style/*.scss', '!./src/style/detail.scss'])
+    .pipe(sass().on('error', sass.logError))
+    .pipe(concat('all.css'))
+    .pipe(rev())
+    .pipe(dest('./dist/style/'))
+    .pipe(rev.manifest('css-index-manifest.json'))
+    .pipe(dest('./rev/'))
+}
+function detailCompileCss() {
+  return src(['./src/style/detail.scss', './src/style/reset.scss'])
+    .pipe(sass().on('error', sass.logError))
+    .pipe(concat('detail.css'))
+    .pipe(rev())
+    .pipe(dest('./dist/style/'))
+    .pipe(rev.manifest('css-detail-manifest.json'))
+    .pipe(dest('./rev/'))
+}
+function compileJS() {
+  return src('./src/js/index.js')
+    .pipe(webpackStream({
+      mode: 'production',
+      devtool: 'inline-source-map',
+      entry: {
+        index: './src/js/index.js',
+        detail: './src/js/detail.js'
+      },
+      output: {
+        path: path.resolve(__dirname, './dev/js/'),
+        filename: '[name]-min.js'
+      },
+      module: {
+        rules: [
+          {
+            test: /\.js$/,
+            exclude: /(node_modules)/,
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env'],
+                plugins: ['@babel/plugin-transform-runtime']
+              }
+            }
+          },
+          { test: /\.html$/, loader: "string-loader" }
+        ]
+      }
+    }))
+    .pipe(rev())
+    .pipe(dest('./dist/js/'))
+    .pipe(rev.manifest('js-rev-manifest.json'))
+    .pipe(dest('./rev/'))
+}
+function copyLibs() {
+  return src('./src/libs/*.*')
+    .pipe(dest('./dist/libs/'));
+}
+function remove() {
+  return del(['./dist/'])
+}
+function revCollector() {
+  return src(['./rev/*.json', './dist/*.html'])
+    .pipe(revCol())
+    .pipe(dest('./dist/'))
+}
+exports.default = series(remove, parallel(copyHtml, copyImages, copyLibs, compileJS, compileCSS, detailCompileCss), revCollector);
+```
+
 ## 什么是Gulp
 
 Gulp 是一个自动化工具，前端开发者可以使用它来处理常见任务：
