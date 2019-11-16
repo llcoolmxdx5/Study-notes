@@ -2,9 +2,16 @@
 
 ## 起步
 
+npm init -y
+yarn add webpack webpack-cli -D
+yarn add webpack-dev-server -D
+yarn add html-webpack-plugin -D
+yarn add css-loader style-loader -D
+yarn add mini-css-extract-plugin -D
+
 1. 先将当前开发设置为ES6模式
 2. `npm init -y`    初始化项目生成package.json
-3. `npm install webpack --save-dev`  安装webpack
+3. `yarn add webpack webpack-cli -D`  安装webpack
 4. 创建a.js文件
 
     ```js
