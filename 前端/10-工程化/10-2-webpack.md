@@ -8,6 +8,7 @@ yarn add webpack webpack-cli -D # 添加webpack依赖
 yarn add webpack-dev-server -D # webpack开发热更新
 yarn add html-webpack-plugin -D # 将编译出来的js文件注入到模板文件
 yarn add css-loader style-loader -D # cssloader
+yarn add sass-loader node-sass -D # 处理sass
 yarn add mini-css-extract-plugin -D # 处理sass
 yarn add copy-webpack-plugin -D # 文件复制
 yarn add string-loader -D # 处理html

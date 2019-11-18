@@ -6,12 +6,12 @@
 
 ```js
 // db.js
-const mongoose = require('mongoose'),
+const mongoose = require('mongoose');
 const DB_URL = 'mongodb://localhost:27017/mongoosesample'; /** * 连接 */
 mongoose.connect(DB_URL); /** * 连接成功 */
 mongoose.connection.on('connected', function () {
   console.log('Mongoose connection open to ' + DB_URL);
-}); /** * 连接异常 */
+}); /** * 连接正常 */
 mongoose.connection.on('error', function (err) {
   console.log('Mongoose connection error: ' + err);
 }); /** * 连接断开 */
@@ -33,7 +33,7 @@ let UserSchema = new Schema({
   userage: { type: Number }, //年龄
   logindate: { type: Date, default: Date.now } //最近登录时间
 });
-module.exports = mongoose.model('User',UserSchema);
+module.exports = mongoose.model('User',UserSchema); // 表名
 ```
 
 ### Schema Types内置类型
