@@ -2,6 +2,10 @@
 
 > yarn add mongoose
 
+cd /usr/local/opt/mongodb-community@4.0/bin
+mongod --dbpath=./data/db
+mongo
+
 ## 连接
 
 ```js
@@ -33,6 +37,7 @@ let UserSchema = new Schema({
   userage: { type: Number }, //年龄
   logindate: { type: Date, default: Date.now } //最近登录时间
 });
+mongoose.set('useCreateIndex', true);
 module.exports = mongoose.model('User',UserSchema); // 表名
 ```
 
