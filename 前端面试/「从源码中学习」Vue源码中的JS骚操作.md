@@ -123,7 +123,7 @@ export function toString (val: any): string {
   return val == null
     ? ''
     : typeof val === 'object'
-      ? JSON.stringify(val, null, 2)
+      ? JSON.stringify(val, null, 2) // 第三个参数表示转化后的缩进2个空格
       : String(val)
 }
 ```
@@ -175,7 +175,7 @@ export const capitalize = cached((str: string): string => {
 ### 3.5 `hyphenate`:驼峰转连字符
 
 ```js
-const hyphenateRE = /\B([A-Z])/g
+const hyphenateRE = /\B([A-Z])/g // \B 字母数字与字母数字的边界，非字母数字与非字母数字的边界。
 export const hyphenate = cached((str: string): string => {
   return str.replace(hyphenateRE, '-$1').toLowerCase()
 })
