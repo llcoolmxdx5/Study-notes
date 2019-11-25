@@ -60,7 +60,7 @@ Vue CLI工具现在将安装所有依赖项并设置项目。
 
 此时我们打开亲切的`src/components/HelloWorld.vue`，将会发现写法已大有不同
 
-```js
+```html
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
@@ -104,7 +104,7 @@ let hexLiteral: number = 0xf00d;
 
 // 字符串，单双引都行
 let name: string = "bob";
-let sentence: string = `Hello, my name is ${ name }.
+let sentence: string = `Hello, my name is ${ name }.`
 
 // 数组，第二种方式是使用数组泛型，Array<元素类型>：
 let list: number[] = [1, 2, 3];

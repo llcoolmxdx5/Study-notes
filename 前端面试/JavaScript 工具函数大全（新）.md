@@ -47,17 +47,14 @@ allEqual([1, 1, 1, 1]); // true
 
 ```js
 const approximatelyEqual = (v1, v2, epsilon = 0.001) => Math.abs(v1 - v2) < epsilon;
-
 approximatelyEqual(Math.PI / 2.0, 1.5708); // true
 ```
 
 ### 4.`arrayToCSV`：数组转`CSV`格式（带空格的字符串）
 
 ```js
-
 const arrayToCSV = (arr, delimiter = ',') =>
   arr.map(v => v.map(x => `"${x}"`).join(delimiter)).join('\n');
-  
 arrayToCSV([['a', 'b'], ['c', 'd']]); // '"a","b"\n"c","d"'
 arrayToCSV([['a', 'b'], ['c', 'd']], ';'); // '"a";"b"\n"c";"d"'
 ```
@@ -72,7 +69,6 @@ const arrayToHtmlList = (arr, listID) =>
     (el = document.querySelector('#' + listID)),
     (el.innerHTML += arr.map(item => `<li>${item}</li>`).join(''))
   ))();
-  
 arrayToHtmlList(['item 1', 'item 2'], 'myListID');
 ```
 
