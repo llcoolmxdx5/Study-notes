@@ -58,3 +58,7 @@ class Stack {
     return objString;
   }
 }
+
+// export default Stack
+
+module.exports = Stack
