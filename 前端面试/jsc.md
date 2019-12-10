@@ -18,7 +18,7 @@
     typeof 1; // number 有效
     typeof true; // boolean 有效
     typeof undefined; //undefined 有效
-    typeof newFunction (); // function 有效
+    typeof new Function (); // function 有效
     typeof null; // object 无效
     typeof []; // object 无效
     typeof new Date (); // object 无效
