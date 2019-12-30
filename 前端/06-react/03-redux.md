@@ -147,10 +147,9 @@ Store 就是把action和reducer联系到一起的对象。Store 有以下职责�
 createStore() 的第二个参数是可选的, 用于设置 state 初始状态。这对开发同构应用时非常有用，服务器端 redux 应用的 state 结构可以与客户端保持一致, 那么客户端可以将从网络接收到的服务端 state 直接用于本地数据初始化。
 
 ```js
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk' // 中间件，可以异步事件
+import { createStore } from 'redux'
 import reducer from './reducer'
-const store = createStore(reducer, applyMiddleware(thunk))
+const store = createStore(reducer)
 export default store
 ```
 
@@ -191,3 +190,66 @@ ReactDOM.render(
 ```
 
 ## 中间件
+
+### redux-thunk
+
+```jsx
+// store.js
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import reducer from './reducer'
+const store = createStore(reducer, applyMiddleware(thunk))
+export default store;
+```
+
+### redux-saga
+
+```jsx
+// /src/sagas.js
+import { sagas as homeSaga } from 'pages/index/home/'
+function* sagas() {
+  yield homeSaga.loadDataSaga()
+  yield homeSaga.loadMoreDataSaga()
+}
+export default sagas
+```
+
+```jsx
+// /src/store/index.js
+import { createStore, applyMiddleware } from 'redux'
+import createSagaMiddleware from 'redux-saga'
+import reducer from './reducer'
+import sagas from './sagas'
+const sagaMiddleware = createSagaMiddleware()
+const store = createStore(
+  reducer,
+  applyMiddleware(sagaMiddleware)
+)
+sagaMiddleware.run(sagas)
+export default store
+```
+
+```jsx
+// /src/pages/index/home/sagas.js
+import { takeEvery, put } from 'redux-saga/effects'
+import { SAGA_LOAD_DATA, SAGA_LOAD_MORE_DATA } from './actionTypes'
+import { loadData, loadMoreData } from './actionCreator'
+import http from 'utils/http'
+function loadDataSaga() {
+  return takeEvery(SAGA_LOAD_DATA, function* () {
+    let result = yield http.get({url: '/data?_start=0&_limit=10'})
+    yield put(loadData(result))
+  })
+}
+function loadMoreDataSaga() {
+  return takeEvery(SAGA_LOAD_MORE_DATA, function* (action) {
+    let { start, limit } = action.data
+    let result = yield http.get({url: `/data?_start=${start}&_limit=${limit}`})
+    yield put(loadMoreData(result))
+  })
+}
+export {
+  loadDataSaga,
+  loadMoreDataSaga
+}
+```
