@@ -1,60 +1,5 @@
 # jest
 
-## 什么是前端工程化
-
-工程化就是软件工程的一种概念，项目在编写的时候要注意哪些地方
-
-- 性能
-- 稳定性
-- 可用性
-- 可维护性
-
-要考虑的地方
-
-- 生产的效率
-- 维护的难易程度
-
-解决方案
-
-- 制定规范 ---> css bem规范 css私有化 sass less js规范 文件的规范
-- 模块化与组件化 ---> 可维护性 可复用性强
-  - 模块化
-    - esmodule commonJs AMD CMD
-    - 如何定义模块 导入导出模块
-  - 组件
-    - 页面上的任一部分
-  - 多个模块组成一个组件
-
-部署问题
-
-- 代码审核
-- 压缩打包
-- 增量更新
-- 单元测试
-
-构建和编译
-
-- 构建：构建是在编译的基础之上的
-- 编译：单文件的一些编译
-
-总结：注意的地方
-
-- 模块化、组件化
-- 自动化
-- 规范
-- 静态资源管理
-
-## 前端为什么要做自动化测试
-
-哪些方面
-
-- UI测试
-- 功能测试
-- 性能测试
-- 页面的一些特性检查
-
-单元测试 集成测试 E2E测试
-
 ## jest基本介绍以及原理
 
 1. 若需测试ES6的MODULE模块化时需要安装 `yarn add @babel/core @babel/preset-env jest@24.8.0 -D`
@@ -64,20 +9,16 @@
     {
       "presets": [
         [
-          "@babel/preset-env",
-          {
-            "targets": {
-              "node": "current"
-            }
-          }
+          "@babel/preset-env", { "targets": { "node": "current" } }
         ]
       ]
     }
     ```
 
 3. jest会自动进行.test.js文件的检测
+4. jest@24.8.0 版本匹配 axios@0.19.0
 
-## jest匹配器以及命令行操作
+## jest匹配器
 
 ```js
 expect({a:1}).toBe({a:1})//判断两个对象是否相等，用Object.is()判断对象的地址是否一致,测试数字用
@@ -102,3 +43,86 @@ test('compiling android goes as expected', () => {
   expect(compileAndroidCode).toThrow(ConfigError); //判断抛出异常
 }）
 ```
+
+```js
+test.only("仅测试当前用例"，() => {
+  expect(1).not.toBe(2)
+})
+```
+
+## 命令行操作
+
+jest --watchAll 自动测试所有后缀为.test.js的文件
+jest --watch 自动测试当前文件
+jest --coverage 生成测试覆盖率报告
+
+- 按f仅运行失败的测试。
+- 按o仅运行与更改的文件相关的测试。
+- 按p按文件名正则表达式模式过滤。
+- 按t以测试名称正则表达式模式进行过滤。
+- 按q退出监视模式。
+- 按Enter触发测试运行。
+
+## 异步测试
+
+```js
+test("测试异步代码", () => {
+  return fetchData().then((data) => {
+    expect(data.data).toEqual({ success: true })
+  })
+})
+test("测试异步代码", async () => {
+  let data = await fetchData();
+  expect(data.data).toMatchObject({ success: true })
+})
+test("异步测试失败", () => {
+  return expect(fetchData()).rejects.toThrow();
+})
+```
+
+## 生命周期
+
+- beforeEach:每一个测试用例执行之前都会执行的生命周期
+- afterEach:每一个测试用例执行之后都会执行的生命周期
+- beforeAll:所有测试用例在执行之前执行的生命周期
+- afterAll：所有测试用例在执行之后执行的生命周期
+
+- 生命周期作用域的问题
+  分组：describe
+  > 所有的describe函数下面都有独立的beforeEach beforeAll afterAll afterEach
+
+```js
+describe("测试所有加法", () => {
+  beforeAll(() => {
+    p = new Num()
+  })
+  test('测试Num加法', () => {
+    p.add()
+    expect(p.n).toBe(11)
+  })
+  test('测试Num减法', () => {
+    p.reduce()
+    expect(p.n).toBe(10)
+  })
+})
+```
+
+## mock测试
+
+mock测试作用
+
+- 测试函数的返回值
+- 捕获函数的使用情况
+- 改变函数内部的实现(重要)
+
+mock的使用
+
+- jest.fn:捕获函数的调用
+- toBeCalled:测试函数是否调用成功
+- jest.fn().mock
+  - calls: [ [] ], 测试函数调用的次数以及调用的参数
+  - instances: [ undefined ], 当前调用函数的this指向
+  - invocationCallOrder: [ 1 ], 函数执行的顺序
+  - results: [ { type: 'return', value: undefined } ] 函数返回值的测试
+
+## dom测试
