@@ -20,20 +20,24 @@ div {
 
 - 块元素 `display:block;`
 
-  `Div,h1-h6,p,ul,li`
+  `div,h1-h6,p,dl,dt,dd,ul,li`
   独占一行,可以设置宽高
   嵌套（包含）下，子块元素宽度（没有定义情况下）和父块元素宽度默认一致。
 
 - 行内元素 display:inline
 
-  `span  ,a,  ,strong , em,  del,  ins`
+  `span,a,b,strong,em,del,ins`
   在一行上显示,不能直接设置宽高
   元素的宽和高就是内容撑开的宽高。
 
 - 行内块元素(内联元素) `display:inline-block;`
 
-  `input  img`
+  `input,img`
   在一行上显示,可以设置宽高
+
+- 空元素(void)
+
+  `br,hr,link,meta,area,base,col,command,embed,keygen,param,source,track,wbr`
 
 行内元素尽量包含行内元素，行内元素不要包含块元素
 
