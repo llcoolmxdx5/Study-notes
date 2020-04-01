@@ -208,24 +208,24 @@ let app = http.createServer((req, res) => {
   let pageSize = url.parse(str, true).query.pageSize;
   let reqUrl = `https://m.lagou.com/listmore.json?pageNo=${pageNo}&pageSize=${pageSize}`;
   res.setHeader('Content-Type', 'application/json;charset=utf8;')
-  https.get(reqUrl, (res) => {
-    if (res.statusCode !== 200) {
+  https.get(reqUrl, (res1) => {
+    if (res1.statusCode !== 200) {
       throw new Error('error info');
     }
     let rawdata = ''
-    res.on('data', (chunk) => {
+    res1.on('data', (chunk) => {
       rawdata += chunk;
     })
-    res.on('end', () => {
+    res1.on('end', () => {
       res.write(rawdata);
       res.end();
     })
   })
 })
-app.listen('8080', () => {
-  console.log('localhost:8080 stat ...')
+app.listen('3000', () => {
+  console.log('localhost:3000 stat ...')
 })
-//https://m.lagou.com/listmore.json?pageNo=2&pageSize=15
+// http://localhost:3000/?pageNo=2&pageSize=15
 ```
 
 ### http.request
