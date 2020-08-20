@@ -87,8 +87,9 @@ int p2_5_any(char s1[], char s2[])
   return -1;
 }
 
-int p2_10_lower(int c) {
-  return c >= 'A' && c <= 'Z' ? c + 'a' - 'A' : c; 
+int p2_10_lower(int c)
+{
+  return c >= 'A' && c <= 'Z' ? c + 'a' - 'A' : c;
 }
 
 int main(int argc, char const *argv[])
@@ -101,7 +102,12 @@ int main(int argc, char const *argv[])
 
   // printf("index = %d\n", p2_5_any("acv", "rab"));
 
-  printf("lower = %d\n", p2_10_lower('A'));
+  // printf("lower = %d\n", p2_10_lower('A'));
+
+  char s2[] = "I am a string";
+  *(s2 + 1) = 'S';
+  
+  printf("%s", s2);
 
   return 0;
 }
