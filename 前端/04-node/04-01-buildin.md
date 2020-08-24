@@ -1,24 +1,24 @@
-# node内置包
+# node 内置包
 
 ## url
 
 ### url.parse
 
-> 将一个URL字符串转换成对象并返回。
+> 将一个 URL 字符串转换成对象并返回。
 
 `url.parse(urlString[, parseQueryString[, slashesDenoteHost]])`
 
 接收参数：
 
-- urlString:url字符串
+- urlString:url 字符串
 
-- parseQueryString:为true时将使用查询模块分析查询字符串，默认为false
+- parseQueryString:为 true 时将使用查询模块分析查询字符串，默认为 false
 
 - slashesDenoteHost
 
-  默认为false，//foo/bar 形式的字符串将被解释成 { pathname: ‘//foo/bar' }
+  默认为 false，//foo/bar 形式的字符串将被解释成 { pathname: ‘//foo/bar' }
 
-  如果设置成true，//foo/bar 形式的字符串将被解释成  { host: ‘foo', pathname: ‘/bar' }
+  如果设置成 true，//foo/bar 形式的字符串将被解释成   { host: ‘foo', pathname: ‘/bar' }
 
 ```js
 var url = require('url');
@@ -42,7 +42,7 @@ console.log(a);
 
 ### url.format
 
-> 将一个解析后的URL对象、转成、一个格式化的URL字符串。与上一个反向
+> 将一个解析后的 URL 对象、转成、一个格式化的 URL 字符串。与上一个反向
 
 `url.format(URL[, options])`
 
@@ -56,18 +56,18 @@ console.log(a);
 
 ### url.resolve
 
-> 解析url（拼接）
+> 解析 url（拼接）
 
 `url.resolve(from, to)`
 
-- from string 要解析的基本URL。
-- to string 要解析的HREF URL。
+- from string 要解析的基本 URL。
+- to string 要解析的 HREF URL。
 
 ```js
-const url = require('url');
-url.resolve('/one/two/three', 'four');         // '/one/two/four'
-url.resolve('http://example.com/', '/one');    // 'http://example.com/one'
-url.resolve('http://example.com/one', '/two'); // 'http://example.com/two'
+const url = require("url");
+url.resolve("/one/two/three", "four"); // '/one/two/four'
+url.resolve("http://example.com/", "/one"); // 'http://example.com/one'
+url.resolve("http://example.com/one", "/two"); // 'http://example.com/two'
 ```
 
 ## querystring
@@ -91,25 +91,25 @@ qs.escape("name=慕白");
 
 ### querystring.parse(str,separator,eq,options)
 
-parse这个方法是将一个字符串反序列化为一个对象。
+parse 这个方法是将一个字符串反序列化为一个对象。
 
 参数：
 
 - str string 指需要反序列化的字符串;
-- separator string 指用于分割str这个字符串的字符或字符串，默认值为"&";
+- separator string 指用于分割 str 这个字符串的字符或字符串，默认值为"&";
 - eq string 指用于划分键和值的字符或字符串，默认值为"=";
-- options object 可设置maxKeys和decodeURIComponent这两个属性：
-  - maxKeys：number 指定解析键值对的最大值，默认值为1000，如果设置为0时，则取消解析的数量限制;
+- options object 可设置 maxKeys 和 decodeURIComponent 这两个属性：
+  - maxKeys：number 指定解析键值对的最大值，默认值为 1000，如果设置为 0 时，则取消解析的数量限制;
   - decodeURIComponent function 解码查询字符串中的百分比编码字符时使用的函数。默认值: qs.unescape()
 
 ```js
-qs.parse('foo=bar&abc=xyz&abc=123');
+qs.parse("foo=bar&abc=xyz&abc=123");
 // { foo: 'bar', abc: ['xyz', '123'] }
 ```
 
 ### qs.stringify
 
-> stringify这个方法是将一个对象序列化成一个字符串，与qs.parse相对。
+> stringify 这个方法是将一个对象序列化成一个字符串，与 qs.parse 相对。
 
 `qs.stringify(obj[, sep[, eq[, options]]])`
 
@@ -118,16 +118,18 @@ qs.parse('foo=bar&abc=xyz&abc=123');
 - obj object 指需要序列化的对象
 - separator string 用于连接键值对的字符或字符串，默认值为"&";
 - eq string 用于连接键和值的字符或字符串，默认值为"=";
-- options object 传入一个对象，该对象可设置encodeURIComponent这个属性：
-  - encodeURIComponent:值的类型为function，可以将一个不安全的url字符串转换成百分比的形式，默认值为qs.escape()
+- options object 传入一个对象，该对象可设置 encodeURIComponent 这个属性：
+  - encodeURIComponent:值的类型为 function，可以将一个不安全的 url 字符串转换成百分比的形式，默认值为 qs.escape()
 
 ```js
-qs.stringify({ foo: 'bar', baz: ['qux', 'quux'], corge: '' });
+qs.stringify({ foo: "bar", baz: ["qux", "quux"], corge: "" });
 // 返回 'foo=bar&baz=qux&baz=quux&corge='
-qs.stringify({ foo: 'bar', baz: 'qux' }, ';', ':');
+qs.stringify({ foo: "bar", baz: "qux" }, ";", ":");
 // 返回 'foo:bar;baz:qux'
 // 假设 gbkEncodeURIComponent 函数已存在。
-qs.stringify({ w: '中文', foo: 'bar' }, null, null,{ encodeURIComponent: gbkEncodeURIComponent });
+qs.stringify({ w: "中文", foo: "bar" }, null, null, {
+  encodeURIComponent: gbkEncodeURIComponent,
+});
 ```
 
 ### qs.unescape
@@ -155,35 +157,41 @@ qs.unescape() 方法由 qs.parse() 使用，通常不会直接使用它。 它�
 
 ```js
 // 获取 JSON 的示例
-http.get('http://nodejs.cn/index.json', (res) => {
-  const { statusCode } = res;
-  const contentType = res.headers['content-type'];
-  let error;
-  if (statusCode !== 200) {
-    error = new Error(`请求失败\n状态码: ${statusCode}`);
-  } else if (!/^application\/json/.test(contentType)) {
-    error = new Error(`无效的 content-type.\n期望的是 application/json 但接收到的是 ${contentType}`);
-  }
-  if (error) {
-    console.error(error.message);
-    // 消费响应数据来释放内存。
-    res.resume();
-    return;
-  }
-  res.setEncoding('utf8');
-  let rawData = '';
-  res.on('data', (chunk) => { rawData += chunk; });
-  res.on('end', () => {
-    try {
-      const parsedData = JSON.parse(rawData);
-      console.log(parsedData);
-    } catch (e) {
-      console.error(e.message);
+http
+  .get("http://nodejs.cn/index.json", (res) => {
+    const { statusCode } = res;
+    const contentType = res.headers["content-type"];
+    let error;
+    if (statusCode !== 200) {
+      error = new Error(`请求失败\n状态码: ${statusCode}`);
+    } else if (!/^application\/json/.test(contentType)) {
+      error = new Error(
+        `无效的 content-type.\n期望的是 application/json 但接收到的是 ${contentType}`
+      );
     }
+    if (error) {
+      console.error(error.message);
+      // 消费响应数据来释放内存。
+      res.resume();
+      return;
+    }
+    res.setEncoding("utf8");
+    let rawData = "";
+    res.on("data", (chunk) => {
+      rawData += chunk;
+    });
+    res.on("end", () => {
+      try {
+        const parsedData = JSON.parse(rawData);
+        console.log(parsedData);
+      } catch (e) {
+        console.error(e.message);
+      }
+    });
+  })
+  .on("error", (e) => {
+    console.error(`出现错误: ${e.message}`);
   });
-}).on('error', (e) => {
-  console.error(`出现错误: ${e.message}`);
-});
 ```
 
 ### http.createServer
@@ -199,32 +207,32 @@ http.get('http://nodejs.cn/index.json', (res) => {
 requestListener 是一个自动添加到 'request' 事件的函数。
 
 ```js
-const http = require('http');
-const https = require('https');
-const url = require('url');
+const http = require("http");
+const https = require("https");
+const url = require("url");
 let app = http.createServer((req, res) => {
   let str = req.url;
   let pageNo = url.parse(str, true).query.pageNo;
   let pageSize = url.parse(str, true).query.pageSize;
   let reqUrl = `https://m.lagou.com/listmore.json?pageNo=${pageNo}&pageSize=${pageSize}`;
-  res.setHeader('Content-Type', 'application/json;charset=utf8;')
+  res.setHeader("Content-Type", "application/json;charset=utf8;");
   https.get(reqUrl, (res1) => {
     if (res1.statusCode !== 200) {
-      throw new Error('error info');
+      throw new Error("error info");
     }
-    let rawdata = ''
-    res1.on('data', (chunk) => {
+    let rawdata = "";
+    res1.on("data", (chunk) => {
       rawdata += chunk;
-    })
-    res1.on('end', () => {
+    });
+    res1.on("end", () => {
       res.write(rawdata);
       res.end();
-    })
-  })
-})
-app.listen('3000', () => {
-  console.log('localhost:3000 stat ...')
-})
+    });
+  });
+});
+app.listen("3000", () => {
+  console.log("localhost:3000 stat ...");
+});
 // http://localhost:3000/?pageNo=2&pageSize=15
 ```
 
@@ -265,29 +273,29 @@ url 可以是字符串或 URL 对象。 如果 url 是一个字符串，则会�
 http.request() 返回 http.ClientRequest 类的实例。 ClientRequest 实例是一个可写流。 如果需要使用 POST 请求上传文件，则写入到 ClientRequest 对象。
 
 ```js
-const postData = querystring.stringify({ 'msg': '你好世界' });
+const postData = querystring.stringify({ msg: "你好世界" });
 const options = {
-  hostname: 'nodejs.cn',
+  hostname: "nodejs.cn",
   port: 80,
-  path: '/upload',
-  method: 'POST',
+  path: "/upload",
+  method: "POST",
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Content-Length': Buffer.byteLength(postData)
-  }
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Content-Length": Buffer.byteLength(postData),
+  },
 };
 const req = http.request(options, (res) => {
   console.log(`状态码: ${res.statusCode}`);
   console.log(`响应头: ${JSON.stringify(res.headers)}`);
-  res.setEncoding('utf8');
-  res.on('data', (chunk) => {
+  res.setEncoding("utf8");
+  res.on("data", (chunk) => {
     console.log(`响应主体: ${chunk}`);
   });
-  res.on('end', () => {
-    console.log('响应中已无数据');
+  res.on("end", () => {
+    console.log("响应中已无数据");
   });
 });
-req.on('error', (e) => {
+req.on("error", (e) => {
   console.error(`请求遇到问题: ${e.message}`);
 });
 // 将数据写入请求主体。
@@ -298,38 +306,38 @@ req.end();
 ## path
 
 ```js
-const path = require('path');
+const path = require("path");
 path.extname(path); // 返回 path 的扩展名
-path.join('/foo', 'bar', 'baz/asdf', 'quux', '..'); // 返回: '/foo/bar/baz/asdf'
+path.join("/foo", "bar", "baz/asdf", "quux", ".."); // 返回: '/foo/bar/baz/asdf'
 ```
 
 ## fs
 
 ```js
-const fs = require('fs');
+const fs = require("fs");
 // 带sync的方法为同步
 
 // 创建文件并写入内容
-fs.writeFile('log.txt', 'hello world', 'utf8',() => { }); // 异步
-fs.writeFileSync('log1.txt', 'hello world', 'utf8');
+fs.writeFile("log.txt", "hello world", "utf8", () => {}); // 异步
+fs.writeFileSync("log1.txt", "hello world", "utf8");
 
-fs.appendFile('log1.txt', 'gp', function () { })//内容的追加
-fs.unlink('log.txt', () => { })// 删除文件
-fs.renameSync('log.txt', 'lognew.txt'); // 改名
-fs.appendFileSync('./log1.txt', "\rhello world");// 给文件追加内容
-fs.mkdirSync('logs');// 创建文件夹
-fs.rmdirSync('log')//删除文件夹
+fs.appendFile("log1.txt", "gp", function () {}); //内容的追加
+fs.unlink("log.txt", () => {}); // 删除文件
+fs.renameSync("log.txt", "lognew.txt"); // 改名
+fs.appendFileSync("./log1.txt", "\rhello world"); // 给文件追加内容
+fs.mkdirSync("logs"); // 创建文件夹
+fs.rmdirSync("log"); //删除文件夹
 // 读取文件
-fs.readFile('./logs/log.txt', (err, data) => {
-  console.log(data.toString())
-})
-// 读取文件夹
-var s = fs.readdir('./logs', (err, data) => {
-  console.log(data.toString());// 数组
+fs.readFile("./logs/log.txt", (err, data) => {
+  console.log(data.toString());
 });
-var s = fs.statSync('./logs')// 获取文件信息
+// 读取文件夹
+var s = fs.readdir("./logs", (err, data) => {
+  console.log(data.toString()); // 数组
+});
+var s = fs.statSync("./logs"); // 获取文件信息
 console.log(s.isDirectory());
-fs.rmdirSync('./logs');// 删除文件夹
+fs.rmdirSync("./logs"); // 删除文件夹
 //删除文件夹
 function delfile(path) {
   var stat = fs.statSync(path);
@@ -337,35 +345,35 @@ function delfile(path) {
     var files = fs.readdirSync(path);
     console.log(files);
     files.forEach((item, index) => {
-      let curPath = __dirname + '/logs/' + item;
-      delfile(curPath)
-    })
+      let curPath = __dirname + "/logs/" + item;
+      delfile(curPath);
+    });
     if (!files.length) {
       fs.rmdirSync(path);
     }
   } else {
-    console.log('del:', path)
-    fs.unlink(path, () => { });
+    console.log("del:", path);
+    fs.unlink(path, () => {});
   }
 }
-delfile('./logs');
+delfile("./logs");
 ```
 
 ## stream
 
 ```js
-const fs = require('fs');
-const zlib = require('zlib')
-fs.writeFileSync('log.txt', 'gp16');
-fs.createReadStream('./log.txt')
+const fs = require("fs");
+const zlib = require("zlib");
+fs.writeFileSync("log.txt", "gp16");
+fs.createReadStream("./log.txt")
   .pipe(zlib.createGzip())
-  .pipe(fs.createWriteStream('log.txt.gz'))
+  .pipe(fs.createWriteStream("log.txt.gz"));
 ```
 
 ## events
 
 ```js
-const { once, EventEmitter } = require('events');
+const { once, EventEmitter } = require("events");
 ```
 
 ### events.once
@@ -381,22 +389,22 @@ const { once, EventEmitter } = require('events');
 创建一个 Promise，当 EventEmitter 触发给定的事件时则会被解决，当 EventEmitter 触发 'error' 时则会被拒绝。 解决 Promise 时将会带上触发到给定事件的所有参数的数组。
 
 ```js
-const { once, EventEmitter } = require('events');
+const { once, EventEmitter } = require("events");
 async function run() {
   const ee = new EventEmitter();
   process.nextTick(() => {
-    ee.emit('myevent', 42);
+    ee.emit("myevent", 42);
   });
-  const [value] = await once(ee, 'myevent');
+  const [value] = await once(ee, "myevent");
   console.log(value);
-  const err = new Error('错误信息');
+  const err = new Error("错误信息");
   process.nextTick(() => {
-    ee.emit('error', err);
+    ee.emit("error", err);
   });
   try {
-    await once(ee, 'myevent');
+    await once(ee, "myevent");
   } catch (err) {
-    console.log('出错', err);
+    console.log("出错", err);
   }
 }
 run();

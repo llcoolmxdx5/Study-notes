@@ -171,7 +171,7 @@ bootstrap 每行均分12等分
 
 列适用性.col-xs-6     sm-6/md-6/lg-6
 
-偏移列:大屏显示器 .col-lg-offset-* .col-md-offset-*
+偏移列:大屏显示器 `.col-lg-offset-*` `.col-md-offset-*`
 
 一个列可以指定在不同屏幕下宽度占比div.col-xs-12 .col-sm-6 .col-md-3
 

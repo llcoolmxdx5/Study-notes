@@ -5,40 +5,40 @@
 ## observable
 
 ```js
-import { observable } from 'mobx';
+import { observable } from "mobx";
 const map = observable.map({ a: 1, b: 2 });
-map.set('a', 11)
-console.log(map.get('a'))
-map.delete('a')
-console.log(map.has('a'))
+map.set("a", 11);
+console.log(map.get("a"));
+map.delete("a");
+console.log(map.has("a"));
 
-const obj = observable({ a: 1, b: 2 })
-obj.a = 11
-console.log(obj.a)
+const obj = observable({ a: 1, b: 2 });
+obj.a = 11;
+console.log(obj.a);
 
-const arr = observable(['a', 'b', 'c', 'd'])
-console.log(arr[0])
-arr.pop()
-arr.push('e')
-console.log(arr)
+const arr = observable(["a", "b", "c", "d"]);
+console.log(arr[0]);
+arr.pop();
+arr.push("e");
+console.log(arr);
 
-const num = observable.box(10)
-const str = observable.box('hello')
-const bool = observable.box(true)
-num.set(100)
-console.log(num.get(), str.get(), bool.get())
+const num = observable.box(10);
+const str = observable.box("hello");
+const bool = observable.box(true);
+num.set(100);
+console.log(num.get(), str.get(), bool.get());
 
 class Store {
-  @observable arr = ['a']
-  @observable obj = { a: 1 }
-  @observable map = new Map()
+  @observable arr = ["a"];
+  @observable obj = { a: 1 };
+  @observable map = new Map();
 }
 ```
 
 ## 对 observables 作出响应
 
 ```js
-import { observable, autorun, when, reaction, computed } from 'mobx';
+import { observable, autorun, when, reaction, computed } from "mobx";
 ```
 
 ### autorun
@@ -47,35 +47,35 @@ import { observable, autorun, when, reaction, computed } from 'mobx';
 
 所提供的函数总是立即被触发一次，然后每次它的依赖关系改变时会再次被触发。
 
-经验法则：如果你有一个函数应该自动运行，但不会产生一个新的值，请使用autorun。 其余情况都应该使用 computed。
+经验法则：如果你有一个函数应该自动运行，但不会产生一个新的值，请使用 autorun。 其余情况都应该使用 computed。
 
 ```js
 let obj = observable({
-  title: 'message'
-})
+  title: "message",
+});
 autorun(() => {
-  console.log(obj.title)
-})
-obj.title = 'hello'
+  console.log(obj.title);
+});
+obj.title = "hello";
 ```
 
 ### when
 
 `when(predicate: () => boolean, effect?: () => void, options?)`
 
-when 观察并运行给定的 predicate，直到返回true。 一旦返回 true，给定的 effect 就会被执行，然后 autorunner(自动运行程序) 会被清理。 该函数返回一个清理器以提前取消自动运行程序。
+when 观察并运行给定的 predicate，直到返回 true。 一旦返回 true，给定的 effect 就会被执行，然后 autorunner(自动运行程序) 会被清理。 该函数返回一个清理器以提前取消自动运行程序。
 
 对于以响应式方式来进行处理或者取消，此函数非常有用。
 
 ```js
 when(
   () => {
-    return store.bool
+    return store.bool;
   },
   () => {
-    console.log('when ')
+    console.log("when ");
   }
-)
+);
 ```
 
 ### reaction
@@ -87,45 +87,46 @@ autorun 的变种，对于如何追踪 observable 赋予了更细粒度的控制
 ```js
 reaction(
   () => {
-    return store.result
+    return store.result;
   },
-  result => { // 第一个函数的返回值作为第二个函数的参数
-    console.log(result)
+  (result) => {
+    // 第一个函数的返回值作为第二个函数的参数
+    console.log(result);
   }
-)
+);
 ```
 
 ### computed
 
-计算值是可以根据现有的状态或其它计算值衍生出的值, 跟vue中的computed非常相似。
+计算值是可以根据现有的状态或其它计算值衍生出的值, 跟 vue 中的 computed 非常相似。
 
-computed可作为装饰器， 将result的计算添加到类中
+computed 可作为装饰器， 将 result 的计算添加到类中
 
 ```js
 class Store {
   @computed get result() {
-    return this.str + this.num
+    return this.str + this.num;
   }
 }
 ```
 
-## 改变 observables状态
+## 改变 observables 状态
 
 ```js
-import { action, runInAction } from 'mobx';
+import { action, runInAction } from "mobx";
 ```
 
 ### action
 
 ```js
-class Store{
+class Store {
   @action bar() {
-    this.str = 'world';
+    this.str = "world";
     this.num = 40;
   }
 }
 const store = new Store();
-store.bar();// 调用action，只会执行一次
+store.bar(); // 调用action，只会执行一次
 ```
 
 ### action.bound
@@ -133,20 +134,20 @@ store.bar();// 调用action，只会执行一次
 `action.bound` 可以用来自动地将动作绑定到目标对象。
 
 ```js
-class Store{
+class Store {
   // this 永远都是正确的
   @action.bound foo() {
-    this.str = 'world';
+    this.str = "world";
     this.num = 40;
   }
 }
 const store = new Store();
-setInterval(store.foo, 1000)
+setInterval(store.foo, 1000);
 ```
 
 ### runInAction
 
-`action` 只能影响正在运行的函数，而无法影响当前函数调用的异步操作。如果你使用async function来处理业务，那么我们可以使用 `runInAction` 这个API来解决这个问题。
+`action` 只能影响正在运行的函数，而无法影响当前函数调用的异步操作。如果你使用 async function 来处理业务，那么我们可以使用 `runInAction` 这个 API 来解决这个问题。
 
 ```js
 @action async fzz() {
@@ -165,11 +166,11 @@ setInterval(store.foo, 1000)
 }
 ```
 
-## 在react中使用mobx
+## 在 react 中使用 mobx
 
-在react中使用mobx，需要借助mobx-react。
+在 react 中使用 mobx，需要借助 mobx-react。
 
-它的功能相当于在react中使用redux，需要借助react-redux。
+它的功能相当于在 react 中使用 redux，需要借助 react-redux。
 
 首先来搭建环境：
 
@@ -181,7 +182,7 @@ yarn add @babel/plugin-proposal-decorators @babel/plugin-proposal-class-properti
 yarn add mobx mobx-react;
 ```
 
-修改package.json中babel的配置：
+修改 package.json 中 babel 的配置：
 
 ```js
 "babel": {
@@ -199,72 +200,72 @@ yarn add mobx mobx-react;
 
 ### 创建 store
 
-在项目根目录下创建store目录，在store目录下创建index.js，内容如下：
+在项目根目录下创建 store 目录，在 store 目录下创建 index.js，内容如下：
 
 ```js
-import { observable, action, computed, runInAction } from 'mobx'
+import { observable, action, computed, runInAction } from "mobx";
 
 class AppStore {
-  @observable title = 'mobx'
-  @observable todos = []
-  @computed get desc(){
-    return `一共${this.todos.length}条`
+  @observable title = "mobx";
+  @observable todos = [];
+  @computed get desc() {
+    return `一共${this.todos.length}条`;
   }
   @action addTodo(todo) {
-    this.todos.push(todo)
+    this.todos.push(todo);
   }
   @action.bound async asynnAddTodo(todo) {
-    await new Promise(res => {
+    await new Promise((res) => {
       setTimeout(() => {
-        res()
+        res();
       }, 1000);
-    })
+    });
     runInAction(() => {
-      this.todos.push(todo)
-    })
+      this.todos.push(todo);
+    });
   }
 }
-const store = new AppStore()
-export default store
+const store = new AppStore();
+export default store;
 ```
 
-### 修改App.js
+### 修改 App.js
 
 修改项目根目录下的 App.js
 
 ```jsx
-import React, { Component } from 'react'
-import Home from './pages/Home'
-import { Provider } from 'mobx-react'
-import store from './store/'
+import React, { Component } from "react";
+import Home from "./pages/Home";
+import { Provider } from "mobx-react";
+import store from "./store/";
 export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
         <Home></Home>
       </Provider>
-    )
+    );
   }
 }
 ```
 
 ### 创建 Home.js
 
-在项目根目录下创建 pages 文件夹，在 pages文件夹下创建 Home.js 组件，内容如下：
+在项目根目录下创建 pages 文件夹，在 pages 文件夹下创建 Home.js 组件，内容如下：
 
 ```jsx
-import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
-import store from '../store';
+import React, { Component } from "react";
+import { observer, inject } from "mobx-react";
+import store from "../store";
 
-@inject('store')
+@inject("store")
 @observer
 class Home extends Component {
-  addTodo = item => {
+  addTodo = (item) => {
     return () => {
-      store.addTodo(item)
-    }
-  }
+      store.addTodo(item);
+    };
+  };
   // asyncAddTodo = item => {
   //   return () => {
   //     setTimeout(() => {
@@ -272,26 +273,26 @@ class Home extends Component {
   //     }, 1000);
   //   }
   // }
-  asyncAddTodo = item => {
+  asyncAddTodo = (item) => {
     return () => {
-      store.addTodo(item)
-    }
-  }
+      store.addTodo(item);
+    };
+  };
   render() {
     return (
       <>
-        <div>{ store.title }</div>
-        <button onClick={this.addTodo('这是一条内容')}>添加</button>
-        <button onClick={this.asyncAddTodo('这是异步添加的内容')}>async添加</button>
-        <h6>{ store.desc }</h6>
-        {
-          store.todos.map((item, index) => (
-            <div key={index}>{item}</div>
-          ))
-        }
+        <div>{store.title}</div>
+        <button onClick={this.addTodo("这是一条内容")}>添加</button>
+        <button onClick={this.asyncAddTodo("这是异步添加的内容")}>
+          async添加
+        </button>
+        <h6>{store.desc}</h6>
+        {store.todos.map((item, index) => (
+          <div key={index}>{item}</div>
+        ))}
       </>
-    )
+    );
   }
 }
-export default Home
+export default Home;
 ```

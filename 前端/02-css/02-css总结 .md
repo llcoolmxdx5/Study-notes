@@ -1029,7 +1029,7 @@ expression 必须，一个数学表达式，结果将采用运算后的返回值
 #### 1）非浮动元素的父元素,高度的自适应
 
 hack1:      height:auto; 或不写height属性；
-hack2:      min-height:value;_height:value;              _下划线过滤器只有IE6识别
+hack2:      min-height:value;_height:value;_下划线过滤器只有IE6识别
 hack3:      min-height:200px; height:auto !important; height:200px
 ！important; 关键字过滤器
 他表示所附加的声明具有最高优先级的意思，但由于IE6及更低版本不能识别他，我们可以利用IE6 这个bug作为过滤器来兼容IE6和其他标准浏览器；

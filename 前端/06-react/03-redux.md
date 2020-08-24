@@ -2,7 +2,7 @@
 
 ![alt](./media/redux.jpeg)
 
-## **Redux的使用的三大原则**
+## **Redux 的使用的三大原则**
 
 - Single Source of Truth(唯一的数据源)
   整个应用的 state 被储存在一棵 object tree 中，并且这个 object tree 只存在于唯一一个 store 中。
@@ -25,28 +25,28 @@ Action 创建函数 就是生成 action 的方法。在 Redux 中的 action 创�
 
   ```js
   // actionCreators.js
-  import { ADD, DEL } from './actionTypes'
-  const add_item = data => {
-  return {
-    type: ADD,
-    data
-    }
-  }
-  const del_item = id => {
+  import { ADD, DEL } from "./actionTypes";
+  const add_item = (data) => {
+    return {
+      type: ADD,
+      data,
+    };
+  };
+  const del_item = (id) => {
     return {
       type: DEL,
-      id
-    }
-  }
-  export { add_item, del_item }
+      id,
+    };
+  };
+  export { add_item, del_item };
   ```
 
 - actionTypes
 
   ```js
   // actionTypes.js
-  export const ADD = 'todolist/add'
-  export const DEL = 'todolist/del'
+  export const ADD = "todolist/add";
+  export const DEL = "todolist/del";
   ```
 
 ### Reducer
@@ -67,36 +67,36 @@ combineReducers() 所做的只是生成一个函数，这个函数来调用你�
 
 ```js
 // reducer.js
-import { ADD, DEL } from "./actionTypes"
-import { combineReducers } from 'redux'
-import * as reducers from './reducers' // 多个reducer
+import { ADD, DEL } from "./actionTypes";
+import { combineReducers } from "redux";
+import * as reducers from "./reducers"; // 多个reducer
 const defaultState = {
   list: [
-    { id: 1, name: 'beijing' },
-    { id: 2, name: 'shanghai' }
-  ]
-}
-const reducer  = (state = defaultState, action) => {
-  switch(action.type) {
+    { id: 1, name: "beijing" },
+    { id: 2, name: "shanghai" },
+  ],
+};
+const reducer = (state = defaultState, action) => {
+  switch (action.type) {
     case ADD:
       return {
-        list: [action.data].concat(state.list)
-      }
+        list: [action.data].concat(state.list),
+      };
     case DEL:
       return {
-        list: state.list.filter(value => value.id !== action.id)
-      }
+        list: state.list.filter((value) => value.id !== action.id),
+      };
     default:
-      return state
+      return state;
   }
-}
-export default reducer
+};
+export default reducer;
 // const todoApp = combineReducers(reducers) // 多个reducer
 ```
 
 ### Store
 
-Store 就是把action和reducer联系到一起的对象。Store 有以下职责：
+Store 就是把 action 和 reducer 联系到一起的对象。Store 有以下职责：
 
 - 维持应用的 state；
 - 提供 getState() 方法获取 state；
@@ -109,46 +109,46 @@ Store 就是把action和reducer联系到一起的对象。Store 有以下职责�
 createStore() 的第二个参数是可选的, 用于设置 state 初始状态。这对开发同构应用时非常有用，服务器端 redux 应用的 state 结构可以与客户端保持一致, 那么客户端可以将从网络接收到的服务端 state 直接用于本地数据初始化。
 
 ```js
-import { createStore } from 'redux'
-import reducer from './reducer'
-const store = createStore(reducer)
-export default store
+import { createStore } from "redux";
+import reducer from "./reducer";
+const store = createStore(reducer);
+export default store;
 ```
 
 ### connect
 
 ```js
-import { connect } from 'react-redux'
-import { add_item, del_item } from './actionCreators'
-const mapState = state => {
+import { connect } from "react-redux";
+import { add_item, del_item } from "./actionCreators";
+const mapState = (state) => {
   return {
-    list: state.list
-  }
-}
-const mapDispatch = dispatch => {
+    list: state.list,
+  };
+};
+const mapDispatch = (dispatch) => {
   return {
-    addItem: data => {
-      dispatch(add_item(data))
+    addItem: (data) => {
+      dispatch(add_item(data));
     },
-    delItem: id => {
-      dispatch(del_item(id))
-    }
-  }
-}
-export default connect(mapState, mapDispatch)
+    delItem: (id) => {
+      dispatch(del_item(id));
+    },
+  };
+};
+export default connect(mapState, mapDispatch);
 ```
 
 ### index.js
 
 ```js
-import { Provider } from 'react-redux'
-import store from './redux/store'
+import { Provider } from "react-redux";
+import store from "./redux/store";
 ReactDOM.render(
   <Provider store={store}>
     <App></App>
-  </Provider>
-  , document.getElementById("root")
-)
+  </Provider>,
+  document.getElementById("root")
+);
 ```
 
 ## 中间件
@@ -157,10 +157,10 @@ ReactDOM.render(
 
 ```jsx
 // store.js
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
-import reducer from './reducer'
-const store = createStore(reducer, applyMiddleware(thunk))
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import reducer from "./reducer";
+const store = createStore(reducer, applyMiddleware(thunk));
 export default store;
 ```
 
@@ -168,50 +168,46 @@ export default store;
 
 ```jsx
 // /src/sagas.js
-import { sagas as homeSaga } from 'pages/index/home/'
+import { sagas as homeSaga } from "pages/index/home/";
 function* sagas() {
-  yield homeSaga.loadDataSaga()
-  yield homeSaga.loadMoreDataSaga()
+  yield homeSaga.loadDataSaga();
+  yield homeSaga.loadMoreDataSaga();
 }
-export default sagas
+export default sagas;
 ```
 
 ```jsx
 // /src/store/index.js
-import { createStore, applyMiddleware } from 'redux'
-import createSagaMiddleware from 'redux-saga'
-import reducer from './reducer'
-import sagas from './sagas'
-const sagaMiddleware = createSagaMiddleware()
-const store = createStore(
-  reducer,
-  applyMiddleware(sagaMiddleware)
-)
-sagaMiddleware.run(sagas)
-export default store
+import { createStore, applyMiddleware } from "redux";
+import createSagaMiddleware from "redux-saga";
+import reducer from "./reducer";
+import sagas from "./sagas";
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(reducer, applyMiddleware(sagaMiddleware));
+sagaMiddleware.run(sagas);
+export default store;
 ```
 
 ```jsx
 // /src/pages/index/home/sagas.js
-import { takeEvery, put } from 'redux-saga/effects'
-import { SAGA_LOAD_DATA, SAGA_LOAD_MORE_DATA } from './actionTypes'
-import { loadData, loadMoreData } from './actionCreator'
-import http from 'utils/http'
+import { takeEvery, put } from "redux-saga/effects";
+import { SAGA_LOAD_DATA, SAGA_LOAD_MORE_DATA } from "./actionTypes";
+import { loadData, loadMoreData } from "./actionCreator";
+import http from "utils/http";
 function loadDataSaga() {
   return takeEvery(SAGA_LOAD_DATA, function* () {
-    let result = yield http.get({url: '/data?_start=0&_limit=10'})
-    yield put(loadData(result))
-  })
+    let result = yield http.get({ url: "/data?_start=0&_limit=10" });
+    yield put(loadData(result));
+  });
 }
 function loadMoreDataSaga() {
   return takeEvery(SAGA_LOAD_MORE_DATA, function* (action) {
-    let { start, limit } = action.data
-    let result = yield http.get({url: `/data?_start=${start}&_limit=${limit}`})
-    yield put(loadMoreData(result))
-  })
+    let { start, limit } = action.data;
+    let result = yield http.get({
+      url: `/data?_start=${start}&_limit=${limit}`,
+    });
+    yield put(loadMoreData(result));
+  });
 }
-export {
-  loadDataSaga,
-  loadMoreDataSaga
-}
+export { loadDataSaga, loadMoreDataSaga };
 ```

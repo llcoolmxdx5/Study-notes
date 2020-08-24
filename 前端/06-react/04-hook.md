@@ -18,7 +18,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       count: 0,
-      name: "alife"
+      name: "alife",
     };
   }
   render() {
@@ -41,13 +41,17 @@ import React, { useState } from "react";
 function App() {
   const [obj, setObject] = useState({
     count: 0,
-    name: "alife"
+    name: "alife",
   });
   return (
     <div className="App">
       Count: {obj.count}
-      <button onClick={() => setObject({ ...obj, count: obj.count + 1 })}>+</button>
-      <button onClick={() => setObject({ ...obj, count: obj.count - 1 })}>-</button>
+      <button onClick={() => setObject({ ...obj, count: obj.count + 1 })}>
+        +
+      </button>
+      <button onClick={() => setObject({ ...obj, count: obj.count - 1 })}>
+        -
+      </button>
     </div>
   );
 }
@@ -65,14 +69,14 @@ function App() {
 import React, { Component } from "react";
 class App extends Component {
   state = {
-    count: 1
+    count: 1,
   };
   componentDidMount() {
     const { count } = this.state;
     document.title = "componentDidMount" + count;
     this.timer = setInterval(() => {
       this.setState(({ count }) => ({
-        count: count + 1
+        count: count + 1,
       }));
     }, 1000);
   }
@@ -107,11 +111,11 @@ function App() {
   const [count, setCount] = useState(0);
   useEffect(() => {
     document.title = "componentDidMount" + count;
-  },[count]);
-  
+  }, [count]);
+
   useEffect(() => {
     timer = setInterval(() => {
-      setCount(prevCount => prevCount + 1);
+      setCount((prevCount) => prevCount + 1);
     }, 1000);
     return () => {
       document.title = "componentWillUnmount";
@@ -156,7 +160,7 @@ function useUpdate(fn) {
 ```jsx
 const { Provider, Consumer } = React.createContext(null);
 function Bar() {
-  return <Consumer>{color => <div>{color}</div>}</Consumer>;
+  return <Consumer>{(color) => <div>{color}</div>}</Consumer>;
 }
 function Foo() {
   return <Bar />;
@@ -218,8 +222,7 @@ function HeaderBar() {
   const notifications = useContext(Notifications);
   return (
     <header>
-      Welcome back, {user.name}!
-      You have {notifications.length} notifications.
+      Welcome back, {user.name}! You have {notifications.length} notifications.
     </header>
   );
 }
@@ -232,7 +235,7 @@ useReducer 这个 Hooks 在使用上几乎跟 Redux/React-Redux 一模一样，�
 ```jsx
 import React, { useReducer } from "react";
 const initialState = {
-  count: 0
+  count: 0,
 };
 function reducer(state, action) {
   switch (action.type) {
@@ -269,9 +272,16 @@ function App() {
 ```jsx
 class App {
   render() {
-    return <div>
-      <SomeComponent style={{ fontSize: 14 }} doSomething={ () => { console.log('do something'); }}  />
-    </div>;
+    return (
+      <div>
+        <SomeComponent
+          style={{ fontSize: 14 }}
+          doSomething={() => {
+            console.log("do something");
+          }}
+        />
+      </div>
+    );
   }
 }
 ```
@@ -282,12 +292,14 @@ class App {
 const fontSizeStyle = { fontSize: 14 };
 class App {
   doSomething = () => {
-    console.log('do something');
-  }
+    console.log("do something");
+  };
   render() {
-    return <div>
-      <SomeComponent style={fontSizeStyle} doSomething={ this.doSomething }  />
-    </div>;
+    return (
+      <div>
+        <SomeComponent style={fontSizeStyle} doSomething={this.doSomething} />
+      </div>
+    );
   }
 }
 ```
@@ -297,8 +309,8 @@ class App {
 ```jsx
 function App() {
   const handleClick = () => {
-    console.log('Click happened');
-  }
+    console.log("Click happened");
+  };
   return <SomeComponent onClick={handleClick}>Click Me</SomeComponent>;
 }
 ```
@@ -308,7 +320,7 @@ function App() {
 ```jsx
 function App() {
   const memoizedHandleClick = useCallback(() => {
-    console.log('Click happened')
+    console.log("Click happened");
   }, []); // 空数组代表无论什么情况下该函数都不会发生改变
   return <SomeComponent onClick={memoizedHandleClick}>Click Me</SomeComponent>;
 }
@@ -327,9 +339,12 @@ useCallback 的功能完全可以由 useMemo 所取代，如果你想通过使�
 
 ```jsx
 function App() {
-  const memoizedHandleClick = useMemo(() => () => {
-    console.log('Click happened')
-  }, []); // 空数组代表无论什么情况下该函数都不会发生改变
+  const memoizedHandleClick = useMemo(
+    () => () => {
+      console.log("Click happened");
+    },
+    []
+  ); // 空数组代表无论什么情况下该函数都不会发生改变
   return <SomeComponent onClick={memoizedHandleClick}>Click Me</SomeComponent>;
 }
 ```
@@ -349,7 +364,7 @@ function Parent({ a, b }) {
       {child1}
       {child2}
     </>
-  )
+  );
 }
 ```
 
@@ -398,7 +413,7 @@ function MessageThread() {
   const handleSendClick = () => {
     setTimeout(showMessage, 3000);
   };
-  const handleMessageChange = e => {
+  const handleMessageChange = (e) => {
     setMessage(e.target.value);
   };
   return (
@@ -421,7 +436,7 @@ function MessageThread() {
   const handleSendClick = () => {
     setTimeout(showMessage, 3000);
   };
-  const handleMessageChange = e => {
+  const handleMessageChange = (e) => {
     latestMessage.current = e.target.value;
   };
 }
@@ -434,7 +449,12 @@ function MessageThread() {
 通过 useImperativeHandle 用于让父组件获取子组件内的索引
 
 ```jsx
-import React, { useRef, useEffect, useImperativeHandle, forwardRef } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 function ChildInputComponent(props, ref) {
   const inputRef = useRef(null);
   useImperativeHandle(ref, () => inputRef.current);
@@ -497,7 +517,7 @@ function useFriendStatus(friendID) {
   // ...
   // 在开发者工具中的这个 Hook 旁边显示标签
   // e.g. "FriendStatus: Online"
-  useDebugValue(isOnline ? 'Online' : 'Offline');
+  useDebugValue(isOnline ? "Online" : "Offline");
   return isOnline;
 }
 ```
@@ -513,14 +533,14 @@ function useFriendStatus(friendID) {
 - 例如，一个返回 Date 值的自定义 Hook 可以通过格式化函数来避免不必要的 toDateString 函数调用：
 
   ```jsx
-  useDebugValue(date, date => date.toDateString());
+  useDebugValue(date, (date) => date.toDateString());
   ```
 
 ## React Hooks 不足
 
 尽管我们通过上面的例子看到 React Hooks 的强大之处，似乎类组件完全都可以使用 React Hooks 重写。但是当下 v16.8 的版本中，还无法实现 getSnapshotBeforeUpdate 和 componentDidCatch 这两个在类组件中的生命周期函数。官方也计划在不久的将来在 React Hooks 进行实现。
 
-## 自定义hook
+## 自定义 hook
 
 ### 获取上一轮的 props 或 state
 
@@ -529,7 +549,11 @@ function Counter() {
   const [count, setCount] = useState(0);
   const calculation = count + 100;
   const prevCount = usePrevious(calculation);
-  return <h1>Now: {count}, before: {prevCount}</h1>;
+  return (
+    <h1>
+      Now: {count}, before: {prevCount}
+    </h1>
+  );
 }
 function usePrevious(value) {
   const ref = useRef();

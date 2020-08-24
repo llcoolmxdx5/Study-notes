@@ -146,12 +146,13 @@ axios(config)
 }
 ```
 
-全局的axios默认值
+全局的 axios 默认值
 
 ```js
-axios.defaults.baseURL = 'https://api.example.com';
-axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.baseURL = "https://api.example.com";
+axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+axios.defaults.headers.post["Content-Type"] =
+  "application/x-www-form-urlencoded";
 ```
 
 自定义实例默认值
@@ -159,10 +160,10 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 ```js
 // 创建实例时设置配置的默认值
 var instance = axios.create({
-  baseURL: 'https://api.example.com'
+  baseURL: "https://api.example.com",
 });
 // 在实例已创建后修改默认值
-instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+instance.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 ```
 
 配置的优先顺序
@@ -177,8 +178,8 @@ var instance = axios.create();
 // 现在，在超时前，所有请求都会等待 2.5 秒
 instance.defaults.timeout = 2500;
 // 为已知需要花费很长时间的请求覆写超时设置
-instance.get('/longRequest', {
-  timeout: 5000
+instance.get("/longRequest", {
+  timeout: 5000,
 });
 ```
 
@@ -188,28 +189,36 @@ instance.get('/longRequest', {
 
 ```js
 // 添加请求拦截器
-axios.interceptors.request.use(function (config) {
+axios.interceptors.request.use(
+  function (config) {
     // 在发送请求之前做些什么
     return config;
-  }, function (error) {
+  },
+  function (error) {
     // 对请求错误做些什么
     return Promise.reject(error);
-  });
+  }
+);
 
 // 添加响应拦截器
-axios.interceptors.response.use(function (response) {
+axios.interceptors.response.use(
+  function (response) {
     // 对响应数据做点什么
     return response;
-  }, function (error) {
+  },
+  function (error) {
     // 对响应错误做点什么
     return Promise.reject(error);
-  });
+  }
+);
 ```
 
 如果你想在稍后移除拦截器，可以这样：
 
 ```js
-var myInterceptor = axios.interceptors.request.use(function () {/*...*/});
+var myInterceptor = axios.interceptors.request.use(function () {
+  /*...*/
+});
 axios.interceptors.request.eject(myInterceptor);
 ```
 
@@ -217,16 +226,19 @@ axios.interceptors.request.eject(myInterceptor);
 
 ```js
 var instance = axios.create();
-instance.interceptors.request.use(function () {/*...*/});
+instance.interceptors.request.use(function () {
+  /*...*/
+});
 ```
 
 ## 请求实例
 
-执行GET请求
+执行 GET 请求
 
 ```js
 // 为给定 ID 的 user 创建请求
-axios.get('/user?ID=12345')
+axios
+  .get("/user?ID=12345")
   .then(function (response) {
     console.log(response);
   })
@@ -235,10 +247,11 @@ axios.get('/user?ID=12345')
   });
 
 // 可选地，上面的请求可以这样做
-axios.get('/user', {
+axios
+  .get("/user", {
     params: {
-      ID: 12345
-    }
+      ID: 12345,
+    },
   })
   .then(function (response) {
     console.log(response);
@@ -248,12 +261,13 @@ axios.get('/user', {
   });
 ```
 
-执行post请求
+执行 post 请求
 
 ```js
-axios.post('/user', {
-    firstName: 'Fred',
-    lastName: 'Flintstone'
+axios
+  .post("/user", {
+    firstName: "Fred",
+    lastName: "Flintstone",
   })
   .then(function (response) {
     console.log(response);
@@ -267,15 +281,16 @@ axios.post('/user', {
 
 ```js
 function getUserAccount() {
-  return axios.get('/user/12345');
+  return axios.get("/user/12345");
 }
 function getUserPermissions() {
-  return axios.get('/user/12345/permissions');
+  return axios.get("/user/12345/permissions");
 }
-axios.all([getUserAccount(), getUserPermissions()])
-  .then(axios.spread(function (acct, perms) {
+axios.all([getUserAccount(), getUserPermissions()]).then(
+  axios.spread(function (acct, perms) {
     // 两个请求现在都执行完成
-  }));
+  })
+);
 ```
 
 ## 响应
@@ -295,30 +310,28 @@ axios.all([getUserAccount(), getUserPermissions()])
 使用 then 时，你将接收下面这样的响应：
 
 ```js
-axios.get('/user/12345')
-  .then(function(response) {
-    console.log(response.data);
-    console.log(response.status);
-    console.log(response.statusText);
-    console.log(response.headers);
-    console.log(response.config);
-  });
+axios.get("/user/12345").then(function (response) {
+  console.log(response.data);
+  console.log(response.status);
+  console.log(response.statusText);
+  console.log(response.headers);
+  console.log(response.config);
+});
 ```
 
 错误处理
 
 ```js
-axios.get('/user/12345')
-  .catch(function (error) {
-    if (error.response) {
-      // 请求已发出，但服务器响应的状态码不在 2xx 范围内
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      console.log('Error', error.message);
-    }
-    console.log(error.config);
-  });
+axios.get("/user/12345").catch(function (error) {
+  if (error.response) {
+    // 请求已发出，但服务器响应的状态码不在 2xx 范围内
+    console.log(error.response.data);
+    console.log(error.response.status);
+    console.log(error.response.headers);
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.log("Error", error.message);
+  }
+  console.log(error.config);
+});
 ```

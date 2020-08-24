@@ -1,6 +1,6 @@
-# 「从源码中学习」Vue源码中的JS骚操作
+# 「从源码中学习」Vue 源码中的 JS 骚操作
 
-> 本文不准备解析Vue源码的运行原理，仅单纯探寻vue中工具函数中那些值得学习的骚操作
+> 本文不准备解析 Vue 源码的运行原理，仅单纯探寻 vue 中工具函数中那些值得学习的骚操作
 
 终极目标：从工具函数中扩展知识点
 
@@ -10,7 +10,7 @@
 
 ```js
 // 通过判断 `window` 对象是否存在即可
-export const inBrowser = typeof window !== 'undefined'
+export const inBrowser = typeof window !== "undefined";
 ```
 
 ### 1.2 `hasProto`:检查当前环境是否可以使用对象的 `__proto__` 属性
@@ -18,7 +18,7 @@ export const inBrowser = typeof window !== 'undefined'
 ```js
 // 一个对象的 __proto__ 属性指向了其构造函数的原型
 // 从一个空的对象字面量开始沿着原型链逐级检查。
-export const hasProto = '__proto__' in {}
+export const hasProto = "__proto__" in {};
 ```
 
 ## 2. `user Agent`常量的一系列操作
@@ -27,10 +27,10 @@ export const hasProto = '__proto__' in {}
 
 ```js
 // toLowerCase目的是 为了后续的各种环境检测
-export const UA = inBrowser && window.navigator.userAgent.toLowerCase()
+export const UA = inBrowser && window.navigator.userAgent.toLowerCase();
 ```
 
-### 2.2 IE浏览器判断
+### 2.2 IE 浏览器判断
 
 `export const isIE = UA && /msie|trident/.test(UA)`
 
@@ -44,20 +44,20 @@ export const UA = inBrowser && window.navigator.userAgent.toLowerCase()
 ### 2.3 `IE9`| `Edge` | `Chrome` 判断
 
 ```js
-export const isIE9 = UA && UA.indexOf('msie 9.0') > 0
-export const isEdge = UA && UA.indexOf('edge/') > 0
-export const isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge
+export const isIE9 = UA && UA.indexOf("msie 9.0") > 0;
+export const isEdge = UA && UA.indexOf("edge/") > 0;
+export const isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
 ```
 
 ## 3. 字符串操作
 
-### 3.1 `isReserved`：检测字符串是否以 $ 或者 _ 开头
+### 3.1 `isReserved`：检测字符串是否以 \$ 或者 \_ 开头
 
 ```js
 // charCodeAt() 方法可返回指定位置的字符的 Unicode 编码
-export function isReserved (str: string): boolean {
-  const c = (str + '').charCodeAt(0)
-  return c === 0x24 || c === 0x5F
+export function isReserved(str: string): boolean {
+  const c = (str + "").charCodeAt(0);
+  return c === 0x24 || c === 0x5f;
 }
 ```
 
@@ -73,44 +73,44 @@ export function isReserved (str: string): boolean {
 ```js
 function fearNotLetter(str) {
   //将字符串转为ASCII码，并存入数组
-  let arr=[];
-  for(let i=0; i<str.length; i++){
+  let arr = [];
+  for (let i = 0; i < str.length; i++) {
     arr.push(str.charCodeAt(i));
   }
-  for(let j=1; j<arr.length; j++){
-    let num=arr[j]-arr[j-1];
+  for (let j = 1; j < arr.length; j++) {
+    let num = arr[j] - arr[j - 1];
     //判断后一项减前一项是否为1，若不为1，则缺失该字符的前一项
-    if(num!=1){
+    if (num != 1) {
       //将缺失字符ASCII转为字符并返回
-      return String.fromCharCode(arr[j]-1);
+      return String.fromCharCode(arr[j] - 1);
     }
   }
   return undefined;
 }
-fearNotLetter("abce") // "d"
+fearNotLetter("abce"); // "d"
 ```
 
 ### 3.2 `camelize`: 连字符转驼峰
 
 ```js
-const camelizeRE = /-(\w)/g
+const camelizeRE = /-(\w)/g;
 export const camelize = cached((str: string): string => {
-  return str.replace(camelizeRE, (_, c) => c ? c.toUpperCase() : '')
-})
+  return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ""));
+});
 ```
 
 **解析：** 定义正则表达式：`/-(\w)/g`，用来全局匹配字符串中 中横线及连字符后的一个字符。若捕获到，则将字符以`toUpperCase`大写替换，否则以`''`替换。
-如：`camelize('aa-bb')   // aaBb`
+如：`camelize('aa-bb') // aaBb`
 
 ### 3.3 `toString`: 将给定变量的值转换为 string 类型并返回
 
 ```js
-export function toString (val: any): string {
+export function toString(val: any): string {
   return val == null
-    ? ''
-    : typeof val === 'object'
-      ? JSON.stringify(val, null, 2)
-      : String(val)
+    ? ""
+    : typeof val === "object"
+    ? JSON.stringify(val, null, 2)
+    : String(val);
 }
 ```
 
@@ -119,12 +119,12 @@ export function toString (val: any): string {
 #### 3.3.1 多重三元运算符
 
 ```js
-export function toString (val: any): string {
+export function toString(val: any): string {
   return val == null
-    ? ''
-    : typeof val === 'object'
-      ? JSON.stringify(val, null, 2) // 第三个参数表示转化后的缩进2个空格
-      : String(val)
+    ? ""
+    : typeof val === "object"
+    ? JSON.stringify(val, null, 2) // 第三个参数表示转化后的缩进2个空格
+    : String(val);
 }
 ```
 
@@ -140,12 +140,12 @@ export function toString (val: any): string {
 }
 ```
 
-类似的操作在vue源码里很多。比如`mergeHook`
+类似的操作在 vue 源码里很多。比如`mergeHook`
 
 #### 3.3.2 `mergeHook`: 合并生命周期选项
 
 ```js
-function mergeHook (
+function mergeHook(
   parentVal: ?Array<Function>,
   childVal: ?Function | ?Array<Function>
 ): ?Array<Function> {
@@ -153,9 +153,9 @@ function mergeHook (
     ? parentVal
       ? parentVal.concat(childVal)
       : Array.isArray(childVal)
-        ? childVal
-        : [childVal]
-    : parentVal
+      ? childVal
+      : [childVal]
+    : parentVal;
 }
 ```
 
@@ -166,8 +166,8 @@ function mergeHook (
 ```js
 // 忽略cached
 export const capitalize = cached((str: string): string => {
-  return str.charAt(0).toUpperCase() + str.slice(1)
-})
+  return str.charAt(0).toUpperCase() + str.slice(1);
+});
 ```
 
 **解析：** `str.charAt(0)`获取`str`的第一项，利用`toUpperCase()`转换为大写字母，`str.slice(1)` 截取除第一项的`str`部分。
@@ -175,10 +175,10 @@ export const capitalize = cached((str: string): string => {
 ### 3.5 `hyphenate`:驼峰转连字符
 
 ```js
-const hyphenateRE = /\B([A-Z])/g // \B 字母数字与字母数字的边界，非字母数字与非字母数字的边界。
+const hyphenateRE = /\B([A-Z])/g; // \B 字母数字与字母数字的边界，非字母数字与非字母数字的边界。
 export const hyphenate = cached((str: string): string => {
-  return str.replace(hyphenateRE, '-$1').toLowerCase()
-})
+  return str.replace(hyphenateRE, "-$1").toLowerCase();
+});
 ```
 
 **解析：** 与`camelize`相反。实现方式同样是使用正则，`/\B([A-Z])/g`用来全局匹配字符串中的大写字母, 然后替换掉。
@@ -188,14 +188,14 @@ export const hyphenate = cached((str: string): string => {
 ### 4.1 `isPrimitive`: 判断变量是否为原型类型
 
 ```js
-export function isPrimitive (value: any): boolean %checks {
+export function isPrimitive(value: any): boolean %checks {
   return (
-    typeof value === 'string' ||
-    typeof value === 'number' ||
+    typeof value === "string" ||
+    typeof value === "number" ||
     // $flow-disable-line
-    typeof value === 'symbol' ||
-    typeof value === 'boolean'
-  )
+    typeof value === "symbol" ||
+    typeof value === "boolean"
+  );
 }
 ```
 
@@ -206,8 +206,8 @@ export function isPrimitive (value: any): boolean %checks {
 ```js
 // 使用 Object.prototype.toString 与 '[object RegExp]' 做全等对比。
 
-export function isRegExp (v: any): boolean {
-  return _toString.call(v) === '[object RegExp]'
+export function isRegExp(v: any): boolean {
+  return _toString.call(v) === "[object RegExp]";
 }
 ```
 
@@ -216,42 +216,40 @@ export function isRegExp (v: any): boolean {
 ### 4.3 `isValidArrayIndex`: 判断变量是否含有效的数组索引
 
 ```js
-export function isValidArrayIndex (val: any): boolean {
-  const n = parseFloat(String(val))
+export function isValidArrayIndex(val: any): boolean {
+  const n = parseFloat(String(val));
   // n >= 0 && Math.floor(n) === n 保证了索引是一个大于等于 0 的整数
-  return n >= 0 && Math.floor(n) === n && isFinite(val)
+  return n >= 0 && Math.floor(n) === n && isFinite(val);
 }
 ```
 
 `isFinite`方法检测它参数的数值。如果参数是`NaN`，正无穷大或者负无穷大，会返回`false`，其他返回`true`。
-> 扩展：[语法：isFinite()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/isFinite)
-> ![alt](https://user-gold-cdn.xitu.io/2019/2/25/16923e09ace9f772?w=1382&h=608&f=png&s=145986)
+
+> 扩展：[语法：isFinite()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/isFinite) > ![alt](https://user-gold-cdn.xitu.io/2019/2/25/16923e09ace9f772?w=1382&h=608&f=png&s=145986)
 
 ### 4.4 `isObject`: 区分对象和原始值
 
 ```js
-export function isObject (obj: mixed): boolean %checks {
-  return obj !== null && typeof obj === 'object'
+export function isObject(obj: mixed): boolean %checks {
+  return obj !== null && typeof obj === "object";
 }
 ```
 
-## 5.Vue中的闭包骚操作
+## 5.Vue 中的闭包骚操作
 
-### 5.1  `makeMap()`：判断一个变量是否包含在传入字符串里
+### 5.1 `makeMap()`：判断一个变量是否包含在传入字符串里
 
 ```js
-export function makeMap (
+export function makeMap(
   str: string,
   expectsLowerCase?: boolean
 ): (key: string) => true | void {
-  const map = Object.create(null)
-  const list: Array<string> = str.split(',')
+  const map = Object.create(null);
+  const list: Array<string> = str.split(",");
   for (let i = 0; i < list.length; i++) {
-    map[list[i]] = true
+    map[list[i]] = true;
   }
-  return expectsLowerCase
-    ? val => map[val.toLowerCase()]
-    : val => map[val]
+  return expectsLowerCase ? (val) => map[val.toLowerCase()] : (val) => map[val];
 }
 ```
 
@@ -263,11 +261,11 @@ export function makeMap (
 我们用一个例子来说明下：
 
 ```js
-let isMyName = makeMap('前端劝退师,帅比',true);
+let isMyName = makeMap("前端劝退师,帅比", true);
 //设定一个检测是否为我的名字的方法，第二个参数不区分大小写
-isMyName('前端劝退师')  // true
-isMyName('帅比')  // true
-isMyName('丑逼')  // false
+isMyName("前端劝退师"); // true
+isMyName("帅比"); // true
+isMyName("丑逼"); // false
 ```
 
 `Vue`中类似的判断非常多，也很实用。
@@ -278,39 +276,39 @@ isMyName('丑逼')  // false
 
 ```js
 export const isHTMLTag = makeMap(
-  'html,body,base,head,link,meta,style,title,' +
-  'address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,hgroup,nav,section,' +
-  'div,dd,dl,dt,figcaption,figure,picture,hr,img,li,main,ol,p,pre,ul,' +
-  'a,b,abbr,bdi,bdo,br,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,rtc,ruby,' +
-  's,samp,small,span,strong,sub,sup,time,u,var,wbr,area,audio,map,track,video,' +
-  'embed,object,param,source,canvas,script,noscript,del,ins,' +
-  'caption,col,colgroup,table,thead,tbody,td,th,tr,' +
-  'button,datalist,fieldset,form,input,label,legend,meter,optgroup,option,' +
-  'output,progress,select,textarea,' +
-  'details,dialog,menu,menuitem,summary,' +
-  'content,element,shadow,template,blockquote,iframe,tfoot'
-)
+  "html,body,base,head,link,meta,style,title," +
+    "address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,hgroup,nav,section," +
+    "div,dd,dl,dt,figcaption,figure,picture,hr,img,li,main,ol,p,pre,ul," +
+    "a,b,abbr,bdi,bdo,br,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,rtc,ruby," +
+    "s,samp,small,span,strong,sub,sup,time,u,var,wbr,area,audio,map,track,video," +
+    "embed,object,param,source,canvas,script,noscript,del,ins," +
+    "caption,col,colgroup,table,thead,tbody,td,th,tr," +
+    "button,datalist,fieldset,form,input,label,legend,meter,optgroup,option," +
+    "output,progress,select,textarea," +
+    "details,dialog,menu,menuitem,summary," +
+    "content,element,shadow,template,blockquote,iframe,tfoot"
+);
 export const isSVG = makeMap(
-  'svg,animate,circle,clippath,cursor,defs,desc,ellipse,filter,font-face,' +
-  'foreignObject,g,glyph,image,line,marker,mask,missing-glyph,path,pattern,' +
-  'polygon,polyline,rect,switch,symbol,text,textpath,tspan,use,view',
+  "svg,animate,circle,clippath,cursor,defs,desc,ellipse,filter,font-face," +
+    "foreignObject,g,glyph,image,line,marker,mask,missing-glyph,path,pattern," +
+    "polygon,polyline,rect,switch,symbol,text,textpath,tspan,use,view",
   true
-)
+);
 // web平台的保留属性有 style 和 class
-export const isReservedAttr = makeMap('style,class')
+export const isReservedAttr = makeMap("style,class");
 ```
 
 ### 5.2 `once`:只调用一次的函数
 
 ```js
-export function once (fn: Function): Function {
-  let called = false
+export function once(fn: Function): Function {
+  let called = false;
   return function () {
     if (!called) {
-      called = true
-      fn.apply(this, arguments)
+      called = true;
+      fn.apply(this, arguments);
     }
-  }
+  };
 }
 ```
 
@@ -322,12 +320,12 @@ export function once (fn: Function): Function {
 /**
  * Create a cached version of a pure function.
  */
-export function cached<F: Function> (fn: F): F {
-  const cache = Object.create(null)
-  return (function cachedFn (str: string) {
-    const hit = cache[str]
-    return hit || (cache[str] = fn(str))
-  }: any)
+export function cached<F: Function>(fn: F): F {
+  const cache = Object.create(null);
+  return (function cachedFn(str: string) {
+    const hit = cache[str];
+    return hit || (cache[str] = fn(str));
+  }: any);
 }
 ```
 
@@ -335,56 +333,62 @@ export function cached<F: Function> (fn: F): F {
 
 `const cache = Object.create(null)`创建纯函数是为了防止变化`（纯函数的特性：输入不变则输出不变）`。
 
->在Vue中，需要转译很多相同的字符串，若每次都重新执行转译，会造成很多不必要的开销。
->`cache`这个函数可以读取缓存，如果缓存中没有就存放到缓存中，最后再读。
+> 在 Vue 中，需要转译很多相同的字符串，若每次都重新执行转译，会造成很多不必要的开销。
+> `cache`这个函数可以读取缓存，如果缓存中没有就存放到缓存中，最后再读。
 
 ## 6. 多类型的全等判断
 
 ### `looseEqual`: 检查两个值是否相等
 
 ```js
-export function looseEqual (a: any, b: any): boolean {
+export function looseEqual(a: any, b: any): boolean {
   // 当 a === b 时，返回true
-  if (a === b) return true
+  if (a === b) return true;
   // 否则进入isObject判断
-  const isObjectA = isObject(a)
-  const isObjectB = isObject(b)
+  const isObjectA = isObject(a);
+  const isObjectB = isObject(b);
   // 判断是否都为Object类型
   if (isObjectA && isObjectB) {
     try {
       // 调用 Array.isArray() 方法，再次进行判断
       // isObject 不能区分是真数组还是对象（typeof）
-      const isArrayA = Array.isArray(a)
-      const isArrayB = Array.isArray(b)
+      const isArrayA = Array.isArray(a);
+      const isArrayB = Array.isArray(b);
       // 判断是否都为数组
       if (isArrayA && isArrayB) {
         // 对比a、bs数组的长度
-        return a.length === b.length && a.every((e, i) => {
-          // 调用 looseEqual 进入递归
-          return looseEqual(e, b[i])
-        })
+        return (
+          a.length === b.length &&
+          a.every((e, i) => {
+            // 调用 looseEqual 进入递归
+            return looseEqual(e, b[i]);
+          })
+        );
       } else if (!isArrayA && !isArrayB) {
         // 均不为数组，获取a、b对象的key集合
-        const keysA = Object.keys(a)
-        const keysB = Object.keys(b)
+        const keysA = Object.keys(a);
+        const keysB = Object.keys(b);
         // 对比a、b对象的key集合长度
-        return keysA.length === keysB.length && keysA.every(key => {
-          //长度相等，则调用 looseEqual 进入递归
-          return looseEqual(a[key], b[key])
-        })
+        return (
+          keysA.length === keysB.length &&
+          keysA.every((key) => {
+            //长度相等，则调用 looseEqual 进入递归
+            return looseEqual(a[key], b[key]);
+          })
+        );
       } else {
         // 如果a、b中一个是数组，一个是对象，直接返回 false
         /* istanbul ignore next */
-        return false
+        return false;
       }
     } catch (e) {
       /* istanbul ignore next */
-      return false
+      return false;
     }
   } else if (!isObjectA && !isObjectB) {
-    return String(a) === String(b)
+    return String(a) === String(b);
   } else {
-    return false
+    return false;
   }
 }
 ```
@@ -393,11 +397,11 @@ export function looseEqual (a: any, b: any): boolean {
 总之，就是**各种类型判断+递归**
 
 ![alt](https://user-gold-cdn.xitu.io/2019/2/25/16923f9e58db09a0?w=960&h=540&f=png&s=334728)
-此篇就先讲讲Vue中的一些工具函数类的吧，Vue源码很多值得挖掘的玩法。走过路过，点个赞憋老哥。
+此篇就先讲讲 Vue 中的一些工具函数类的吧，Vue 源码很多值得挖掘的玩法。走过路过，点个赞憋老哥。
 
 ### 作者文章总集
 
-* [「从源码中学习」彻底理解Vue选项Props](https://juejin.im/post/5c88e669f265da2d8f47792a)
-* [「Vue实践」项目升级vue-cli3的正确姿势](https://juejin.im/post/5c4a83e36fb9a049b13e91ba)
-* [「从源码中学习」Vue源码中的JS骚操作](https://juejin.im/post/5c73554cf265da2de33f2a32)
-* [为何你始终理解不了JavaScript作用域链？](https://juejin.im/editor/posts/5c8efeb1e51d45614372addd)
+- [「从源码中学习」彻底理解 Vue 选项 Props](https://juejin.im/post/5c88e669f265da2d8f47792a)
+- [「Vue 实践」项目升级 vue-cli3 的正确姿势](https://juejin.im/post/5c4a83e36fb9a049b13e91ba)
+- [「从源码中学习」Vue 源码中的 JS 骚操作](https://juejin.im/post/5c73554cf265da2de33f2a32)
+- [为何你始终理解不了 JavaScript 作用域链？](https://juejin.im/editor/posts/5c8efeb1e51d45614372addd)

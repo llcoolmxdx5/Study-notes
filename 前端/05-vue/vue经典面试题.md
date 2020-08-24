@@ -1,4 +1,4 @@
-# vue经典面试题
+# vue 经典面试题
 
 ## 1、说说你对 SPA 单⻚⾯的理解，它的优缺点 分别是什么
 
@@ -31,19 +31,14 @@ Class 可以通过对象语法和数组语法进⾏动态绑定:
 
   ```html
   <div v-bind:class="{ active: isActive, 'text-danger': hasError }"></div>
-  data: {
-    isActive: true,
-    hasError: false
-  }
+  data: { isActive: true, hasError: false }
   ```
 
 - 数组语法:
 
   ```html
   <div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
-  data: {
-    activeClass: 'active', errorClass: 'text-danger'
-  }
+  data: { activeClass: 'active', errorClass: 'text-danger' }
   ```
 
 Style 也可以通过对象语法和数组语法进⾏动态绑定:
@@ -52,28 +47,19 @@ Style 也可以通过对象语法和数组语法进⾏动态绑定:
 
   ```html
   <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }"></div>
-  data: {
-    activeColor: 'red', fontSize: 30
-  }
+  data: { activeColor: 'red', fontSize: 30 }
   ```
 
 - 数组语法:
 
   ```html
   <div v-bind:style="[styleColor, styleSize]"></div>
-  data: {
-    styleColor: {
-      color: 'red'
-    },
-    styleSize:{
-      fontSize:'23px'
-    }
-  }
+  data: { styleColor: { color: 'red' }, styleSize:{ fontSize:'23px' } }
   ```
 
 ## 4、怎样理解 Vue 的单向数据流
 
-所有的 prop 都使得其⽗子 prop 之间形成了⼀个**单向下行绑定**:⽗级 prop 的更新会向下流动到⼦组件中，但是反过来则不行。这样会防⽌从⼦组件意外改变父级组件的状态，从⽽导致你的应用的数据流向难以理解。 额外的，每次⽗级组件发⽣更新时，⼦组件中所有的 prop 都将会刷新为最新的值。这意味着你不应该在⼀个子组件内部改变 prop。如果你这样做了，Vue 会在浏览器的控制台中发出警告。子组件想修改时，只能通过 $emit 派发⼀个⾃定义事件，⽗组件接收到后，由⽗组件修改。
+所有的 prop 都使得其⽗子 prop 之间形成了⼀个**单向下行绑定**:⽗级 prop 的更新会向下流动到⼦组件中，但是反过来则不行。这样会防⽌从⼦组件意外改变父级组件的状态，从⽽导致你的应用的数据流向难以理解。 额外的，每次⽗级组件发⽣更新时，⼦组件中所有的 prop 都将会刷新为最新的值。这意味着你不应该在⼀个子组件内部改变 prop。如果你这样做了，Vue 会在浏览器的控制台中发出警告。子组件想修改时，只能通过 \$emit 派发⼀个⾃定义事件，⽗组件接收到后，由⽗组件修改。
 
 有两种常⻅的试图改变⼀个 prop 的情形 :
 
@@ -120,18 +106,18 @@ Style 也可以通过对象语法和数组语法进⾏动态绑定:
 
 ```js
 // Vue.set
-Vue.set(vm.items, indexOfItem, newValue)
+Vue.set(vm.items, indexOfItem, newValue);
 // vm.$set，Vue.set的⼀个别名
-vm.$set(vm.items, indexOfItem, newValue)
+vm.$set(vm.items, indexOfItem, newValue);
 // Array.prototype.splice
-vm.items.splice(indexOfItem, 1, newValue)
+vm.items.splice(indexOfItem, 1, newValue);
 ```
 
 为了解决第⼆个问题，Vue 提供了以下操作⽅法:
 
 ```js
 // Array.prototype.splice
-vm.items.splice(newLength)
+vm.items.splice(newLength);
 ```
 
 ## 7、谈谈你对 Vue 命周期的理解
@@ -142,19 +128,19 @@ vm.items.splice(newLength)
 
 - 各个⽣命周期的作⽤
 
-  | ⽣命周期      | 描述                                             |
-  | :-------     | :----                                           |
-  | beforeCreate | 在实例初始化之后，数据观测 (data observer) 和 event/watcher 事件配置之前被调用。|
-  | created      | 在实例创建完成后被立即调用。在这一步，实例已完成以下的配置：数据观测 (data observer)，属性和方法的运算，watch/event 事件回调。然而，挂载阶段还没开始，`$el` 属性目前不可见。 |
-  | beforeMount  | 在挂载开始之前被调用：相关的 render 函数首次被调用。**该钩子在服务器端渲染期间不被调用。**|
-  | mounted      | `el` 被新创建的 `vm.$el` 替换，并挂载到实例上去之后调用该钩子。如果 `root` 实例挂载了一个文档内元素，当 `mounted` 被调用时 `vm.$el` 也在文档内。**该钩子在服务器端渲染期间不被调用。**|
-  | beforeUpdate | 数据更新时调用，发生在虚拟 DOM 打补丁之前。这里适合在更新之前访问现有的 DOM，比如手动移除已添加的事件监听器。**该钩子在服务器端渲染期间不被调用。**|
-  | update       | 由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。当这个钩子被调用时，组件 DOM 已经更新，所以你现在可以执行依赖于 DOM 的操作。然而在大多数情况下，你应该避免在此期间更改状态。如果要相应状态改变，通常最好使用计算属性或 watcher 取而代之。**该钩子在服务器端渲染期间不被调用。**|
-  | activited    | keep-alive 组件激活时调用。**该钩子在服务器端渲染期间不被调用。**|
-  | deadctivated | keep-alive 组件停用时调用。**该钩子在服务器端渲染期间不被调用。**|
-  | beforeDestory| 实例销毁之前调用。在这一步，实例仍然完全可用。**该钩子在服务器端渲染期间不被调用。** |
-  | destoryed    | Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。**该钩子在服务器端渲染期间不被调用。** |
-  | errorCaptured | 当捕获一个来自子孙组件的错误时被调用。此钩子会收到三个参数：错误对象、发生错误的组件实例以及一个包含错误来源信息的字符串。此钩子可以返回 false 以阻止该错误继续向上传播。|
+  | ⽣命周期      | 描述                                                                                                                                                                                                                                                                                               |
+  | :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | beforeCreate  | 在实例初始化之后，数据观测 (data observer) 和 event/watcher 事件配置之前被调用。                                                                                                                                                                                                                   |
+  | created       | 在实例创建完成后被立即调用。在这一步，实例已完成以下的配置：数据观测 (data observer)，属性和方法的运算，watch/event 事件回调。然而，挂载阶段还没开始，`$el` 属性目前不可见。                                                                                                                       |
+  | beforeMount   | 在挂载开始之前被调用：相关的 render 函数首次被调用。**该钩子在服务器端渲染期间不被调用。**                                                                                                                                                                                                         |
+  | mounted       | `el` 被新创建的 `vm.$el` 替换，并挂载到实例上去之后调用该钩子。如果 `root` 实例挂载了一个文档内元素，当 `mounted` 被调用时 `vm.$el` 也在文档内。**该钩子在服务器端渲染期间不被调用。**                                                                                                             |
+  | beforeUpdate  | 数据更新时调用，发生在虚拟 DOM 打补丁之前。这里适合在更新之前访问现有的 DOM，比如手动移除已添加的事件监听器。**该钩子在服务器端渲染期间不被调用。**                                                                                                                                                |
+  | update        | 由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。当这个钩子被调用时，组件 DOM 已经更新，所以你现在可以执行依赖于 DOM 的操作。然而在大多数情况下，你应该避免在此期间更改状态。如果要相应状态改变，通常最好使用计算属性或 watcher 取而代之。**该钩子在服务器端渲染期间不被调用。** |
+  | activited     | keep-alive 组件激活时调用。**该钩子在服务器端渲染期间不被调用。**                                                                                                                                                                                                                                  |
+  | deadctivated  | keep-alive 组件停用时调用。**该钩子在服务器端渲染期间不被调用。**                                                                                                                                                                                                                                  |
+  | beforeDestory | 实例销毁之前调用。在这一步，实例仍然完全可用。**该钩子在服务器端渲染期间不被调用。**                                                                                                                                                                                                               |
+  | destoryed     | Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。**该钩子在服务器端渲染期间不被调用。**                                                                                                                                             |
+  | errorCaptured | 当捕获一个来自子孙组件的错误时被调用。此钩子会收到三个参数：错误对象、发生错误的组件实例以及一个包含错误来源信息的字符串。此钩子可以返回 false 以阻止该错误继续向上传播。                                                                                                                          |
 
 - ⽣命周期示意图
 
@@ -187,7 +173,7 @@ Vue 的父组件和子组件生命周期钩子函数执行顺序可以归类为�
 - 能更快获取到服务端数据，减少⻚面 loading 时间;
 - ssr 不支持 beforeMount 、mounted 钩⼦函数，所以放在 created 中有助于一致性;
 
-## 10、在什么阶段才能访问操作DOM
+## 10、在什么阶段才能访问操作 DOM
 
 在钩⼦函数 mounted 被调⽤前，Vue 已经将编译好的模板挂载到⻚面上，所以在 mounted 中可以访问操作 DOM。
 
@@ -204,7 +190,7 @@ mounted() {
 }
 ```
 
-以上需要⼿动通过 $emit 触发⽗组件的事件，更简单的方式可以在⽗组件引⽤⼦组件时通过 @hook 来监听即可，如下所示:
+以上需要⼿动通过 \$emit 触发⽗组件的事件，更简单的方式可以在⽗组件引⽤⼦组件时通过 @hook 来监听即可，如下所示:
 
 ```jsx
 // Parent.vue
@@ -311,14 +297,14 @@ Vuex 是⼀个专为 Vue.js 应⽤程序开发的状态管理模式。每⼀个 
 主要包括以下⼏个模块:
 
 - State:定义了应⽤状态的数据结构，可以在这⾥设置默认的初始状态
-- Getter:允许组件从 Store 中获取数据，mapGetters 辅助函数仅仅是将store 中的 getter 映射到局部计算属性。
+- Getter:允许组件从 Store 中获取数据，mapGetters 辅助函数仅仅是将 store 中的 getter 映射到局部计算属性。
 - Mutation:是唯⼀更改 store 中状态的⽅法，且必须是同步函数。
 - Action:⽤于提交 mutation，⽽不是直接变更状态，可以包含任意异步操作。
 - Module:允许将单⼀的 Store 拆分为多个 store 且同时保存在单⼀的状态树中。
 
 ## 17、使⽤过 Vue SSR 吗?说说 SSR
 
-Vue.js 是构建客户端应⽤程序的框架。默认情况下，可以在浏览器中输出 Vue 组件，进⾏生成 DOM 和操作 DOM。然⽽，也可以将同⼀个组件渲染为服务端 的 HTML 字符串，将它们直接发送到浏览器，最后将这些静态标记"激活"为客户 端上完全可交互的应⽤程序。 即:SSR⼤致的意思就是vue在客户端将标签渲染成的整个 html ⽚段的⼯作在服务端完成，服务端形成的html 片段直接返回给客户端这个过程就叫做服务端渲染。
+Vue.js 是构建客户端应⽤程序的框架。默认情况下，可以在浏览器中输出 Vue 组件，进⾏生成 DOM 和操作 DOM。然⽽，也可以将同⼀个组件渲染为服务端 的 HTML 字符串，将它们直接发送到浏览器，最后将这些静态标记"激活"为客户 端上完全可交互的应⽤程序。 即:SSR ⼤致的意思就是 vue 在客户端将标签渲染成的整个 html ⽚段的⼯作在服务端完成，服务端形成的 html 片段直接返回给客户端这个过程就叫做服务端渲染。
 
 服务端渲染 SSR 的优缺点如下:
 
@@ -327,7 +313,7 @@ Vue.js 是构建客户端应⽤程序的框架。默认情况下，可以在浏�
   - 更快的内容到达时间(⾸屏加载更快): SPA 会等待所有 Vue 编译后的 js ⽂件都下载完成后，才开始进⾏⻚⾯的渲染，⽂件下载等需要⼀定的时间等，所以⾸屏渲染需要⼀定的时间;SSR 直接由服务端渲染好⻚⾯直接返回显示，⽆需等待下载 js ⽂件及再去渲染等，所以 SSR 有更快的内容到达时间;
 - 服务端渲染的缺点:
   - 更多的开发条件限制: 例如服务端渲染只⽀持 beforCreate 和 created 两个钩⼦函数，这会导致⼀些外部扩展库需要特殊处理，才能在服务端渲染应⽤程序中运⾏;并且与可以部署在任何静态⽂件服务器上的完全静态单⻚⾯应⽤程序 SPA 不同，服务端渲染应⽤程序，需要处于 Node.js server 运⾏ 环境;
-  - 更多的服务器负载:在 Node.js 中渲染完整的应⽤程序，显然会⽐仅仅提 供静态⽂件的 server 更加⼤量占⽤CPU 资源 (CPU-intensive - CPU 密 集)，因此如果你预料在⾼流量环境 ( high traffic ) 下使⽤，请准备相应的服 务器负载，并明智地采⽤缓存策略略。
+  - 更多的服务器负载:在 Node.js 中渲染完整的应⽤程序，显然会⽐仅仅提 供静态⽂件的 server 更加⼤量占⽤ CPU 资源 (CPU-intensive - CPU 密 集)，因此如果你预料在⾼流量环境 ( high traffic ) 下使⽤，请准备相应的服 务器负载，并明智地采⽤缓存策略略。
 
 如果没有 SSR 开发经验的同学，可以参考本⽂作者的另⼀篇 SSR 的实践⽂章 《Vue SSR 踩坑之旅》，⾥⾯ SSR 项⽬搭建以及附有项⽬源码。
 
@@ -337,18 +323,18 @@ vue-router 有 3 种路由模式:hash、history、abstract，对应的源码如�
 
 ```js
 switch (mode) {
-  case 'history':
-    this.history = new HTML5History(this, options.base)
-    break
-  case 'hash':
-    this.history = new HashHistory(this, options.base, this.fallback)
-    break
-  case 'abstract':
-    this.history = new AbstractHistory(thisoptions.base)
-    break
+  case "history":
+    this.history = new HTML5History(this, options.base);
+    break;
+  case "hash":
+    this.history = new HashHistory(this, options.base, this.fallback);
+    break;
+  case "abstract":
+    this.history = new AbstractHistory(thisoptions.base);
+    break;
   default:
-    if (process.env.NODE_ENV !== 'production') {
-      assert(false, `invalid mode: ${mode}`)
+    if (process.env.NODE_ENV !== "production") {
+      assert(false, `invalid mode: ${mode}`);
     }
 }
 ```
@@ -367,9 +353,10 @@ switch (mode) {
   hash 路由模式的实现主要是基于下⾯⼏个特性:
 
   - URL 中 hash 值只是客户端的⼀种状态，也就是说当向服务器端发出请求 时，hash 部分不会被发送;
-  - hash 值的改变，都会在浏览器的访问历史中增加⼀个记录。因此我们能 通过浏览器的回退、前进按钮控制hash 的切换;
+  - hash 值的改变，都会在浏览器的访问历史中增加⼀个记录。因此我们能 通过浏览器的回退、前进按钮控制 hash 的切换;
   - 可以通过 a 标签，并设置 href 属性，当⽤户点击这个标签后，URL 的 hash 值会发改变;或者使⽤ JavaScript 来对 loaction.hash 进⾏赋值， 改变 URL 的 hash 值;
   - 我们可以使⽤ hashchange 事件来监听 hash 值的变化，从⽽对⻚⾯进⾏ 跳转(渲染)
+
 - history 模式的实现原理
   HTML5 提供了 History API 来实现 URL 的变化。其中做最主要的 API 有以下两 个:history.pushState() 和 history.repalceState()。这两个 API 可以在不进⾏刷 新的情况下，操作浏览器的历史纪录。唯⼀不同的是，前者是新增⼀个历史记 录，后者是直接替换当前的历史记录，如下所示
 
@@ -386,7 +373,7 @@ switch (mode) {
 
 ## 20、什么是 MVVM
 
-Model–View–ViewModel (MVVM) 是⼀个软件架构设计模式，由微软 WPF 和 Silverlight 的架构师 Ken Cooper 和 Ted Peters 开发，是⼀种简化⽤户界⾯的事 件驱动编程⽅式。由 John Gossman(同样也是 WPF 和 Silverlight 的架构师) 于2005年年在他的博客上发表
+Model–View–ViewModel (MVVM) 是⼀个软件架构设计模式，由微软 WPF 和 Silverlight 的架构师 Ken Cooper 和 Ted Peters 开发，是⼀种简化⽤户界⾯的事 件驱动编程⽅式。由 John Gossman(同样也是 WPF 和 Silverlight 的架构师) 于 2005 年年在他的博客上发表
 MVVM 源⾃于经典的 Model–View–Controller(MVC)模式 ，MVVM 的出现促 进了前端开发与后端业务逻辑的分离，极⼤地提⾼了前端开发效率，MVVM 的 核⼼是 ViewModel 层，它就像是⼀个中转站(value converter)，负责转换 Model 中的数据对象来让数据变得更容易易管理和使⽤，该层向上与视图层进⾏双 向数据绑定，向下与 Model 层通过接⼝口请求进⾏数据交互，起呈上启下作⽤。
 (1)View 层
 View 是视图层，也就是⽤户界⾯。前端主要由 HTML 和 CSS 来构建 。
@@ -400,35 +387,38 @@ MVVM 框架实现了双向绑定，这样 ViewModel 的内容会实时展现在 
 
 ```html
 <div id="app">
-    <p>{{message}}</p>
-<button v-on:click="showMessage()">Click me</button> </div>
+  <p>{{message}}</p>
+  <button v-on:click="showMessage()">Click me</button>
+</div>
 ```
 
 (2)ViewModel 层
 
 ```js
 var app = new Vue({
-  el: '#app',
-  data: { // ⽤于描述视图状态
-    message: 'Hello Vue!'
+  el: "#app",
+  data: {
+    // ⽤于描述视图状态
+    message: "Hello Vue!",
   },
-  methods: { // ⽤于描述视图⾏为
-    showMessage(){
+  methods: {
+    // ⽤于描述视图⾏为
+    showMessage() {
       let vm = this;
       alert(vm.message);
-    }
+    },
   },
-  created(){
+  created() {
     let vm = this;
     // Ajax 获取 Model 层的数
     ajax({
-      url: '/your/server/data/api',
-      success(res){
+      url: "/your/server/data/api",
+      success(res) {
         vm.message = res;
-      }
+      },
     });
-  }
-})
+  },
+});
 ```
 
 (3) Model 层
@@ -500,9 +490,9 @@ Object.defineProperty 的优势如下:
 - 兼容性好，⽀持 IE9，⽽ Proxy 的存在浏览器兼容性问题,⽽且⽆法⽤
 - polyfill 磨平，因此 Vue 的作者才声明需要等到下个⼤版本( 3.0 )才能⽤ Proxy 重写。
 
-## 24、Vue 怎么⽤ vm.$set() 解决对象新增属性不能响应的问题
+## 24、Vue 怎么⽤ vm.\$set() 解决对象新增属性不能响应的问题
 
-受现代 JavaScript 的限制 ，Vue **⽆法检测到对象属性的添加或删除**。由于 Vue 会在初始化实例时对属性执⾏ getter/setter 转化，所以属性必须在 data 对象上 存在才能让 Vue 将它转换为响应式的。但是 Vue 提供了 Vue.set (object, propertyName, value) / vm.$set (object, propertyName, value) 来实现为对象添加响应式属性，那框架本身是如何实现的呢? 我们查看对应的 Vue 源码:vue/src/core/instance/index.js
+受现代 JavaScript 的限制 ，Vue **⽆法检测到对象属性的添加或删除**。由于 Vue 会在初始化实例时对属性执⾏ getter/setter 转化，所以属性必须在 data 对象上 存在才能让 Vue 将它转换为响应式的。但是 Vue 提供了 Vue.set (object, propertyName, value) / vm.\$set (object, propertyName, value) 来实现为对象添加响应式属性，那框架本身是如何实现的呢? 我们查看对应的 Vue 源码:vue/src/core/instance/index.js
 
 ```ts
 export function set (target: Array<any> | Object, key: any, val: any): any {
@@ -531,7 +521,7 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
 }
 ```
 
-我们阅读以上源码可知，vm.$set 的实现原理是:
+我们阅读以上源码可知，vm.\$set 的实现原理是:
 
 - 如果⽬标是数组，直接使⽤数组的 splice ⽅法触发相应式;
 - 如果⽬标是对象，会先判读属性是否存在、对象是否是响应式，最终如果要对属性进⾏响应式处理，则是通过调⽤ defineReactive ⽅法进⾏响应式处 理( defineReactive ⽅法就是 Vue 在初始化对象时，给对象属性采⽤ Object.defineProperty 动态添加 getter 和 setter 的功能所调⽤的⽅法)
@@ -556,11 +546,11 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
 - diff 算法 — ⽐较两棵虚拟 DOM 树的差异;
 - pach 算法 — 将两个虚拟 DOM 对象的差异应⽤到真正的 DOM 树。
 
-如果对以上 3 个部分还不是很了解的同学，可以查看本⽂作者写的另⼀篇详解虚拟 DOM 的⽂章《深⼊剖析:Vue核⼼之虚拟DOM》
+如果对以上 3 个部分还不是很了解的同学，可以查看本⽂作者写的另⼀篇详解虚拟 DOM 的⽂章《深⼊剖析:Vue 核⼼之虚拟 DOM》
 
 ## 27、Vue 中的 key 有什么作⽤
 
-key 是为 Vue 中 vnode 的唯⼀标记，通过这个 key，我们的 diff 操作可以更准确、更快速。Vue 的 diff 过程可以概括为:oldCh 和 newCh 各有两个头尾的变量 oldStartIndex、oldEndIndex 和 newStartIndex、newEndIndex，它们会新节点和旧节点会进⾏两两对⽐，即⼀共有4种⽐较⽅式:newStartIndex 和 oldStartIndex 、newEndIndex 和 oldEndIndex 、newStartIndex 和 oldEndIndex 、newEndIndex 和 oldStartIndex，如果以上 4 种⽐较都没匹配， 如果设置了key，就会⽤ key 再进⾏⽐较，在⽐较的过程中，遍历会往中间靠， ⼀旦 StartIdx > EndIdx 表明 oldCh 和 newCh ⾄至少有⼀个已经遍历完了，就会结束⽐较。具体有⽆ key 的 diff 过程，可以查看作者写的另⼀篇详解虚拟 DOM 的 ⽂章《深⼊剖析:Vue核⼼之虚拟DOM》
+key 是为 Vue 中 vnode 的唯⼀标记，通过这个 key，我们的 diff 操作可以更准确、更快速。Vue 的 diff 过程可以概括为:oldCh 和 newCh 各有两个头尾的变量 oldStartIndex、oldEndIndex 和 newStartIndex、newEndIndex，它们会新节点和旧节点会进⾏两两对⽐，即⼀共有 4 种⽐较⽅式:newStartIndex 和 oldStartIndex 、newEndIndex 和 oldEndIndex 、newStartIndex 和 oldEndIndex 、newEndIndex 和 oldStartIndex，如果以上 4 种⽐较都没匹配， 如果设置了 key，就会⽤ key 再进⾏⽐较，在⽐较的过程中，遍历会往中间靠， ⼀旦 StartIdx > EndIdx 表明 oldCh 和 newCh ⾄至少有⼀个已经遍历完了，就会结束⽐较。具体有⽆ key 的 diff 过程，可以查看作者写的另⼀篇详解虚拟 DOM 的 ⽂章《深⼊剖析:Vue 核⼼之虚拟 DOM》
 
 所以 Vue 中 key 的作⽤是:key 是为 Vue 中 vnode 的唯⼀标记，通过这个 key，我们的 diff 操作可以更准确、更快速
 
@@ -568,14 +558,14 @@ key 是为 Vue 中 vnode 的唯⼀标记，通过这个 key，我们的 diff 操
 - 更快速:利⽤ key 的唯⼀性成 map 对象来获取对应节点，⽐遍历⽅式更快， 源码如下:
 
 ```js
-function createKeyToOldIdx (children, beginIdx, endIdx) {
-  let i, key
-  const map = {}
+function createKeyToOldIdx(children, beginIdx, endIdx) {
+  let i, key;
+  const map = {};
   for (i = beginIdx; i <= endIdx; ++i) {
-    key = children[i].key
-    if (isDef(key)) map[key] = i
+    key = children[i].key;
+    if (isDef(key)) map[key] = i;
   }
-  return map
+  return map;
 }
 ```
 
@@ -585,31 +575,31 @@ function createKeyToOldIdx (children, beginIdx, endIdx) {
 
 1. 代码层⾯的优化
 
-    - v-if 和 v-show 区分使⽤场景
-    - computed 和 watch 区分使⽤场景
-    - v-for 遍历必须为 item 添加 key，且避免同时使⽤ v-if
-    - ⻓列表性能优化
-    - 事件的销毁
-    - 图⽚片资源懒加载
-    - 路由懒加载
-    - 第三⽅插件的按需引⼊
-    - 优化⽆限列列表性能
-    - 服务端渲染 SSR or 预渲染
+   - v-if 和 v-show 区分使⽤场景
+   - computed 和 watch 区分使⽤场景
+   - v-for 遍历必须为 item 添加 key，且避免同时使⽤ v-if
+   - ⻓列表性能优化
+   - 事件的销毁
+   - 图⽚片资源懒加载
+   - 路由懒加载
+   - 第三⽅插件的按需引⼊
+   - 优化⽆限列列表性能
+   - 服务端渲染 SSR or 预渲染
 
 2. Webpack 层⾯的优化
 
-    - Webpack 对图⽚片进⾏压缩
-    - 减少 ES6 转为 ES5 的冗余代码 提取公共代码
-    - 模板预编译
-    - 提取组件的 CSS
-    - 优化 SourceMap 构建结果输出分析 Vue 项⽬的编译优化
+   - Webpack 对图⽚片进⾏压缩
+   - 减少 ES6 转为 ES5 的冗余代码 提取公共代码
+   - 模板预编译
+   - 提取组件的 CSS
+   - 优化 SourceMap 构建结果输出分析 Vue 项⽬的编译优化
 
 3. 基础的 Web 技术的优化
 
-    - 开启 gzip 压缩
-    - 浏览器缓存
-    - CDN 的使⽤
-    - 使⽤ Chrome Performance 查找性能瓶颈
+   - 开启 gzip 压缩
+   - 浏览器缓存
+   - CDN 的使⽤
+   - 使⽤ Chrome Performance 查找性能瓶颈
 
 ## 29、对于即将到来的 vue3.0 特性你有什么了解的吗
 
@@ -617,36 +607,36 @@ Vue 3.0 正⾛走在发布的路上，Vue 3.0 的⽬标是让 Vue 核⼼变得�
 
 1. 监测机制的改变
 
-    3.0 将带来基于代理 Proxy 的 observer 实现，提供全语⾔言覆盖的反应性跟踪。 这消除了 Vue 2 当中基于 Object.defineProperty 的实现所存在的很多限制:
+   3.0 将带来基于代理 Proxy 的 observer 实现，提供全语⾔言覆盖的反应性跟踪。 这消除了 Vue 2 当中基于 Object.defineProperty 的实现所存在的很多限制:
 
-    - 只能监测属性，不能监测对象
-    - 检测属性的添加和删除;
-    - 检测数组索引和⻓长度的变更;
-    - ⽀持 Map、Set、WeakMap 和 WeakSet。
+   - 只能监测属性，不能监测对象
+   - 检测属性的添加和删除;
+   - 检测数组索引和⻓长度的变更;
+   - ⽀持 Map、Set、WeakMap 和 WeakSet。
 
-    新的 observer 还提供了以下特性:
+   新的 observer 还提供了以下特性:
 
-    - ⽤于创建 observable 的公开 API。这为中⼩小规模场景提供了简单轻量级的跨组件状态管理解决⽅案。
-    - 默认采⽤惰性观察。在 2.x 中，不管反应式数据有多⼤，都会在启动时被观察到。如果你的数据集很⼤，这可能会在应⽤启动时带来明显的开销。在 3.x 中，只观察⽤于渲染应⽤程序最初可⻅见部分的数据。
-    - 更精确的变更通知。在 2.x 中，通过 Vue.set 强制添加新属性将导致依赖 于该对象的 watcher 收到变更通知。在 3.x 中，只有依赖于特定属性的 watcher 才会收到通知。
-    - 不可变的 observable:我们可以创建值的“不可变”版本(即使是嵌套属 性)，除⾮非系统在内部暂时将其“解禁”。这个机制可⽤于冻结 prop 传递或 Vuex 状态树以外的变化。
-    - 更好的调试功能:我们可以使⽤新的 renderTracked 和 renderTriggered 钩⼦精确地跟踪组件在什么时候以及为什么重新渲染。
+   - ⽤于创建 observable 的公开 API。这为中⼩小规模场景提供了简单轻量级的跨组件状态管理解决⽅案。
+   - 默认采⽤惰性观察。在 2.x 中，不管反应式数据有多⼤，都会在启动时被观察到。如果你的数据集很⼤，这可能会在应⽤启动时带来明显的开销。在 3.x 中，只观察⽤于渲染应⽤程序最初可⻅见部分的数据。
+   - 更精确的变更通知。在 2.x 中，通过 Vue.set 强制添加新属性将导致依赖 于该对象的 watcher 收到变更通知。在 3.x 中，只有依赖于特定属性的 watcher 才会收到通知。
+   - 不可变的 observable:我们可以创建值的“不可变”版本(即使是嵌套属 性)，除⾮非系统在内部暂时将其“解禁”。这个机制可⽤于冻结 prop 传递或 Vuex 状态树以外的变化。
+   - 更好的调试功能:我们可以使⽤新的 renderTracked 和 renderTriggered 钩⼦精确地跟踪组件在什么时候以及为什么重新渲染。
 
 2. 模板
 
-    模板⽅⾯没有⼤的变更，只改了作⽤域插槽，2.x 的机制导致作⽤域插槽变了，⽗组件会重新渲染，⽽ 3.0 把作⽤域插槽改成了函数的⽅式，这样只会影响⼦组件的重新渲染，提升了渲染的性能。
+   模板⽅⾯没有⼤的变更，只改了作⽤域插槽，2.x 的机制导致作⽤域插槽变了，⽗组件会重新渲染，⽽ 3.0 把作⽤域插槽改成了函数的⽅式，这样只会影响⼦组件的重新渲染，提升了渲染的性能。
 
-    同时，对于 render 函数的⽅⾯，vue3.0 也会进⾏⼀系列更改来⽅便习惯直接使 ⽤ api 来成 vdom 。
+   同时，对于 render 函数的⽅⾯，vue3.0 也会进⾏⼀系列更改来⽅便习惯直接使 ⽤ api 来成 vdom 。
 
 3. 对象式的组件声明⽅式
 
-    vue2.x 中的组件是通过声明的⽅式传⼊⼀系列 option，和 TypeScript 的结合需 要通过⼀些装饰器的⽅式来做，虽然能实现功能，但是⽐较麻烦。3.0 修改了组件的声明⽅式，改成了类式的写法，这样使得和 TypeScript 的结合变得很容易。
-    此外，vue 的源码也改⽤了 TypeScript 来写。其实当代码的功能复杂之后，必须有⼀个静态类型系统来做⼀些辅助管理。现在 vue3.0 也全⾯改⽤ TypeScript 来重写了，更是使得对外暴露的 api 更容易结合 TypeScript。静态类型系统对于复杂代码的维护确实很有必要。
+   vue2.x 中的组件是通过声明的⽅式传⼊⼀系列 option，和 TypeScript 的结合需 要通过⼀些装饰器的⽅式来做，虽然能实现功能，但是⽐较麻烦。3.0 修改了组件的声明⽅式，改成了类式的写法，这样使得和 TypeScript 的结合变得很容易。
+   此外，vue 的源码也改⽤了 TypeScript 来写。其实当代码的功能复杂之后，必须有⼀个静态类型系统来做⼀些辅助管理。现在 vue3.0 也全⾯改⽤ TypeScript 来重写了，更是使得对外暴露的 api 更容易结合 TypeScript。静态类型系统对于复杂代码的维护确实很有必要。
 
 4. 其它⽅⾯的更改
 
-    vue3.0 的改变是全⾯的，上⾯只涉及到主要的 3 个⽅⾯，还有⼀些其他的更改:
+   vue3.0 的改变是全⾯的，上⾯只涉及到主要的 3 个⽅⾯，还有⼀些其他的更改:
 
-    - ⽀持⾃定义渲染器，从⽽使得 weex 可以通过⾃定义渲染器的⽅式来扩展，⽽不是直接 fork 源码来改的⽅式。
-    - ⽀持 Fragment(多个根节点)和 Protal(在 dom 其他部分渲染组建内 容)组件，针对⼀些特殊的场景做了处理。
-    - 基于 treeshaking 优化，提供了更多的内置功能。
+   - ⽀持⾃定义渲染器，从⽽使得 weex 可以通过⾃定义渲染器的⽅式来扩展，⽽不是直接 fork 源码来改的⽅式。
+   - ⽀持 Fragment(多个根节点)和 Protal(在 dom 其他部分渲染组建内 容)组件，针对⼀些特殊的场景做了处理。
+   - 基于 treeshaking 优化，提供了更多的内置功能。
