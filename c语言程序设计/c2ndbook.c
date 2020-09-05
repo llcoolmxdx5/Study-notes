@@ -106,7 +106,7 @@ int main(int argc, char const *argv[])
 
   char s2[] = "I am a string";
   *(s2 + 1) = 'S';
-  
+
   printf("%s", s2);
 
   return 0;
