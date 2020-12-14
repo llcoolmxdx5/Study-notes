@@ -44,7 +44,9 @@ class Queue {
   }
 }
 
-const queue = new Queue();
-queue.enqueue(1, 2, 3);
-queue.dequeue();
-console.log(queue.toString());
+module.exports = Queue;
+
+// const queue = new Queue();
+// queue.enqueue(1, 2, 3);
+// queue.dequeue();
+// console.log(queue.toString());
