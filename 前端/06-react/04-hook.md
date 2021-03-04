@@ -457,6 +457,7 @@ import React, {
 } from "react";
 function ChildInputComponent(props, ref) {
   const inputRef = useRef(null);
+  // 自定义暴露给外部使用的东西, 没有暴露的不能使用
   useImperativeHandle(ref, () => inputRef.current);
   return <input type="text" name="child input" ref={inputRef} />;
 }
@@ -562,5 +563,18 @@ function usePrevious(value) {
     ref.current = value;
   });
   return ref.current;
+}
+```
+
+### 自定义 useState
+
+```js
+function useState(initialState) {
+  const reducer = useCallback((state, action) => action);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  function setState(payload) {
+    dispatch(payload)
+  }
+  return [state, setState]
 }
 ```
