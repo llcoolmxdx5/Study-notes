@@ -347,7 +347,7 @@ JS 需要异步的根本原因是 JS 是单线程运行的，即在同一时间�
 
 一个完整的 Event Loop 过程，可以概括为以下阶段：
 
-![Event Loop](./media/Event Loop.png)
+![Event Loop](./media/EventLoop.png)
 
 - 一开始执行栈空,我们可以把**执行栈认为是一个存储函数调用的栈结构，遵循先进后出的原则。**micro 队列空，macro 队列里有且只有一个 script 脚本（整体代码）。
 
