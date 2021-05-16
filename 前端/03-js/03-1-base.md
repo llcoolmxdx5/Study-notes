@@ -11,7 +11,7 @@
 #### 1. 转为str
 
 ```js
-num.toString() // 不能转换undefied 和 null
+num.toString() // 不能转换 undefined 和 null
 String()
 字符串与其他数据类型直接拼接
 ```
@@ -103,7 +103,7 @@ isNaN(a)
 a && b // 看左边的值是真还是假,如果是真,返回的是右边的值,如果是假返回的是左边的值
 a || b // 看左边的值是真还是假,如果是真,返回的是左边的值,如果是假返回的是右边的值
 value = value || 'default value' // 给函数的参数填充默认值
-value = value !== undefined ? value : 'defaule value' // 传入undefined才会转为默认值
+value = value !== undefined ? value : 'default value' // 传入undefined才会转为默认值
 a && b || c // a为true返回b a为false返回c 类似三元运算符
 ```
 
@@ -683,8 +683,8 @@ arr.sort(function(a, b) {
 
 ```js
 var arr1 = arr.concat() // 把参数拼接到当前数组 返回拼接后的数组
-arr.slice(starti, endi+1) // 从当前数组中截取一个新的数组，不影响原来的数组，参数start从0开始,end从1开始
-var arr1 = arr.splice(starti, n, options)
+arr.slice(start, end+1) // 从当前数组中截取一个新的数组，不影响原来的数组，参数start从0开始,end从1开始
+var arr1 = arr.splice(start, n, options)
   // 删除或替换当前数组的某些项目
   // 参数start, deleteCount, options(要替换的项目)
   // 返回被删除元素的组成的新数组
@@ -878,7 +878,7 @@ bSort(myArr)
 时间复杂度均为o(n^2)    空间复杂度为o(1)  不稳定
 
 ```js
-function selsetSort(arr){
+function selectSort(arr){
   var len = arr.length;
   var index;
   for(var i = 0; i < len - 1; i++) {
@@ -1280,7 +1280,7 @@ str.split(/[&-]/g) // ["a", "s", "b", "d", "c", "a", "", ""]
 
 ```javascript
 // 1. 替换所有空白
-var str = "   123AD  asadf   asadfasf  adf ";
+var str = "   123AD  boy   girl  adf ";
 str = str.replace(/\s/g,"xx");
 console.log(str);
 

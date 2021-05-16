@@ -85,7 +85,7 @@ event.target || event.srcElement //用于获取触发事件的元素
 event.preventDefault() //取消默认行为
 event.returnValue=false  // 返回值=false 阻止默认时间 IE兼容  return false
 e.stopPropagation() // 阻止冒泡/捕获
-e.cacelBubble = true // IE8阻止冒泡
+e.cancelBubble = true // IE8阻止冒泡
 function clickHandler (e) {
     e.currentTarget // 就是默认的this，被监听的对象
     e.target // chrome支持 目标对象，实际监听到的对象
@@ -271,7 +271,7 @@ element.appendChild()
 element.insertBefore(child1,child2) // 将child1插入到child2之前
 element.removeChild()
 element.remove()
-element.replaceChild(newclild, oldchild) // 替换元素
+element.replaceChild(newChild, oldChild) // 替换元素
 element.cloneNode(false/true) // 复制元素，为true时为深复制 浅复制时不会复制节点的子节点
 ```
 

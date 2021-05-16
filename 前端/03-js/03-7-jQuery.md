@@ -273,7 +273,7 @@ $('.animate').click(function(){
 4.removeClass()
 5.toggleClass("className")切换className
 6.css("属性","值")设置或返回被选元素的一个或多个样式属性。
-7.css({"propertyname":"value","propertyname":"value",...})设置多个 CSS 属性
+7.css({"propertyName":"value","propertyName":"value",...})设置多个 CSS 属性
 8.css(['width', 'height']) 以对象的形式返回多个css样式
 
 ### width/height/偏移
@@ -297,9 +297,9 @@ $('.animate').click(function(){
 
 4. `$obj.empty()` 删除`$obj`的子元素
 
-5. `$obj.repalceWith($new)` 将`$obj`替换为`$new`
+5. `$obj.replaceWith($new)` 将`$obj`替换为`$new`
 
-6. `$obj.repalceAll($new)` 将`$obj`全部替换为`$new`
+6. `$obj.replaceAll($new)` 将`$obj`全部替换为`$new`
 
 ### 6.each()方法
 
@@ -368,7 +368,7 @@ function queryData(obj,callback){
             callback(data);
         },
         error:function(data){
-            consolo.log(data)
+            console.log(data)
         }
     });
 }
