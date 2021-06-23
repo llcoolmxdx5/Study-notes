@@ -34,7 +34,7 @@ a.toFixed(2) // 保留2位小数
 
 #### 1. typeof
 
-typeof返回一个表示数据类型的字符串，返回结果包括：number、boolean、string、symbol、object、undefined、function等7种数据类型，但不能判断null、array等
+typeof返回一个表示数据类型的字符串，返回结果包括：number、boolean、string、symbol、object、undefined、function bigint等8种数据类型，但不能判断null、array等
 
 ```js
 typeof Symbol ();// symbol 有效
@@ -43,6 +43,7 @@ typeof 1; // number 有效
 typeof true; // boolean 有效
 typeof undefined; //undefined 有效
 typeof new Function (); // function 有效
+typeof BigInt(1223); // bigint 有效
 typeof null; // object 无效
 typeof []; // object 无效
 typeof new Date (); // object 无效
@@ -68,7 +69,7 @@ constructor作用和instanceof非常相似。但constructor检测 Object与insta
 
 #### 4. Object.prototype.toString.call()
 
-Object.prototype.toString.call() 是最准确最常用的方式 返回一个字符串
+Object.prototype.toString.call() 是最准确最常用的方式 返回一个字符串 但是不能判断 NaN
 
 ```js
 Object.prototype.toString.call('').slice(8, -1); // String
@@ -81,6 +82,7 @@ Object.prototype.toString.call(new Date()).slice(8, -1); // Date
 Object.prototype.toString.call([]).slice(8, -1); // Array
 Object.prototype.toString.call(new RegExp()).slice(8, -1); // RegExp
 Object.prototype.toString.call(new Error()).slice(8, -1); // Error
+Object.prototype.toString.call(NaN).slice(8, -1); // Number
 ```
 
 #### 5.NaN的判断
